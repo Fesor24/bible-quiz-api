@@ -2,18 +2,24 @@ namespace BibleQuiz.API
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
 
             builder.Services.AddControllers();
+
+            builder.Services.AddDbContext(builder.Configuration)
+                .AddIdentity();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
+
+            await app.ApplyMigrationsAsync();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
