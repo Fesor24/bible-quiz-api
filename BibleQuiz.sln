@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BibleQuiz.API", "BibleQuiz.API\BibleQuiz.API.csproj", "{37B6982E-659B-4474-A864-6CB70269CFF5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BibleQuiz.Core", "BibleQuiz.Core\BibleQuiz.Core.csproj", "{C12BC443-5AF2-458E-BA5A-671C8DB1E6A2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{37B6982E-659B-4474-A864-6CB70269CFF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37B6982E-659B-4474-A864-6CB70269CFF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37B6982E-659B-4474-A864-6CB70269CFF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37B6982E-659B-4474-A864-6CB70269CFF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C12BC443-5AF2-458E-BA5A-671C8DB1E6A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C12BC443-5AF2-458E-BA5A-671C8DB1E6A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C12BC443-5AF2-458E-BA5A-671C8DB1E6A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C12BC443-5AF2-458E-BA5A-671C8DB1E6A2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9F0684E8-E753-4B36-AE8F-9F018D709C3C}
+	EndGlobalSection
+EndGlobal
