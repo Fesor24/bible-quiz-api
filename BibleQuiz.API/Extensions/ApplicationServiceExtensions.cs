@@ -21,9 +21,15 @@ namespace BibleQuiz.API
 
                 try
                 {
+                    // Getting the required service for AppDbContext
                     var context = services.GetRequiredService<ApplicationDbContext>();
 
+                    // Apply pending migrations to db
                     await context.Database.MigrateAsync();
+
+                    // Seed thousand questions to db
+                    await AppDbContextSeed.SeedDataAsync(context, loggerFactory);
+
                 }
 
                 catch(Exception ex)
