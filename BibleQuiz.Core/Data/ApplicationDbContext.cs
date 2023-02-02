@@ -17,5 +17,10 @@ namespace BibleQuiz.Core
         {
             base.OnModelCreating(modelBuilder);
         }
+
+        /// <summary>
+        /// Thousand quiz questions db set
+        /// </summary>
+        public DbSet<ThousandQuizQuestionsDataModel> ThousandQuizQuestions { get; set; }
     }
 }
