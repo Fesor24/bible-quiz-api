@@ -11,7 +11,9 @@ namespace BibleQuiz.API
             builder.Services.AddControllers();
 
             builder.Services.AddDbContext(builder.Configuration)
-                .AddIdentity();
+                .AddIdentity()
+                .ConfigureApiBehavior()
+                .AddGenericRepository();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -19,6 +21,9 @@ namespace BibleQuiz.API
 
             var app = builder.Build();
 
+            app.UseMiddleware<ExceptionMiddleware>();
+
+            // Apply pending migrations
             await app.ApplyMigrationsAsync();
 
             // Configure the HTTP request pipeline.
