@@ -17,15 +17,24 @@ namespace BibleQuiz.API.Controllers
         /// </summary>
         private readonly ApplicationDbContext context;
 
+        /// <summary>
+        /// DI instance of ILogger
+        /// </summary>
         private readonly ILogger<QuizController> logger;
+
+        /// <summary>
+        /// Scoped instance of Generic Repository
+        /// </summary>
+        private readonly IGenericRepository<ThousandQuizQuestionsDataModel> thousandQuiz;
 
         #endregion
 
         #region Constructor
-        public QuizController(ApplicationDbContext context, ILogger<QuizController> logger)
+        public QuizController(ApplicationDbContext context, ILogger<QuizController> logger, IGenericRepository<ThousandQuizQuestionsDataModel> thousandQuiz)
         {
             this.context = context;
             this.logger = logger;
+            this.thousandQuiz = thousandQuiz;
         }
 
         #endregion
@@ -35,7 +44,9 @@ namespace BibleQuiz.API.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet(ApiRoutes.FetchThousandQuestionById)]
+        [HttpGet(ApiRoutes.FetchThousandQuestion)]
+        [ProducesResponseType(statusCode: (int)HttpStatusCode.OK, type: typeof(ApiResponse))]
+        [ProducesResponseType(statusCode:(int)HttpStatusCode.NotFound, type:typeof(ApiResponse))]
         public async Task<ApiResponse> GetQuestionById(int id)
         {
             // Initialize thousand quiz data model
@@ -44,7 +55,7 @@ namespace BibleQuiz.API.Controllers
             try
             {
                 // Get the question
-                var question = await context.ThousandQuizQuestions.FirstOrDefaultAsync(x => x.Id == id);
+                var question = await thousandQuiz.GetQuestionByIdAsync(id);              
 
                 // If question is null
                 if (question is null) return NullResult();
@@ -70,6 +81,29 @@ namespace BibleQuiz.API.Controllers
             };
         }
 
+        /// <summary>
+        /// Endpoint to fetch all questions from ThousandQuestions
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet(ApiRoutes.FetchThousandQuestions)]
+        [ProducesResponseType(statusCode: (int)HttpStatusCode.OK, type: typeof(ApiResponse))]
+        public async Task<ApiResponse> GetAllQuestions()
+        {
+            // Fetch all the questions
+            var result = await thousandQuiz.GetAllQuestionsAsync();
+
+            // return it to client
+            return new ApiResponse
+            {
+                Result = result
+            };
+        }
+
+        /// <summary>
+        /// Private class to handle null result
+        /// </summary>
+        /// <param name="errorMessage"></param>
+        /// <returns></returns>
         private ApiResponse NullResult(string errorMessage = "Question not found")
         {
             // Set status code to not found
