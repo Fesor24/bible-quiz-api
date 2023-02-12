@@ -1,5 +1,6 @@
 ﻿using BibleQuiz.Core;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BibleQuiz.API
@@ -34,13 +35,21 @@ namespace BibleQuiz.API
 
                 catch(Exception ex)
                 {
+                    // Create logger
                     var logger = loggerFactory.CreateLogger<Program>();
 
-                    logger.LogError("An error occurred while applying migrations", ex.Message);
+                    // Log error to console
+                    logger.LogError($"An error occurred while applying migrations. Details: {ex.Message}");
                 }
             }
         }
 
+        /// <summary>
+        /// Configure DbContext
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="config"></param>
+        /// <returns></returns>
         public static IServiceCollection AddDbContext(this IServiceCollection services, IConfiguration config)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -53,6 +62,11 @@ namespace BibleQuiz.API
             return services;
         }
 
+        /// <summary>
+        /// Configure AspNet Identity
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
         public static IServiceCollection AddIdentity(this IServiceCollection services)
         {
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -61,6 +75,47 @@ namespace BibleQuiz.API
                 options.Password.RequireNonAlphanumeric = false;
             }).AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+            return services;
+        }
+
+        /// <summary>
+        /// Configure api validation error response
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static IServiceCollection ConfigureApiBehavior(this IServiceCollection services)
+        {
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = actionContext =>
+                {
+                    var errors = actionContext.ModelState.Where(x => x.Value.Errors.Count > 0)
+                    .SelectMany(x => x.Value.Errors)
+                    .Select(x => x.ErrorMessage).ToArray();
+
+                    var errorResponse = new ApiResponse
+                    {
+                        ErrorMessage = "An error occurred",
+                        ErrorResult = errors
+                    };
+
+                    return new BadRequestObjectResult(errorResponse);
+                };
+            });
+
+            // Return services for further chaining
+            return services;
+        }
+
+        /// <summary>
+        /// Register generic repository as a scoped service
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddGenericRepository(this IServiceCollection services)
+        {
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
             return services;
         }
     }
