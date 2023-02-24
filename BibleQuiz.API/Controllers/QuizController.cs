@@ -23,18 +23,19 @@ namespace BibleQuiz.API.Controllers
         private readonly ILogger<QuizController> logger;
 
         /// <summary>
-        /// Scoped instance of Generic Repository
+        /// Scoped instance of IUnitOfWork
         /// </summary>
-        private readonly IGenericRepository<ThousandQuizQuestionsDataModel> thousandQuiz;
+        private readonly IUnitOfWork unit;
 
         #endregion
 
         #region Constructor
-        public QuizController(ApplicationDbContext context, ILogger<QuizController> logger, IGenericRepository<ThousandQuizQuestionsDataModel> thousandQuiz)
+        public QuizController(ApplicationDbContext context, ILogger<QuizController> logger,
+            IUnitOfWork unit)
         {
             this.context = context;
             this.logger = logger;
-            this.thousandQuiz = thousandQuiz;
+            this.unit = unit;
         }
 
         #endregion
@@ -54,8 +55,11 @@ namespace BibleQuiz.API.Controllers
 
             try
             {
+                // Create the specification
+                var spec = new ThousandQuestionsSpecification(id);
+
                 // Get the question
-                var question = await thousandQuiz.GetQuestionByIdAsync(id);              
+                var question = await unit.Repository<ThousandQuizQuestionsDataModel>().GetQuestionWithSpec(spec);            
 
                 // If question is null
                 if (question is null) return NullResult();
@@ -89,8 +93,11 @@ namespace BibleQuiz.API.Controllers
         [ProducesResponseType(statusCode: (int)HttpStatusCode.OK, type: typeof(ApiResponse))]
         public async Task<ApiResponse> GetAllQuestions()
         {
+            // Initialize new spec
+            var spec = new ThousandQuestionsSpecification();
+
             // Fetch all the questions
-            var result = await thousandQuiz.GetAllQuestionsAsync();
+            var result = await unit.Repository<ThousandQuizQuestionsDataModel>().GetQuestionsAsync(spec);
 
             // return it to client
             return new ApiResponse

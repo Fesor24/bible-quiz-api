@@ -13,16 +13,17 @@ namespace BibleQuiz.Core
     public interface IGenericRepository<T> where T : class
     {
         /// <summary>
-        /// Get question by the id
+        /// Get a question by a specified condition
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="spec"></param>
         /// <returns></returns>
-        Task<T> GetQuestionByIdAsync(int id);
-
+        Task<T> GetQuestionWithSpec(ISpecification<T> spec);
+        
         /// <summary>
-        /// Get all questions
+        /// Get all questions by a specified condition
         /// </summary>
+        /// <param name="spec"></param>
         /// <returns></returns>
-        Task<IReadOnlyList<T>> GetAllQuestionsAsync();
+        Task<IReadOnlyList<T>> GetQuestionsAsync(ISpecification<T> spec);
     }
 }

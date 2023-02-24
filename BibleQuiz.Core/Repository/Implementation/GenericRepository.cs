@@ -13,22 +13,37 @@ namespace BibleQuiz.Core
         public GenericRepository(ApplicationDbContext context)
         {
             this.context = context;
-            dbSet = context.Set<T>();  
-        }
-        public async Task<IReadOnlyList<T>> GetAllQuestionsAsync()
-        {
-            // Fetch all details
-            var result = await dbSet.ToListAsync();
-
-            // Return the result
-            return result;
+            dbSet = this.context.Set<T>();  
         }
 
-        public async Task<T> GetQuestionByIdAsync(int id)
+        /// <summary>
+        /// Fetch a list based on the specified specification
+        /// </summary>
+        /// <param name="spec"></param>
+        /// <returns></returns>
+        public async Task<IReadOnlyList<T>> GetQuestionsAsync(ISpecification<T> spec)
         {
-            var result = await dbSet.FindAsync(id);
+            return await ApplySpecification(spec).ToListAsync();
+        }
 
-            return result;
+        /// <summary>
+        /// Fetch a question based on the specified specification
+        /// </summary>
+        /// <param name="spec"></param>
+        /// <returns></returns>
+        public async Task<T> GetQuestionWithSpec(ISpecification<T> spec)
+        {
+            return await ApplySpecification(spec).FirstOrDefaultAsync();
+        }
+
+        /// <summary>
+        /// Private method to apply the specification
+        /// </summary>
+        /// <param name="spec"></param>
+        /// <returns></returns>
+        private IQueryable<T> ApplySpecification(ISpecification<T> spec)
+        {
+            return SpecificationEvaluator<T>.GetQuery(dbSet.AsQueryable(), spec);
         }
     }
 }

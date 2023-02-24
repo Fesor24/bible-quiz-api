@@ -10,6 +10,6 @@
         /// <summary>
         /// Endpoint to fetch all questions from ThousandQuestions
         /// </summary>
-        public const string FetchThousandQuestions = "api/get-all-questions";
+        public const string FetchThousandQuestions = "api/thousand-questions/fetch";
     }
 }

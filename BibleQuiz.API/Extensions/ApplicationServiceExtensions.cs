@@ -116,6 +116,21 @@ namespace BibleQuiz.API
         {
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
+            // Return services for further chaining
+            return services;
+        }
+
+        /// <summary>
+        /// Register UnitOfWork as scoped service
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddUnitOfWork(this IServiceCollection services)
+        {
+            
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            // Return services for further chaining
             return services;
         }
     }

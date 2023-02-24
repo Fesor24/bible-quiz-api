@@ -13,7 +13,8 @@ namespace BibleQuiz.API
             builder.Services.AddDbContext(builder.Configuration)
                 .AddIdentity()
                 .ConfigureApiBehavior()
-                .AddGenericRepository();
+                .AddGenericRepository()
+                .AddUnitOfWork();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
