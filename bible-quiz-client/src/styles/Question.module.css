@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,900;1,100;1,200;1,500&display=swap');
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.container{
+    padding: 20px 30px;
+    font-family: 'Poppins', sans-serif;
+    height: 100%;
+}
+
+.container h4{
+    font-size: 2.5rem;
+    height: auto;
+    width: 100%;
+    color: brown;
+}
+
+.answer{
+    height: auto;
+    min-height: 20vh;
+    font-size: 2rem;
+    font-weight: 400;
+    width: 100%;
+    margin: 10px 0;
+    color: brown;
+}
+
+.btnGroup{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}

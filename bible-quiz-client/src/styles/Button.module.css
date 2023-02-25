@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,900;1,100;1,200;1,500&display=swap');
+
+.btn{
+    padding: 20px 24px;
+    font-size: 1.3rem;
+    font-family: 'Poppins', sans-serif;
+    border-radius: 30px;
+    margin-top: 1rem;
+    border: none;
+    background-color: var(--secondary-color);
+    color: bisque;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    animation: bounce 2s;
+    animation-duration: 2s;
+    animation-fill-mode: both;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+@keyframes bounce{
+    0%, 20%, 50%, 80%, 100%{
+        transform: translateY(0);
+    }
+    40%{
+        transform: translateY(-10px);
+    }
+    60%{
+        transform: translateY(-5px)
+    }
+}
+
+.btn:before{
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background-color: rgba(255,255,255,0.2);
+    border-radius: 100%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease-out, height 0.3s ease-out;
+}
+
+.btn:hover:before{
+    width: 300px;
+    height: 300px;
+}
+
+.btn:after{
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background-color: rgba(255,255,255,0.2);
+    border-radius: 100%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease-out, height 0.3s ease-out, opacity 0.3s ease-out;
+    opacity: 0;
+}
+
+.btn:hover{
+    background-color: bisque;
+    color:black;
+}
