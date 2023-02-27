@@ -133,5 +133,21 @@ namespace BibleQuiz.API
             // Return services for further chaining
             return services;
         }
+
+        public static IServiceCollection ConfigureCors(this IServiceCollection services)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", options =>
+                {
+                    options.AllowAnyHeader();
+                    options.AllowAnyMethod();
+                    options.AllowAnyOrigin();
+                });
+            });
+
+            // Return services for further chaining
+            return services;
+        }
     }
 }

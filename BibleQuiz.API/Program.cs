@@ -14,7 +14,8 @@ namespace BibleQuiz.API
                 .AddIdentity()
                 .ConfigureApiBehavior()
                 .AddGenericRepository()
-                .AddUnitOfWork();
+                .AddUnitOfWork()
+                .ConfigureCors();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -35,6 +36,8 @@ namespace BibleQuiz.API
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 
