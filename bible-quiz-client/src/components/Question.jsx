@@ -7,14 +7,16 @@ import { useSelector, useDispatch } from "react-redux";
 import * as Actions from "../redux/thousandQuestionsSlice"
 
 
-function Question({ displayAnswer, markAsCorrect }) {
+function Question({ clearTimer }) {
+  const state = useSelector(
+    (state) => state.thousandQuestions.queue[state.thousandQuestions.index]
+  );
 
-  const state = useSelector(state => state.thousandQuestions.queue[state.thousandQuestions.index]);
-
-  
+  const { opacity, disabledButtons } = useSelector(
+    (state) => state.thousandQuestions
+  );
 
   const dispatch = useDispatch();
-
 
   const successMessages = [
     "Ileri boys go hear, se dem fit?",
@@ -23,7 +25,7 @@ function Question({ displayAnswer, markAsCorrect }) {
     "Nice! Perfecto",
     "Daddy's proud",
     "They won't see GTCC coming this year",
-    "Dem go collect this year"
+    "Dem go collect this year",
   ];
 
   const failureMessages = [
@@ -35,18 +37,32 @@ function Question({ displayAnswer, markAsCorrect }) {
     "So sad",
   ];
 
-  const wrongAnswerProvided = () => async(dispatch)=> {
-    try{
-      dispatch(Actions.wrongAnswerAction());
-    }
-    catch(error){
-      console.log(error);
-    }
-  }
+  // const wrongAnswerProvided = () => (dispatch) => {
+  //   try {
+  //     dispatch(Actions.wrongAnswerAction());
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // const handleDisableButton = () => async(dispatch) => {
+  //   try{
+  //     dispatch(Actions.setDisableButtonAction(true))
+  //   }
+  //   catch(error){
+  //     console.log(error);
+  //   }
+  // }
 
   const onFailClick = () => {
     // wrongAnswers();
-    dispatch(wrongAnswerProvided());
+    // dispatch(wrongAnswerProvided());
+
+    clearTimer();
+
+    dispatch(Actions.wrongAnswerAction());
+
+    dispatch(Actions.setDisableButtonAction(true));
 
     toastr.options = {
       positionClass: "toast-top-full-width",
@@ -61,24 +77,27 @@ function Question({ displayAnswer, markAsCorrect }) {
     toastr.error(failureMessages[randomNumber], {
       closeButton: true,
       progressBar: true,
-      timeOut: 5000,
-      extendedTimeOut: 2000,
+      timeOut: 2000,
+      extendedTimeOut: 1000,
     });
   };
 
-  const correctAnswerProvided = () => async (dispatch) => {
-    try{
-      dispatch(Actions.correctAnswerAction());
-    }
-    catch(error){
-      console.log(error);
-    }
-  }
+  // const correctAnswerProvided = () => async (dispatch) => {
+  //   try {
+  //     dispatch(Actions.correctAnswerAction());
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const onSuccessClick = () => {
     // correctAnswers();
 
-    dispatch(correctAnswerProvided());
+    dispatch(Actions.correctAnswerAction());
+
+    dispatch(Actions.setDisableButtonAction(true));
+
+    clearTimer();
 
     toastr.options = {
       positionClass: "toast-top-full-width",
@@ -95,9 +114,22 @@ function Question({ displayAnswer, markAsCorrect }) {
     toastr.success(successMessages[randomNumber], {
       closeButton: true,
       progressBar: true,
-      timeOut: 5000,
-      extendedTimeOut: 2000,
+      timeOut: 2000,
+      extendedTimeOut: 1000,
     });
+  };
+
+  // const displayAction = () => async (dispatch) => {
+  //   try {
+  //     dispatch(Actions.setOpacityAction(1));
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  const handleDisplayAnswer = () => {
+    dispatch(Actions.setOpacityAction(1));
+    clearTimer();
   };
 
   return (
@@ -110,27 +142,35 @@ function Question({ displayAnswer, markAsCorrect }) {
         </h4>
       </div>
       <div className={style.answer}>
-        <p>
+        <p style={{ opacity: opacity }}>
           {state?.answer}
           {/* The civil war was fought in year ...., it ended in year.... and the
           president was President.... */}
         </p>
       </div>
       <div class={style.btnGroup}>
-        <Button name="Display answer">
+        <Button
+          name="Display answer"
+          click={handleDisplayAnswer}
+          
+        >
           <i class="fa fa-book" aria-hidden="true"></i>
         </Button>
         <Button
           name="Mark as correct"
-          disabled={markAsCorrect}
+          disabled={disabledButtons}
           click={onSuccessClick}
+          backgroundColor={disabledButtons && "gray"}
+          color={disabledButtons && "brown"}
         >
           <i class="fa fa-check" aria-hidden="true"></i>
         </Button>
         <Button
           name="Mark as wrong"
-          disabled={markAsCorrect}
+          disabled={disabledButtons}
           click={onFailClick}
+          backgroundColor={disabledButtons && "gray"}
+          color={disabledButtons && "brown"}
         >
           <i class="fa fa-times" aria-hidden="true"></i>
         </Button>
