@@ -1,18 +1,30 @@
-import style from "../src/styles/App.module.css";
-import { Link } from "react-router-dom";
-import Button from "./components/Button";
+import Home from "./pages/Home";
+import Category from "./pages/Category";
+import ThousandQuestions from "./pages/ThousandQuestions";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
 
 function App() {
-  return (
-    <div className={style.container}>
-      <h1>gtcc quiz preparation</h1>
 
-      <Link to="/category">
-        <Button name="Get started">
-          <i class="fa fa-play-circle" aria-hidden="true"></i>
-        </Button>
-      </Link>
-    </div>
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Home />,
+    },
+    {
+      path: "/category",
+      element: <Category />,
+    },
+    {
+      path: "/thousand-questions",
+      element: <ThousandQuestions />,
+    },
+  ]);
+
+  return (
+    <>
+      <RouterProvider router={router} />
+    </>
   );
 }
 
