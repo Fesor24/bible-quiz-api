@@ -9,16 +9,19 @@ import { Link } from "react-router-dom";
 import { useFetchThousandQuestions } from "../api/ApiClient";
 import { useSelector, useDispatch } from "react-redux";
 import * as Action from "../redux/thousandQuestionsSlice";
+import toastr from "toastr";
 
 function ThousandQuestions() {
   // const [correctAnswers, setCorrectAnswers] = useState(0);
   // const [wrongAnswers, setWrongAsnwers] = useState(0);
-  const [markAsCorrect, setMarkAsCorrect] = useState(false);
+  const [disableButtons, setDisableButtons] = useState(false);
   const [thousandQuestions, setThousandQuestions] = useState();
 
 
   const questions = useSelector((state) => state.thousandQuestions.queue);
   const dispatch = useDispatch();
+
+  const countdownNumber = 10;
 
   const { correctAnswers, wrongAnswers, questionsAttempted, index } = useSelector(
     (state) => state.thousandQuestions
@@ -63,58 +66,80 @@ function ThousandQuestions() {
     }
   }, []);
 
-  // const increaseCorrectAnswers = () => {
-  //   setCorrectAnswers(correctAnswers + 1);
-  // };
-
-  // const increaseWrongAnswers = () => {
-  //   setWrongAsnwers(wrongAnswers + 1);
-  // };
 
   // Countdown state
-  const [countdown, setCountdown] = useState(10);
+  const [countdown, setCountdown] = useState(countdownNumber);
   const [finishedTimer, setFinishedTimer] = useState(true);
+
+  let timerId;
 
   // Setting timer function in use effect
   useEffect(() => {
     if (countdown > 0) {
-      const timer = setTimeout(() => {
+      timerId = setTimeout(() => {
         setCountdown(countdown - 1);
       }, 1000);
 
       setFinishedTimer(true);
-      return () => clearTimeout(timer);
+      return () => clearTimeout(timerId);
     } else {
       setFinishedTimer(false);
-      setMarkAsCorrect(true);
+      setDisableButtons(true);
+      dispatch(Action.setOpacityAction(1));
+      dispatch(Action.setDisableButtonAction(true));
+      dispatch(Action.wrongAnswerAction());
       // increaseWrongAnswers();
       // console.log(state);
     }
   }, [countdown]);
 
-  const nextQuestion = () => async (dispatch) => {
-    try {
-      dispatch(Action.nextQuestionAction());
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const remainingQuestion = () => async (dispatch) => {
-    try{
-      dispatch(Action.remainingQuestionsAction());
-    }
-    catch(error){
-      console.log(error)
-    }
+  const clearTimer = () => {
+    clearTimeout(timerId);
   }
+
+  // const nextQuestion = () => async (dispatch) => {
+  //   try {
+  //     dispatch(Action.nextQuestionAction());
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // const remainingQuestion = () => async (dispatch) => {
+  //   try{
+  //     dispatch(Action.remainingQuestionsAction());
+  //   }
+  //   catch(error){
+  //     console.log(error)
+  //   }
+  // }
+
+  // const resetHideAnswer = () => async (dispatch) => {
+  //   try{
+  //     dispatch(Action.setOpacityAction(0));
+  //   }
+  //   catch(error){
+  //     console.log(error);
+  //   }
+  // }
+
+  // const resetDisableButton = () => async (dispatch) => {
+  //   try{
+  //     dispatch(Action.setDisableButtonAction(false));
+  //   }
+  //   catch(error){
+  //     console.log(error);
+  //   }
+  // }
 
   const handleNextButtonClick = () => {
     // setFinishedTimer(true);
-    setCountdown(10);
-    setMarkAsCorrect(false);
-    dispatch(nextQuestion());
-    dispatch(remainingQuestion());
+    setCountdown(countdownNumber);
+    setDisableButtons(false);
+    dispatch(Action.nextQuestionAction());
+    dispatch(Action.remainingQuestionsAction());
+    dispatch(Action.setOpacityAction(0));
+    dispatch(Action.setDisableButtonAction(false));
     console.log(index);
     // setAttemptedQuestions(attemptedQuestions + 1);
   };
@@ -123,10 +148,19 @@ function ThousandQuestions() {
     localStorage.setItem("correctAnswer", JSON.stringify(correctAnswers));
     localStorage.setItem("wrongAnswer", JSON.stringify(wrongAnswers));
     localStorage.setItem("questionsAttempted", JSON.stringify(questionsAttempted));
+    toastr.success("Saved")
   }
+
+  // const resetQuiz = () => async(dispatch) => {
+  //   dispatch(Action.resetIndexAction());
+  // }
 
   const handleResetButtonClick = () => {
     localStorage.clear();
+    dispatch(Action.resetIndexAction());
+    setCountdown(countdownNumber);
+    dispatch(Action.setOpacityAction(0));
+    dispatch(Action.setDisableButtonAction(false));
   }
 
   return (
@@ -159,10 +193,11 @@ function ThousandQuestions() {
 
         <div className={style.question}>
           <Question
-            markAsCorrect={markAsCorrect}
+            disableButtons={disableButtons}
             // correctAnswers={increaseCorrectAnswers}
             // wrongAnswers={increaseWrongAnswers}
             displayAnswer={finishedTimer}
+            clearTimer = {clearTimer}
           />
         </div>
       </Col>
