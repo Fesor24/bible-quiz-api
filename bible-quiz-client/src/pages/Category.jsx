@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "../components/Button";
-import style from "../styles/App.module.css";
+import style from "../styles/Home.module.css";
 import { Link } from "react-router-dom";
 
 function Category() {
