@@ -3,8 +3,19 @@ import React from "react";
 import style from "../styles/Question.module.css";
 import toastr from "toastr";
 import "toastr/build/toastr.css";
+import { useSelector, useDispatch } from "react-redux";
+import * as Actions from "../redux/thousandQuestionsSlice"
 
-function Question({ correctAnswers, wrongAnswers }) {
+
+function Question({ displayAnswer, markAsCorrect }) {
+
+  const state = useSelector(state => state.thousandQuestions.queue[state.thousandQuestions.index]);
+
+  
+
+  const dispatch = useDispatch();
+
+
   const successMessages = [
     "Ileri boys go hear, se dem fit?",
     "Be like this year na our year o",
@@ -12,6 +23,7 @@ function Question({ correctAnswers, wrongAnswers }) {
     "Nice! Perfecto",
     "Daddy's proud",
     "They won't see GTCC coming this year",
+    "Dem go collect this year"
   ];
 
   const failureMessages = [
@@ -20,11 +32,21 @@ function Question({ correctAnswers, wrongAnswers }) {
     "Hmmm...I smell 4th position this year",
     "Baptist boys are coming, just dey play",
     "Wahala! Wahala! Wahala!!!",
-    "I'm ashamed",
+    "So sad",
   ];
 
+  const wrongAnswerProvided = () => async(dispatch)=> {
+    try{
+      dispatch(Actions.wrongAnswerAction());
+    }
+    catch(error){
+      console.log(error);
+    }
+  }
+
   const onFailClick = () => {
-    wrongAnswers();
+    // wrongAnswers();
+    dispatch(wrongAnswerProvided());
 
     toastr.options = {
       positionClass: "toast-top-full-width",
@@ -34,7 +56,7 @@ function Question({ correctAnswers, wrongAnswers }) {
       hideMethod: "fadeOut",
     };
 
-    const randomNumber = Math.floor(Math.random() * 5);
+    const randomNumber = Math.floor(Math.random() * 6);
 
     toastr.error(failureMessages[randomNumber], {
       closeButton: true,
@@ -44,8 +66,20 @@ function Question({ correctAnswers, wrongAnswers }) {
     });
   };
 
+  const correctAnswerProvided = () => async (dispatch) => {
+    try{
+      dispatch(Actions.correctAnswerAction());
+    }
+    catch(error){
+      console.log(error);
+    }
+  }
+
   const onSuccessClick = () => {
-    correctAnswers();
+    // correctAnswers();
+
+    dispatch(correctAnswerProvided());
+
     toastr.options = {
       positionClass: "toast-top-full-width",
       progressBar: true,
@@ -54,7 +88,7 @@ function Question({ correctAnswers, wrongAnswers }) {
       hideMethod: "fadeOut",
     };
 
-    const randomNumber = Math.floor(Math.random() * 5);
+    const randomNumber = Math.floor(Math.random() * 7);
 
     console.log(randomNumber);
 
@@ -69,25 +103,35 @@ function Question({ correctAnswers, wrongAnswers }) {
   return (
     <div className={style.container}>
       <div className={style.question}>
-        <h4>
-          Nigeria fought her civil war in what year, when did the war ened and
-          who was president at that period ?
+        <h4 key={state?.id}>
+          {state?.question}
+          {/* Nigeria fought her civil war in what year, when did the war ened and
+          who was president at that period ? */}
         </h4>
       </div>
       <div className={style.answer}>
         <p>
-          The civil war was fought in year ...., it ended in year.... and the
-          president was President....
+          {state?.answer}
+          {/* The civil war was fought in year ...., it ended in year.... and the
+          president was President.... */}
         </p>
       </div>
       <div class={style.btnGroup}>
         <Button name="Display answer">
           <i class="fa fa-book" aria-hidden="true"></i>
         </Button>
-        <Button name="Mark as correct" click={onSuccessClick}>
+        <Button
+          name="Mark as correct"
+          disabled={markAsCorrect}
+          click={onSuccessClick}
+        >
           <i class="fa fa-check" aria-hidden="true"></i>
         </Button>
-        <Button name="Mark as wrong" click={onFailClick}>
+        <Button
+          name="Mark as wrong"
+          disabled={markAsCorrect}
+          click={onFailClick}
+        >
           <i class="fa fa-times" aria-hidden="true"></i>
         </Button>
       </div>
