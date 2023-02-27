@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,900;1,100;1,200;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+
+:root{
+    --primary-color:  rgba(136, 55, 243, 0.7);
+    --secondary-color: rgba(7, 18, 75, 0.76);
+    --delay: 1;
+	--duration: 2500ms;
+	--iterations: 1;
+}
+
+*{
+    padding: 0;
+    margin: 0;
+    border: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: 'Poppins', sans-serif;
+}
+
+.container{
+    height: 100vh;
+    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+    /* padding: 50px 50px 0px; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-align: center
+}
+
+.container h1,
+.container h1::after{
+    animation-delay: var(--animation-delay, 2s);
+	animation-iteration-count: var(--iterations, 1);
+	animation-duration: var(--duration, 1500ms);
+	animation-fill-mode: both;
+	animation-timing-function: cubic-bezier(0.0, 0.0, 0.2, 1);
+}
+
+/* .container h1{
+    font-size: 4rem;
+    margin-top: 2rem;
+    text-shadow: black;
+    letter-spacing: 0.5rem;
+    text-transform: uppercase;
+    opacity: 1;
+  
+    
+} */
+
+.container h1{
+    --animation-delay: var(--delay, 0);
+	--animation-duration: var(--duration, 1000ms);
+	--animation-iterations: var(--iterations, 1);
+	position: relative;
+	font-size: 4rem;
+	animation-name: clip-text;
+	color: bisque;
+	white-space: nowrap;
+	cursor: default;
+    text-transform: uppercase;
+    font-family: 'Fredoka One', cursive;
+
+	
+}
+
+.container::after{
+    content: "";
+		position: absolute;
+		z-index: 999;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: #f2f98b;
+		transform: scaleX(0);
+		transform-origin: 0 50%;
+		pointer-events: none;
+		animation-name: text-revealer;
+}
+
+
+@keyframes clip-text {
+	from {
+		clip-path: inset(0 100% 0 0);
+	}
+	to {
+		clip-path: inset(0 0 0 0);
+	}
+}
+
+
+@keyframes text-revealer {
+	
+	0%, 50% {
+		transform-origin: 0 50%;
+	}
+	
+	60%, 100% {
+		transform-origin: 100% 50%;		
+	}
+
+	
+	60% {
+		transform: scaleX(1);
+	}
+	
+	100% {
+		transform: scaleX(0);
+	}
+}
+
+.link{
+    padding-top: 1rem;
+    color: bisque;
+    text-decoration: none;
+}
+
+

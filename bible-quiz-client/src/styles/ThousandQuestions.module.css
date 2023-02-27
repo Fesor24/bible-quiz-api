@@ -11,13 +11,12 @@
 }
 
 .container{
-    height: 100vh;
-    
+    height: 100vh;    
     
 }
 
 .timer{
-    height: 20vh;
+    height: 15vh;
     background-color: antiquewhite;
     display: flex;
     flex-direction: row;
@@ -26,21 +25,21 @@
 }
 
 .question{
-    height: 80vh;
+    height: 85vh;
     background-color: antiquewhite;
 }
 
 .next{
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+    align-items: flex-end;
+    justify-content: space-around;
 }
 
-.next p{
+/* .next p{
     display: inline-block;
-    padding: 0 15px;
+    padding: 0 0 0 15px;
     font-size: 1.4rem;
     color: brown;
-}
+} */
 
