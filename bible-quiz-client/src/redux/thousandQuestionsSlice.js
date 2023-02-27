@@ -7,7 +7,9 @@ const questionSlice = createSlice({
         index: 0,
         correctAnswers: 0,
         wrongAnswers: 0,
-        questionsAttempted: 0
+        questionsAttempted: 0,
+        opacity: 0,
+        disabledButtons: false
     },
     reducers: {
         startQuizAction : (state, action) => {
@@ -21,6 +23,15 @@ const questionSlice = createSlice({
                 ...state,
                 index: state.index + 1
             }
+        },
+        resetIndexAction : (state) => {
+            return {
+              ...state,
+              index: 0,
+              correctAnswers: 0,
+              wrongAnswers: 0,
+              questionsAttempted: 0
+            };
         },
         correctAnswerAction: (state) => {
             return {
@@ -56,7 +67,7 @@ const questionSlice = createSlice({
         setIndexNumberAction: (state, action) => {
             return {
                 ...state,
-                trace: action.payload
+                index: action.payload
             }
         },
         setQuestionsAttemptedAction: (state, action) => {
@@ -64,12 +75,35 @@ const questionSlice = createSlice({
               ...state,
               questionsAttempted: action.payload
             };
+        },
+        setOpacityAction : (state, action) => {
+            return{
+                ...state,
+                opacity: action.payload
+            }
+        },
+        setDisableButtonAction: (state, action) => {
+            return {
+              ...state,
+              disabledButtons: action.payload,
+            };
         }
     }
 })
 
-export const { startQuizAction, nextQuestionAction, correctAnswerAction, wrongAnswerAction,
-     remainingQuestionsAction, setCorrectNumberAction, setWrongNumberAction, setQuestionsAttemptedAction,
-    setIndexNumberAction} = questionSlice.actions;
+export const {
+  startQuizAction,
+  nextQuestionAction,
+  correctAnswerAction,
+  wrongAnswerAction,
+  remainingQuestionsAction,
+  setCorrectNumberAction,
+  setWrongNumberAction,
+  setQuestionsAttemptedAction,
+  setIndexNumberAction,
+  setOpacityAction,
+  setDisableButtonAction,
+  resetIndexAction,
+} = questionSlice.actions;
 
 export default questionSlice.reducer;
