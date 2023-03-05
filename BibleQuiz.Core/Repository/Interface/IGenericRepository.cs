@@ -18,12 +18,19 @@ namespace BibleQuiz.Core
         /// <param name="spec"></param>
         /// <returns></returns>
         Task<T> GetQuestionWithSpec(ISpecification<T> spec);
-        
+
         /// <summary>
         /// Get all questions by a specified condition
         /// </summary>
         /// <param name="spec"></param>
         /// <returns></returns>
         Task<IReadOnlyList<T>> GetQuestionsAsync(ISpecification<T> spec);
+
+        /// <summary>
+        /// To add question to the table
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        Task AddQuestions(T entity);
     }
 }

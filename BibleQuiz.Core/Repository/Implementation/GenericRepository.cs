@@ -17,11 +17,23 @@ namespace BibleQuiz.Core
         }
 
         /// <summary>
-        /// Fetch a list based on the specified specification
+        /// To add questions to the db
         /// </summary>
-        /// <param name="spec"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        public async Task<IReadOnlyList<T>> GetQuestionsAsync(ISpecification<T> spec)
+        /// <exception cref="NotImplementedException"></exception>
+		public async Task AddQuestions(T entity)
+		{
+            // We add it to the db
+			await dbSet.AddAsync(entity);
+		}
+
+		/// <summary>
+		/// Fetch a list based on the specified specification
+		/// </summary>
+		/// <param name="spec"></param>
+		/// <returns></returns>
+		public async Task<IReadOnlyList<T>> GetQuestionsAsync(ISpecification<T> spec)
         {
             return await ApplySpecification(spec).ToListAsync();
         }
