@@ -22,7 +22,7 @@ body{
 
 .container{
     height: 100vh;
-    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+    background: linear-gradient(to right, rgb(29, 26, 26), rgb(95, 52, 52));
     /* padding: 50px 50px 0px; */
     display: flex;
     flex-direction: column;
