@@ -32,10 +32,15 @@ namespace BibleQuiz.Core
         public Expression<Func<T, object>> OrderByDescending { get; private set; }
 
         /// <summary>
-        /// Method to add include expression to the Includes list
+        /// Order by property
         /// </summary>
-        /// <param name="include"></param>
-        protected void AddInclude(Expression<Func<T, object>> include)
+		public Expression<Func<T, object>> OrderBy { get; private set; }
+
+		/// <summary>
+		/// Method to add include expression to the Includes list
+		/// </summary>
+		/// <param name="include"></param>
+		protected void AddInclude(Expression<Func<T, object>> include)
         {
             Includes.Add(include);
         }
@@ -47,6 +52,15 @@ namespace BibleQuiz.Core
         protected void AddOrderByDescending(Expression<Func<T, object>> orderByDesc)
         {
             OrderByDescending = orderByDesc;
+        }
+
+        /// <summary>
+        /// Method to set order by expression
+        /// </summary>
+        /// <param name="ordeyBy"></param>
+        protected void AddOrderBy(Expression<Func<T, object>> ordeyBy)
+        {
+            OrderBy = ordeyBy;
         }
     }
 }

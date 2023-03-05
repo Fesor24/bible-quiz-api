@@ -18,10 +18,16 @@ namespace BibleQuiz.Core
                 query = query.Where(spec.Criteria);
             }
 
-            // If there is an order by expression
+            // If there is an order by descending expression
             if (spec.OrderByDescending is not null)
             {
                 query = query.OrderByDescending(spec.OrderByDescending);
+            }
+
+            // If there is an order by expression
+            if (spec.OrderBy is not null)
+            {
+                query = query.OrderBy(spec.OrderBy);
             }
 
             // Aggregating the Includes list

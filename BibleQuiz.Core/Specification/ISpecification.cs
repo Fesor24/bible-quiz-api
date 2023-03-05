@@ -14,9 +14,14 @@ namespace BibleQuiz.Core
         Expression<Func<T, bool>> Criteria { get; }
         
         /// <summary>
-        /// OrderBuDescending expression
+        /// OrderByDescending expression
         /// </summary>
         Expression<Func<T, object>> OrderByDescending { get; }
+
+        /// <summary>
+        /// Order By expression
+        /// </summary>
+        Expression<Func<T, object>> OrderBy { get; }
 
         /// <summary>
         /// In any case we have to include navigation props
