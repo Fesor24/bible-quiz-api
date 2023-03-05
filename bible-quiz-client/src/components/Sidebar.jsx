@@ -18,7 +18,7 @@ function Sidebar({ correct, wrong, remaining, total }) {
 
         <div className={style.content}>
           <p>Questions remaining</p>
-          <Circle circleText={remaining} />
+          <Circle circleText={remaining - 1 < 0 ? 0 : remaining - 1} />
         </div>
 
         <div className={style.content}>
