@@ -1,14 +1,6 @@
 import axios from "axios";
 import ApiRoutes from "./ApiRoutes";
-// import fs from 'browserify-fs';
-// import https from "https-browserify";
-// import https from "https"
 
-
-
-// const httpsAgent = new https.Agent({
-//     rejectUnauthorized: false
-// })
 
  axios.defaults.baseURL = ApiRoutes.BASE_URL;
 
@@ -23,4 +15,29 @@ import ApiRoutes from "./ApiRoutes";
     }
 
     return fetchThousandQuestions;
+ }
+
+ // Hook to add question to revision table
+ export function useAddRevisionQuestion(){
+    async function addRevisionQuestion(question){
+        var response = axios.post(
+            ApiRoutes.AddRevisionQuestion, question
+        )
+
+        return response;
+    }
+
+    return addRevisionQuestion;
+ }
+
+ // Hook to fetch revision questions
+ export function useFetchRevisionQuestions(){
+    async function fetchRevisionQuestions(){
+        var response = axios.get(
+            ApiRoutes.FetchRevisionQuestions
+        )
+        return response;
+    }
+
+    return fetchRevisionQuestions;
  }
