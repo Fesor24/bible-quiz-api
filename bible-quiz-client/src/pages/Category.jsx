@@ -1,9 +1,14 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Button from "../components/Button";
 import style from "../styles/Home.module.css";
 import { Link } from "react-router-dom";
 
 function Category() {
+
+  useEffect(() => {
+    document.title = "Category";
+  }, [])
+
   return (
     <div className={style.container}>
       <h1>Select a category</h1>
@@ -20,7 +25,9 @@ function Category() {
       </Link>
 
       <Link to="/revise-questions">
-        <Button name="Revise Questions"> &#129300;</Button>
+        <Button name="Revise Questions">
+          <i class="fa-brands fa-think-peaks"></i>
+        </Button>
       </Link>
 
       <Link to="/" className={style.link}>
