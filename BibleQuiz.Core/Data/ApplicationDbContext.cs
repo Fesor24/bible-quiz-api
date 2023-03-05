@@ -22,5 +22,10 @@ namespace BibleQuiz.Core
         /// Thousand quiz questions db set
         /// </summary>
         public DbSet<ThousandQuizQuestionsDataModel> ThousandQuizQuestions { get; set; }
+
+        /// <summary>
+        /// Revision quiz questions db set
+        /// </summary>
+        public DbSet<RevisionQuestionsDataModel> RevisionQuestions { get; set; }
     }
 }
