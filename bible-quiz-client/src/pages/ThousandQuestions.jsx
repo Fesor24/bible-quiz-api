@@ -5,21 +5,32 @@ import Sidebar from "../components/Sidebar";
 import Timer from "../components/Timer";
 import Question from "../components/Question";
 import Button from "../components/Button";
-import { Link } from "react-router-dom";
+import { useNavigate, Link} from "react-router-dom";
 import { useFetchThousandQuestions } from "../api/ApiClient";
 import { useSelector, useDispatch } from "react-redux";
 import * as Action from "../redux/thousandQuestionsSlice";
-import toastr from "toastr";
 
 function ThousandQuestions() {
   // const [correctAnswers, setCorrectAnswers] = useState(0);
   // const [wrongAnswers, setWrongAsnwers] = useState(0);
   const [disableButtons, setDisableButtons] = useState(false);
+
   const [thousandQuestions, setThousandQuestions] = useState();
+
+  const [questionsFinished, setQuestionsFinished] = useState(false);
 
 
   const questions = useSelector((state) => state.thousandQuestions.queue);
+
+   const { opacity, disabledButtons } = useSelector(
+     (state) => state.thousandQuestions
+   );
+
+  const question = useSelector((state) => state.thousandQuestions.queue[state.thousandQuestions.index]);
+
   const dispatch = useDispatch();
+
+  const navigate = useNavigate();
 
   const countdownNumber = 10;
 
@@ -52,6 +63,11 @@ function ThousandQuestions() {
   }, [dispatch]);
 
   useEffect(() => {
+
+    document.title = "Thousand Questions";
+
+    // dispatch(Action.resetOpacityAction());
+
     const correct = JSON.parse(localStorage.getItem("correctAnswer"));
     const wrong = JSON.parse(localStorage.getItem("wrongAnswer"));
     const index = JSON.parse(localStorage.getItem("questionsAttempted"));
@@ -63,9 +79,12 @@ function ThousandQuestions() {
       dispatch(Action.setWrongNumberAction(wrong));
       dispatch(Action.setIndexNumberAction(index));
       dispatch(Action.setQuestionsAttemptedAction(index));
+
+      if (correct + wrong === index){
+        setDisableButtons(true);
+      }
     }
   }, []);
-
 
   // Countdown state
   const [countdown, setCountdown] = useState(countdownNumber);
@@ -97,41 +116,6 @@ function ThousandQuestions() {
     clearTimeout(timerId);
   }
 
-  // const nextQuestion = () => async (dispatch) => {
-  //   try {
-  //     dispatch(Action.nextQuestionAction());
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // const remainingQuestion = () => async (dispatch) => {
-  //   try{
-  //     dispatch(Action.remainingQuestionsAction());
-  //   }
-  //   catch(error){
-  //     console.log(error)
-  //   }
-  // }
-
-  // const resetHideAnswer = () => async (dispatch) => {
-  //   try{
-  //     dispatch(Action.setOpacityAction(0));
-  //   }
-  //   catch(error){
-  //     console.log(error);
-  //   }
-  // }
-
-  // const resetDisableButton = () => async (dispatch) => {
-  //   try{
-  //     dispatch(Action.setDisableButtonAction(false));
-  //   }
-  //   catch(error){
-  //     console.log(error);
-  //   }
-  // }
-
   const handleNextButtonClick = () => {
     // setFinishedTimer(true);
     setCountdown(countdownNumber);
@@ -141,6 +125,10 @@ function ThousandQuestions() {
     dispatch(Action.setOpacityAction(0));
     dispatch(Action.setDisableButtonAction(false));
     console.log(index);
+
+    if (questions?.length - questionsAttempted === 1) {
+      setQuestionsFinished(true);
+    }
     // setAttemptedQuestions(attemptedQuestions + 1);
   };
 
@@ -148,56 +136,96 @@ function ThousandQuestions() {
     localStorage.setItem("correctAnswer", JSON.stringify(correctAnswers));
     localStorage.setItem("wrongAnswer", JSON.stringify(wrongAnswers));
     localStorage.setItem("questionsAttempted", JSON.stringify(questionsAttempted));
-    toastr.success("Saved")
+    navigate("/category");
   }
 
-  // const resetQuiz = () => async(dispatch) => {
-  //   dispatch(Action.resetIndexAction());
-  // }
 
   const handleResetButtonClick = () => {
-    localStorage.clear();
+    localStorage.removeItem("correctAnswer");
+    localStorage.removeItem("wrongAnswer");
+    localStorage.removeItem("questionsAttempted");
     dispatch(Action.resetIndexAction());
     setCountdown(countdownNumber);
     dispatch(Action.setOpacityAction(0));
     dispatch(Action.setDisableButtonAction(false));
   }
 
+   const handleWrongAnswerAndDisableButton = () => {
+     dispatch(Action.wrongAnswerAction());
+
+     dispatch(Action.setDisableButtonAction(true));
+   };
+
+   const handleCorrectAnswerAndDisableButton = () => {
+    dispatch(Action.correctAnswerAction());
+
+    dispatch(Action.setDisableButtonAction(true));
+   }
+
+   const handleShowAnswer = () => {
+    dispatch(Action.setOpacityAction(1));
+   }
+
+    const handleBackToCategory = () => {
+      setQuestionsFinished(false);
+      dispatch(Action.resetIndexAction());
+    };
+
   return (
     <Row>
       <Col span={18} push={6}>
-        <div className={style.timer}>
-          <Timer countdown={countdown} />
-          <div>
-            <div className={style.next}>
-              <Button click={handleNextButtonClick}>
-                <i class="fa fa-arrow-right" aria-hidden="true"></i>
-              </Button>
-              &nbsp; &nbsp;
-              <Button click={handleSaveButtonClick}>
-                <i class="fa-regular fa-floppy-disk"></i>
-              </Button>
-              &nbsp; &nbsp;
-              <Button click={handleResetButtonClick}>
-                <i class="fa-solid fa-ban"></i>
-              </Button>
-              &nbsp; &nbsp;
+        {!questionsFinished && (
+          <>
+            <div className={style.timer}>
+              <Timer countdown={countdown} />
+              <div>
+                <div className={style.next}>
+                  <Button click={handleNextButtonClick}>
+                    <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                  </Button>
+                  &nbsp; &nbsp;
+                  <Button click={handleSaveButtonClick}>
+                    <i class="fa fa-arrow-left"></i>
+                  </Button>
+                  &nbsp; &nbsp;
+                  <Button click={handleResetButtonClick}>
+                    <i class="fa-solid fa-ban"></i>
+                  </Button>
+                  &nbsp; &nbsp;
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+
+        {questionsFinished && (
+          <>
+            <div className={style.startAgain}>
               <Link to="/category">
-                <Button>
+                <Button name="Back to Category" click={handleBackToCategory}>
                   <i class="fa fa-arrow-left" aria-hidden="true"></i>
                 </Button>
               </Link>
             </div>
-          </div>
-        </div>
+          </>
+        )}
 
         <div className={style.question}>
           <Question
             disableButtons={disableButtons}
-            // correctAnswers={increaseCorrectAnswers}
-            // wrongAnswers={increaseWrongAnswers}
             displayAnswer={finishedTimer}
-            clearTimer = {clearTimer}
+            clearTimer={clearTimer}
+            state={question}
+            handleWrongAnswerAndDisableButton={
+              handleWrongAnswerAndDisableButton
+            }
+            handleCorrectAnswerAndDisableButton={
+              handleCorrectAnswerAndDisableButton
+            }
+            handleShowAnswer={handleShowAnswer}
+            opacity={opacity}
+            disabledButtons={disabledButtons}
+            questionsFinished = {questionsFinished}
           />
         </div>
       </Col>
