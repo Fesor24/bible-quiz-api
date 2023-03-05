@@ -107,6 +107,64 @@ namespace BibleQuiz.API.Controllers
         }
 
         /// <summary>
+        /// Endpoint to add question to the revision table
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost(ApiRoutes.AddRevisionQuestion)]
+        public async Task<ApiResponse> AddRevisionQuestion(RevisionQuestionApiModel model)
+        {
+            // Check if the question exist
+            var questionExist = await context.RevisionQuestions.AnyAsync(x => x.Question.ToLower() == model.Question.ToLower());
+
+            // If the question exist
+            if (questionExist)
+            {
+                // Return message to client
+                return new ApiResponse
+                {
+                    ErrorMessage = "Question already in table"
+                };
+            }
+
+            // Add the question to db
+            await unit.Repository<RevisionQuestionsDataModel>().AddQuestions(new RevisionQuestionsDataModel
+            {
+                Question = model.Question,
+                Answer = model.Answer
+            });
+
+            // Save the changes
+            await unit.Complete();
+
+            // Return the api response
+            return new ApiResponse
+            {
+                Result = "Question successfully added"
+            };
+        }
+
+        /// <summary>
+        /// Endpoint to fetch all revision questions
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet(ApiRoutes.FetchRevisionQuestions)]
+        public async Task<ApiResponse> FetchRevisionQuestions()
+        {
+            // We create an instance of revision specification
+            var spec = new RevisionQuestionsSpecification();
+
+            // Fetch all the questions
+            var questions = await unit.Repository<RevisionQuestionsDataModel>().GetQuestionsAsync(spec);
+
+            // Return questions to client
+            return new ApiResponse
+            {
+                Result = questions
+            };
+        }
+
+        /// <summary>
         /// Private class to handle null result
         /// </summary>
         /// <param name="errorMessage"></param>
