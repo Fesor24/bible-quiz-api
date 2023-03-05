@@ -3,20 +3,30 @@ import React from "react";
 import style from "../styles/Question.module.css";
 import toastr from "toastr";
 import "toastr/build/toastr.css";
-import { useSelector, useDispatch } from "react-redux";
-import * as Actions from "../redux/thousandQuestionsSlice"
+import { useAddRevisionQuestion } from "../api/ApiClient";
+import { message } from "antd";
 
 
-function Question({ clearTimer }) {
-  const state = useSelector(
-    (state) => state.thousandQuestions.queue[state.thousandQuestions.index]
-  );
+function Question({
+  clearTimer,
+  onFailAddToRevise = true,
+  state,
+  questionsFinished,
+  handleWrongAnswerAndDisableButton,
+  handleCorrectAnswerAndDisableButton,
+  handleShowAnswer,
+  opacity,
+  disabledButtons,
+}) {
+  // const state = useSelector(
+  //   (state) => state.thousandQuestions.queue[state.thousandQuestions.index]
+  // );
 
-  const { opacity, disabledButtons } = useSelector(
-    (state) => state.thousandQuestions
-  );
+  // const { opacity, disabledButtons } = useSelector(
+  //   (state) => state.thousandQuestions
+  // );
 
-  const dispatch = useDispatch();
+  const addRevisionQuestion = useAddRevisionQuestion();
 
   const successMessages = [
     "Ileri boys go hear, se dem fit?",
@@ -54,15 +64,39 @@ function Question({ clearTimer }) {
   //   }
   // }
 
-  const onFailClick = () => {
+  const onFailClick = async () => {
     // wrongAnswers();
     // dispatch(wrongAnswerProvided());
 
+    let question = {
+      question: state.question,
+      answer: state.answer,
+    };
+
+    console.log(question);
+
+    if (onFailAddToRevise) {
+      await addRevisionQuestion(question)
+        .then((response) => {
+          if (response.data.successful) {
+            console.log(response.data.successful);
+          } else {
+            console.log(response.data.errorMessage);
+            message.error("Failed to add question to revision table");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
     clearTimer();
 
-    dispatch(Actions.wrongAnswerAction());
+    handleWrongAnswerAndDisableButton();
 
-    dispatch(Actions.setDisableButtonAction(true));
+    // dispatch(Actions.wrongAnswerAction());
+
+    // dispatch(Actions.setDisableButtonAction(true));
 
     toastr.options = {
       positionClass: "toast-top-full-width",
@@ -80,6 +114,8 @@ function Question({ clearTimer }) {
       timeOut: 2000,
       extendedTimeOut: 1000,
     });
+
+    console.log("finished", questionsFinished);
   };
 
   // const correctAnswerProvided = () => async (dispatch) => {
@@ -93,9 +129,11 @@ function Question({ clearTimer }) {
   const onSuccessClick = () => {
     // correctAnswers();
 
-    dispatch(Actions.correctAnswerAction());
+    handleCorrectAnswerAndDisableButton();
 
-    dispatch(Actions.setDisableButtonAction(true));
+    // dispatch(Actions.correctAnswerAction());
+
+    // dispatch(Actions.setDisableButtonAction(true));
 
     clearTimer();
 
@@ -128,54 +166,76 @@ function Question({ clearTimer }) {
   // };
 
   const handleDisplayAnswer = () => {
-    dispatch(Actions.setOpacityAction(1));
+    // dispatch(Actions.setOpacityAction(1));
+
+    handleShowAnswer();
     clearTimer();
+
+    console.log("questions", questionsFinished);
   };
 
   return (
-    <div className={style.container}>
-      <div className={style.question}>
-        <h4 key={state?.id}>
-          {state?.question}
-          {/* Nigeria fought her civil war in what year, when did the war ened and
+    <>
+      {questionsFinished && (
+        <>
+          <div className={style.finishedQuestions}>
+            <h2>
+              session completed{" "}
+              <i class="fa-sharp fa-solid fa-circle-check"></i>
+            </h2>
+            <div className={style.finishedQuestionsImage}>
+              <p>Tada</p>
+            </div>
+            {/* <img src={meme} alt="image" height={100} width={100} /> */}
+          </div>
+        </>
+      )}
+
+      {!questionsFinished && (
+        <>
+          <div className={style.container}>
+            <div className={style.question}>
+              <h4 key={state?.id}>
+                {state?.question}
+                {/* Nigeria fought her civil war in what year, when did the war ened and
           who was president at that period ? */}
-        </h4>
-      </div>
-      <div className={style.answer}>
-        <p style={{ opacity: opacity }}>
-          {state?.answer}
-          {/* The civil war was fought in year ...., it ended in year.... and the
+              </h4>
+            </div>
+            <div className={style.answer}>
+              <p style={{ opacity: opacity }}>
+                {state?.answer}
+                {/* The civil war was fought in year ...., it ended in year.... and the
           president was President.... */}
-        </p>
-      </div>
-      <div class={style.btnGroup}>
-        <Button
-          name="Display answer"
-          click={handleDisplayAnswer}
-          
-        >
-          <i class="fa fa-book" aria-hidden="true"></i>
-        </Button>
-        <Button
-          name="Mark as correct"
-          disabled={disabledButtons}
-          click={onSuccessClick}
-          backgroundColor={disabledButtons && "gray"}
-          color={disabledButtons && "brown"}
-        >
-          <i class="fa fa-check" aria-hidden="true"></i>
-        </Button>
-        <Button
-          name="Mark as wrong"
-          disabled={disabledButtons}
-          click={onFailClick}
-          backgroundColor={disabledButtons && "gray"}
-          color={disabledButtons && "brown"}
-        >
-          <i class="fa fa-times" aria-hidden="true"></i>
-        </Button>
-      </div>
-    </div>
+              </p>
+            </div>
+
+            <div class={style.btnGroup}>
+              <Button name="Display answer" click={handleDisplayAnswer}>
+                <i class="fa fa-book" aria-hidden="true"></i>
+              </Button>
+              <Button
+                name="Mark as correct"
+                disabled={disabledButtons}
+                click={onSuccessClick}
+                backgroundColor={disabledButtons && "gray"}
+                color={disabledButtons && "brown"}
+              >
+                <i class="fa fa-check" aria-hidden="true"></i>
+              </Button>
+              <Button
+                name="Mark as wrong"
+                disabled={disabledButtons}
+                click={onFailClick}
+                backgroundColor={disabledButtons && "gray"}
+                color={disabledButtons && "brown"}
+              >
+                <i class="fa fa-times" aria-hidden="true"></i>
+              </Button>
+            </div>
+          </div>
+        </>
+      )}
+    </>
   );
 }
 
