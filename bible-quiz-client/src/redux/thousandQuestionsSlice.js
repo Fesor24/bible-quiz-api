@@ -33,6 +33,12 @@ const questionSlice = createSlice({
               questionsAttempted: 0
             };
         },
+        resetOpacityAction: (state) => {
+            return{
+                ...state,
+                opacity: state.opacity = 0
+            }
+        },
         correctAnswerAction: (state) => {
             return {
                 ...state,
@@ -104,6 +110,7 @@ export const {
   setOpacityAction,
   setDisableButtonAction,
   resetIndexAction,
+  resetOpacityAction,
 } = questionSlice.actions;
 
 export default questionSlice.reducer;
