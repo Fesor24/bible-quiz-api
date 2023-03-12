@@ -5,7 +5,7 @@
     --primary-color:  rgba(136, 55, 243, 0.7);
     --secondary-color: rgba(7, 18, 75, 0.76);
     --delay: 1;
-	--duration: 2500ms;
+	--duration: 1500ms;
 	--iterations: 1;
 }
 
@@ -36,7 +36,7 @@ body{
 .container h1::after{
     animation-delay: var(--animation-delay, 2s);
 	animation-iteration-count: var(--iterations, 1);
-	animation-duration: var(--duration, 1500ms);
+	animation-duration: var(--duration, 1000ms);
 	animation-fill-mode: both;
 	animation-timing-function: cubic-bezier(0.0, 0.0, 0.2, 1);
 }
@@ -64,8 +64,12 @@ body{
 	cursor: default;
     text-transform: uppercase;
     font-family: 'Fredoka One', cursive;
+}
 
-	
+@media screen and (max-width: 600px){
+	.container h1{
+		font-size: 1.4rem;
+	}
 }
 
 .container::after{
@@ -119,5 +123,7 @@ body{
     color: bisque;
     text-decoration: none;
 }
+
+
 
 

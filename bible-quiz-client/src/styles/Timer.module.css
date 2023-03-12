@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,900;1,100;1,200;1,500&display=swap');
+
 *{
     padding: 0;
     margin: 0;
@@ -6,6 +8,14 @@
 
 .timer p{
     font-size: 3.6rem;
-    font-weight: 500;
+    font-weight: bold;
     color: rgb(95, 52, 52);
+    font-family: 'Poppins', sans-serif;
+}
+
+@media screen and (min-width: 350px) and (max-width: 600px){
+    .timer p{
+        font-size: 2rem;
+        font-weight: bold;
+    }
 }
