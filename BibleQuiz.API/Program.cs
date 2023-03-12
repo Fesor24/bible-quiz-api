@@ -1,9 +1,19 @@
+using Serilog;
+using Serilog.Events;
+
 namespace BibleQuiz.API
 {
     public class Program
     {
         public static async Task Main(string[] args)
         {
+            // Setting the logger configuration
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .WriteTo.Console()
+                .WriteTo.File("Logs/log.txt", restrictedToMinimumLevel: LogEventLevel.Information ,rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
@@ -15,7 +25,12 @@ namespace BibleQuiz.API
                 .ConfigureApiBehavior()
                 .AddGenericRepository()
                 .AddUnitOfWork()
-                .ConfigureCors();
+                .ConfigureCors()
+                .AddLogging(options =>
+                {
+                    options.ClearProviders();
+                    options.AddSerilog(dispose: true);
+                });
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
