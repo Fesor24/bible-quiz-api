@@ -18,13 +18,7 @@ function Question({
   opacity,
   disabledButtons,
 }) {
-  // const state = useSelector(
-  //   (state) => state.thousandQuestions.queue[state.thousandQuestions.index]
-  // );
 
-  // const { opacity, disabledButtons } = useSelector(
-  //   (state) => state.thousandQuestions
-  // );
 
   const addRevisionQuestion = useAddRevisionQuestion();
 
@@ -47,26 +41,9 @@ function Question({
     "So sad",
   ];
 
-  // const wrongAnswerProvided = () => (dispatch) => {
-  //   try {
-  //     dispatch(Actions.wrongAnswerAction());
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // const handleDisableButton = () => async(dispatch) => {
-  //   try{
-  //     dispatch(Actions.setDisableButtonAction(true))
-  //   }
-  //   catch(error){
-  //     console.log(error);
-  //   }
-  // }
-
   const onFailClick = async () => {
-    // wrongAnswers();
-    // dispatch(wrongAnswerProvided());
+
+    clearTimer();
 
     let question = {
       question: state.question,
@@ -90,13 +67,8 @@ function Question({
         });
     }
 
-    clearTimer();
 
     handleWrongAnswerAndDisableButton();
-
-    // dispatch(Actions.wrongAnswerAction());
-
-    // dispatch(Actions.setDisableButtonAction(true));
 
     toastr.options = {
       positionClass: "toast-top-full-width",
@@ -108,32 +80,20 @@ function Question({
 
     const randomNumber = Math.floor(Math.random() * 6);
 
-    toastr.error(failureMessages[randomNumber], {
-      closeButton: true,
-      progressBar: true,
-      timeOut: 2000,
-      extendedTimeOut: 1000,
-    });
+    // toastr.error(failureMessages[randomNumber], {
+    //   closeButton: true,
+    //   progressBar: true,
+    //   timeOut: 2000,
+    //   extendedTimeOut: 1000,
+    // });
 
     console.log("finished", questionsFinished);
   };
-
-  // const correctAnswerProvided = () => async (dispatch) => {
-  //   try {
-  //     dispatch(Actions.correctAnswerAction());
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   const onSuccessClick = () => {
     // correctAnswers();
 
     handleCorrectAnswerAndDisableButton();
-
-    // dispatch(Actions.correctAnswerAction());
-
-    // dispatch(Actions.setDisableButtonAction(true));
 
     clearTimer();
 
@@ -149,21 +109,14 @@ function Question({
 
     console.log(randomNumber);
 
-    toastr.success(successMessages[randomNumber], {
-      closeButton: true,
-      progressBar: true,
-      timeOut: 2000,
-      extendedTimeOut: 1000,
-    });
+    // toastr.success(successMessages[randomNumber], {
+    //   closeButton: true,
+    //   progressBar: true,
+    //   timeOut: 2000,
+    //   extendedTimeOut: 1000,
+    // });
   };
 
-  // const displayAction = () => async (dispatch) => {
-  //   try {
-  //     dispatch(Actions.setOpacityAction(1));
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   const handleDisplayAnswer = () => {
     // dispatch(Actions.setOpacityAction(1));
