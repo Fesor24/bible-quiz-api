@@ -165,6 +165,27 @@ namespace BibleQuiz.API.Controllers
         }
 
         /// <summary>
+        /// Fetch questions set by me
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet(ApiRoutes.FetchFesorQuestions)]
+        public async Task<ApiResponse> FetchFesorsQuestions()
+        {
+            // Create an instance of the fesor specification
+            var spec = new FesorQuestionsSpecification();
+
+            // Fetch all questions
+            var questions = await unit.Repository<FesorQuestionsDataModel>().GetQuestionsAsync(spec);
+
+            // Return the questions
+            return new ApiResponse
+            {
+                Result = questions
+            };
+
+		}
+
+        /// <summary>
         /// Private class to handle null result
         /// </summary>
         /// <param name="errorMessage"></param>
