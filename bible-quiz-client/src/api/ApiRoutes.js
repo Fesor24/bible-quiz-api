@@ -6,4 +6,6 @@ export default class ApiRoutes {
   static AddRevisionQuestion = "api/revision-question/add";
 
   static FetchRevisionQuestions = "api/revision-questions/fetch";
+
+  static FetchFesorQuestions = "api/fesor-questions/fetch";
 }
