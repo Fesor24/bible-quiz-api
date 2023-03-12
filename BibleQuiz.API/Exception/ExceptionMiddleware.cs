@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Text.Json;
 using BibleQuiz.Core;
+using Serilog;
 
 namespace BibleQuiz.API
 {
@@ -39,8 +40,8 @@ namespace BibleQuiz.API
             }
             catch(Exception ex)
             {
-                // Log the error to console depending on env
-                logger.LogError(ex, ex.Message);
+                // Log the error to console
+                Log.Error(ex.Message);
 
                 // Set status code to 500
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
