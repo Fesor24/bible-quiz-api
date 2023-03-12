@@ -6,7 +6,10 @@ import Timer from "../components/Timer";
 import Question from "../components/Question";
 import Button from "../components/Button";
 import { useNavigate, Link} from "react-router-dom";
-import { useFetchThousandQuestions } from "../api/ApiClient";
+import {
+  useFetchThousandQuestions,
+  useAddRevisionQuestion,
+} from "../api/ApiClient";
 import { useSelector, useDispatch } from "react-redux";
 import * as Action from "../redux/thousandQuestionsSlice";
 
@@ -40,6 +43,8 @@ function ThousandQuestions() {
 
   const fetchThousandQuestions = useFetchThousandQuestions();
 
+  const addRevisionQuestion = useAddRevisionQuestion();
+
   useEffect(() => {
     async function fetchAllThousandQuestions() {
       await fetchThousandQuestions()
@@ -68,9 +73,9 @@ function ThousandQuestions() {
 
     // dispatch(Action.resetOpacityAction());
 
-    const correct = JSON.parse(localStorage.getItem("correctAnswer"));
-    const wrong = JSON.parse(localStorage.getItem("wrongAnswer"));
-    const index = JSON.parse(localStorage.getItem("questionsAttempted"));
+    const correct = JSON.parse(localStorage.getItem("thousandCorrectAnswer"));
+    const wrong = JSON.parse(localStorage.getItem("thousandWrongAnswer"));
+    const index = JSON.parse(localStorage.getItem("thousandQuestionsAttempted"));
 
     console.log(correct, wrong, index);
 
@@ -107,8 +112,27 @@ function ThousandQuestions() {
       dispatch(Action.setOpacityAction(1));
       dispatch(Action.setDisableButtonAction(true));
       dispatch(Action.wrongAnswerAction());
-      // increaseWrongAnswers();
-      // console.log(state);
+
+       let body = {
+         question: question.question,
+         answer: question.answer,
+       };
+
+       const AddToRevision = async () => {
+         await addRevisionQuestion(body)
+           .then((response) => {
+             if (response.data.successful) {
+               console.log(response.data.result);
+             } else {
+               console.log(response.data.errorMessage);
+             }
+           })
+           .catch((error) => {
+             console.log(error);
+           });
+       };
+
+       AddToRevision();
     }
   }, [countdown]);
 
@@ -133,17 +157,17 @@ function ThousandQuestions() {
   };
 
   const handleSaveButtonClick = () => {
-    localStorage.setItem("correctAnswer", JSON.stringify(correctAnswers));
-    localStorage.setItem("wrongAnswer", JSON.stringify(wrongAnswers));
-    localStorage.setItem("questionsAttempted", JSON.stringify(questionsAttempted));
+    localStorage.setItem("thousandCorrectAnswer", JSON.stringify(correctAnswers));
+    localStorage.setItem("thousandWrongAnswer", JSON.stringify(wrongAnswers));
+    localStorage.setItem("thousandQuestionsAttempted", JSON.stringify(questionsAttempted));
     navigate("/category");
   }
 
 
   const handleResetButtonClick = () => {
-    localStorage.removeItem("correctAnswer");
-    localStorage.removeItem("wrongAnswer");
-    localStorage.removeItem("questionsAttempted");
+    localStorage.removeItem("thousandCorrectAnswer");
+    localStorage.removeItem("thousandWrongAnswer");
+    localStorage.removeItem("thousandQuestionsAttempted");
     dispatch(Action.resetIndexAction());
     setCountdown(countdownNumber);
     dispatch(Action.setOpacityAction(0));
@@ -173,7 +197,7 @@ function ThousandQuestions() {
 
   return (
     <Row>
-      <Col span={18} push={6}>
+      <Col lg = {{ span:18, push: 6}} sm={{ span: 16, push: 8}} xs={{span: 16, push: 8}}>
         {!questionsFinished && (
           <>
             <div className={style.timer}>
@@ -225,13 +249,13 @@ function ThousandQuestions() {
             handleShowAnswer={handleShowAnswer}
             opacity={opacity}
             disabledButtons={disabledButtons}
-            questionsFinished = {questionsFinished}
+            questionsFinished={questionsFinished}
           />
         </div>
       </Col>
 
-      <Col span={6} pull={18}>
-        <Sidebar
+      <Col lg= {{span: 6, pull:18}} sm={{ span: 8, pull: 16}} xs={{span: 8, pull: 16}}>
+        <Sidebar        
           correct={correctAnswers}
           wrong={wrongAnswers}
           remaining={questions?.length - questionsAttempted}
