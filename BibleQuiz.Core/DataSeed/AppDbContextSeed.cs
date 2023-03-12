@@ -31,6 +31,25 @@ namespace BibleQuiz.Core
 
                 }
 
+                if(!context.FesorQuestions.Any())
+                {
+                    // Read the content from the file
+                    var fesorsQuestion = File.ReadAllText("../BibleQuiz.Core/DataSeed/fesor.json");
+
+                    // Deserialize it into a list of fesor questions
+                    var questions = JsonSerializer.Deserialize<List<FesorQuestionsDataModel>>(fesorsQuestion);
+
+                    // Loop over the questions and add to db
+                    foreach(var question in questions)
+                    {
+                        // Add the question to db
+                        await context.FesorQuestions.AddAsync(question);
+                    }
+
+                    // Save the changes to db
+                    await context.SaveChangesAsync();
+                }
+
             }
 
             catch(Exception ex)
