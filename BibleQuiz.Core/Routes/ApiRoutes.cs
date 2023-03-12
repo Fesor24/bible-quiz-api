@@ -21,5 +21,10 @@
         /// Endpoint to fetch all revision questions
         /// </summary>
         public const string FetchRevisionQuestions = "api/revision-questions/fetch";
+
+        /// <summary>
+        /// Endpoint to fetch questions set by me
+        /// </summary>
+        public const string FetchFesorQuestions = "api/fesor-questions/fetch";
     }
 }
