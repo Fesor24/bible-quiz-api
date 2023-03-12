@@ -3,6 +3,7 @@ import style from "../styles/Sidebar.module.css";
 import Circle from "../components/Circle";
 
 function Sidebar({ correct, wrong, remaining, total }) {
+
   return (
     <div className={style.container}>
       <div className={style.sidebar}>
