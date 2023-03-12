@@ -41,3 +41,14 @@ import ApiRoutes from "./ApiRoutes";
 
     return fetchRevisionQuestions;
  }
+
+ // Hook to fetch fesor questions
+ export function useFetchFesorQuestions(){
+    async function fetchFesorQuestions(){
+        var response = axios.get(ApiRoutes.FetchFesorQuestions);
+
+        return response;
+    }
+
+    return fetchFesorQuestions;
+ }
