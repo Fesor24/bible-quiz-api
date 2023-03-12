@@ -3,6 +3,7 @@ import Category from "./pages/Category";
 import ThousandQuestions from "./pages/ThousandQuestions";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import RevisionQuestions from "./pages/RevisionQuestions";
+import FesorQuestions from "./pages/FesorQuestions";
 
 
 function App() {
@@ -23,6 +24,10 @@ function App() {
     {
       path: "/revise-questions",
       element: <RevisionQuestions />
+    },
+    {
+      path: "/fesor-questions",
+      element: <FesorQuestions/>
     }
   ]);
 
