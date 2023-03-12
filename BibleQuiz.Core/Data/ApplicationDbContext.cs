@@ -27,5 +27,10 @@ namespace BibleQuiz.Core
         /// Revision quiz questions db set
         /// </summary>
         public DbSet<RevisionQuestionsDataModel> RevisionQuestions { get; set; }
+
+        /// <summary>
+        /// Table containing questions set by me
+        /// </summary>
+        public DbSet<FesorQuestionsDataModel> FesorQuestions { get; set;}
     }
 }
