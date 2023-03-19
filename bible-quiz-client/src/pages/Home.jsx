@@ -12,13 +12,15 @@ function Home() {
 
   return (
     <div className={style.container}>
-      <h1>gtcc quiz preparation</h1>
+      <div className={style.mainWrapper}>
+        <h1>gtcc quiz preparation</h1>
 
-      <Link to="/category">
-        <Button name="Get started">
-          <i class="fa fa-play-circle" aria-hidden="true"></i>
-        </Button>
-      </Link>
+        <Link to="/category">
+          <Button name="Get started">
+            <i class="fa fa-play-circle" aria-hidden="true"></i>
+          </Button>
+        </Link>
+      </div>
     </div>
   );
 }

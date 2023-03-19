@@ -71,6 +71,10 @@
     font-weight: bold;
 }
 
+.btn:focus{
+    outline: none;
+}
+
 @media screen and (max-width: 600px){
     .btn{
         padding: 7px 10px;
@@ -79,5 +83,12 @@
         margin-top: 0.5rem;
         font-weight: bold;
     /* background-color: var(--secondary-color); */
+    }
+}
+
+@media screen and (max-width: 425px){
+    .btn{
+        font-size: .9rem;
+        padding: .4rem;
     }
 }

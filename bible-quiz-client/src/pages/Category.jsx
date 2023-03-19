@@ -11,28 +11,31 @@ function Category() {
 
   return (
     <div className={style.container}>
+      <div className={style.mainWrapper}>
+
       <h1>Select a category</h1>
-      <Link to="/thousand-questions">
-        <Button name="1000 Questions">
-          <i class="fa fa-file-text" aria-hidden="true"></i>
-        </Button>
-      </Link>
+        <Link to="/thousand-questions">
+          <Button name="1000 Questions">
+            <i class="fa fa-file-text" aria-hidden="true"></i>
+          </Button>
+        </Link>
 
-      <Link to="/fesor-questions">
-        <Button name="Fesor's Question">
-          <i class="fa fa-user" aria-hidden="true"></i>
-        </Button>
-      </Link>
+        <Link to="/fesor-questions">
+          <Button name="Fesor's Question">
+            <i class="fa fa-user" aria-hidden="true"></i>
+          </Button>
+        </Link>
 
-      <Link to="/revise-questions">
-        <Button name="Revise Questions">
-          <i class="fa-brands fa-think-peaks"></i>
-        </Button>
-      </Link>
+        <Link to="/revise-questions">
+          <Button name="Revise Questions">
+            <i class="fa-brands fa-think-peaks"></i>
+          </Button>
+        </Link>
 
-      <Link to="/" className={style.link}>
-        Back to home
-      </Link>
+        <Link to="/" className={style.link}>
+          Back to home
+        </Link>
+      </div>
     </div>
   );
 }

@@ -113,8 +113,8 @@ function FesorQuestions() {
       dispatch(Action.wrongAnswerAction());
 
       let body = {
-        question: question.question,
-        answer: question.answer
+        question: question?.question,
+        answer: question?.answer
       }
 
       const AddToRevision = async () => {
@@ -197,78 +197,93 @@ function FesorQuestions() {
 
   const handleBackToCategory = () => {
     setQuestionsFinished(false);
+    localStorage.removeItem("fesorCorrectAnswer");
+    localStorage.removeItem("fesorWrongAnswer");
+    localStorage.removeItem("fesorQuestionsAttempted");
     dispatch(Action.resetIndexAction());
   };
 
   return (
-    <Row>
-      <Col span={18} push={6}>
-        {!questionsFinished && (
-          <>
-            <div className={style.timer}>
-              <Timer countdown={countdown} />
-              <div>
-                <div className={style.next}>
-                  <Button click={handleNextButtonClick}>
-                    <i class="fa fa-arrow-right" aria-hidden="true"></i>
-                  </Button>
-                  &nbsp; &nbsp;
-                  <Button click={handleSaveButtonClick}>
-                    <i class="fa fa-arrow-left"></i>
-                  </Button>
-                  &nbsp; &nbsp;
-                  <Button click={handleResetButtonClick}>
-                    <i class="fa-solid fa-ban"></i>
-                  </Button>
-                  &nbsp; &nbsp;
-                </div>
+    <>
+      {questions?.length === 0 && (
+        <div className={style.blankContainer}>
+          <div class={style.blank}>
+            <h3>No questions at the moment</h3>
+            <i class="fa-solid fa-magnifying-glass fa-4x"></i>
+            <h3>Questions will be available soon. Loading...</h3>
+            <i class="fa-solid fa-empty-set"></i>
+            <Link to="/category">
+              <Button name="Back to Category">
+                <i class="fa-sharp fa-solid fa-backward"></i>
+              </Button>
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {questions?.length > 0 && (
+        <div className={style.container}>
+          <div className={style.displayPage}>
+            <div className={style.sideBar}>
+              <Sidebar
+                key={"fesor-question"}
+                correct={correctAnswers}
+                wrong={wrongAnswers}
+                remaining={questions?.length - questionsAttempted}
+                total={questions?.length}
+              />
+            </div>
+
+            <div className={style.questionBar}>
+              {!questionsFinished && (
+                <>               
+                    <Timer
+                      countdown={countdown}
+                      handleNextButtonClick={handleNextButtonClick}
+                      handleResetButtonClick={handleResetButtonClick}
+                      handleSaveButtonClick={handleSaveButtonClick}
+                    />
+                </>
+              )}
+
+              {questionsFinished && (
+                <>
+                  <div className={style.startAgain}>
+                    <Link to="/category">
+                      <Button
+                        name="Back to Category"
+                        click={handleBackToCategory}
+                      >
+                        <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                      </Button>
+                    </Link>
+                  </div>
+                </>
+              )}
+
+              <div className={style.question}>
+                <Question
+                  disableButtons={disableButtons}
+                  displayAnswer={finishedTimer}
+                  clearTimer={clearTimer}
+                  state={question}
+                  handleWrongAnswerAndDisableButton={
+                    handleWrongAnswerAndDisableButton
+                  }
+                  handleCorrectAnswerAndDisableButton={
+                    handleCorrectAnswerAndDisableButton
+                  }
+                  handleShowAnswer={handleShowAnswer}
+                  opacity={opacity}
+                  disabledButtons={disabledButtons}
+                  questionsFinished={questionsFinished}
+                />
               </div>
             </div>
-          </>
-        )}
-
-        {questionsFinished && (
-          <>
-            <div className={style.startAgain}>
-              <Link to="/category">
-                <Button name="Back to Category" click={handleBackToCategory}>
-                  <i class="fa fa-arrow-left" aria-hidden="true"></i>
-                </Button>
-              </Link>
-            </div>
-          </>
-        )}
-
-        <div className={style.question}>
-          <Question
-            disableButtons={disableButtons}
-            displayAnswer={finishedTimer}
-            clearTimer={clearTimer}
-            state={question}
-            handleWrongAnswerAndDisableButton={
-              handleWrongAnswerAndDisableButton
-            }
-            handleCorrectAnswerAndDisableButton={
-              handleCorrectAnswerAndDisableButton
-            }
-            handleShowAnswer={handleShowAnswer}
-            opacity={opacity}
-            disabledButtons={disabledButtons}
-            questionsFinished={questionsFinished}
-          />
+          </div>
         </div>
-      </Col>
-
-      <Col span={6} pull={18}>
-        <Sidebar
-        key={"fesor-question"}
-          correct={correctAnswers}
-          wrong={wrongAnswers}
-          remaining={questions?.length - questionsAttempted}
-          total={questions?.length}
-        />
-      </Col>
-    </Row>
+      )}
+    </>
   );
 }
 

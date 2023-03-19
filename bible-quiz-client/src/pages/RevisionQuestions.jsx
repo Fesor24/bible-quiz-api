@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Row, Col } from "antd";
 import style from "../styles/ThousandQuestions.module.css";
 import Sidebar from "../components/Sidebar";
 import Timer from "../components/Timer";
@@ -176,6 +175,9 @@ function RevisionQuestions() {
 
   const handleBackToCategory = () => {
     setQuestionsFinished(false);
+    localStorage.removeItem("revisionCorrectAnswer");
+    localStorage.removeItem("revisionWrongAnswer");
+    localStorage.removeItem("revisionQuestionsAttempted");
     dispatch(Action.resetIndexAction());
     
   }
@@ -198,29 +200,28 @@ function RevisionQuestions() {
         </div>
       )}
       {questions.length > 0 && (
-        <Row>
-          <Col span={18} push={6}>
+        <div className={style.container}>
+          <div className={style.displayPage}>
+            <div className={style.sideBar}>
+                <Sidebar
+              correct={correctAnswers}
+              wrong={wrongAnswers}
+              remaining={questions?.length - questionsAttempted}
+              total={questions?.length}
+            />
+            </div>
+
+            <div className={style.questionBar}>
+
             {!questionsFinished && (
               <>
-                <div className={style.timer}>
-                  <Timer countdown={countdown} />
-                  <div>
-                    <div className={style.next}>
-                      <Button click={handleNextButtonClick}>
-                        <i class="fa fa-arrow-right" aria-hidden="true"></i>
-                      </Button>
-                      &nbsp; &nbsp;
-                      <Button click={handleSaveButtonClick}>
-                        <i class="fa fa-arrow-left"></i>
-                      </Button>
-                      &nbsp; &nbsp;
-                      <Button click={handleResetButtonClick}>
-                        <i class="fa-solid fa-ban"></i>
-                      </Button>
-                      &nbsp; &nbsp;
-                    </div>
-                  </div>
-                </div>
+                
+                  <Timer countdown={countdown}
+                  handleNextButtonClick = {handleNextButtonClick}
+                  handleResetButtonClick = {handleResetButtonClick}
+                  handleSaveButtonClick = {handleSaveButtonClick} />
+                
+                
               </>
             )}
 
@@ -260,17 +261,11 @@ function RevisionQuestions() {
                 disabledButtons={disabledButtons}
               />
             </div>
-          </Col>
+          </div>
 
-          <Col span={6} pull={18}>
-            <Sidebar
-              correct={correctAnswers}
-              wrong={wrongAnswers}
-              remaining={questions?.length - questionsAttempted}
-              total={questions?.length}
-            />
-          </Col>
-        </Row>
+          
+        </div>
+        </div>
       )}
     </>
   );

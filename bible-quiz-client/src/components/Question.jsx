@@ -79,13 +79,14 @@ function Question({
     };
 
     const randomNumber = Math.floor(Math.random() * 6);
-
-    // toastr.error(failureMessages[randomNumber], {
-    //   closeButton: true,
+    
+  //   closeButton: true,
     //   progressBar: true,
     //   timeOut: 2000,
     //   extendedTimeOut: 1000,
     // });
+    // toastr.error(failureMessages[randomNumber], {
+  
 
     console.log("finished", questionsFinished);
   };
@@ -133,13 +134,10 @@ function Question({
         <>
           <div className={style.finishedQuestions}>
             <h2>
-              session completed{" "}
+              session completed
               <i class="fa-sharp fa-solid fa-circle-check"></i>
             </h2>
-            <div className={style.finishedQuestionsImage}>
-              <p>Tada</p>
-            </div>
-            {/* <img src={meme} alt="image" height={100} width={100} /> */}
+
           </div>
         </>
       )}
@@ -149,16 +147,16 @@ function Question({
           <div className={style.container}>
             <div>
               <h4 key={state?.id} className={style.question}>
-                {/* {state?.question} */}
-                Nigeria fought her civil war in what year, when did the war ened and
-          who was president at that period ?
+                {state?.question}
+                {/* Nigeria fought her civil war in what year, when did the war ened and
+          who was president at that period ? */}
               </h4>
             </div>
             <div className={style.answer}>
               <p style={{ opacity: opacity }}>
-                {/* {state?.answer} */}
-                The civil war was fought in year ...., it ended in year.... and the
-          president was President....
+                {state?.answer}
+                {/* The civil war was fought in year ...., it ended in year.... and the
+          president was President.... */}
               </p>
             </div>
 

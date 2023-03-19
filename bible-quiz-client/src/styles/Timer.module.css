@@ -6,11 +6,23 @@
     box-sizing: border-box;
 }
 
-.timer p{
+.timer{
+    /* background: antiquewhite; */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly !important;
+}
+
+.timerText{
     font-size: 3.6rem;
     font-weight: bold;
     color: rgb(95, 52, 52);
     font-family: 'Poppins', sans-serif;
+    text-align: center;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 @media screen and (max-width: 600px){

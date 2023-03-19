@@ -21,20 +21,18 @@ body{
 }
 
 .container{
-    height: 100vh;
+	width:100%;
+	height: 100vh;
     background: linear-gradient(to right, rgb(29, 26, 26), rgb(95, 52, 52));
     /* padding: 50px 50px 0px; */
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    text-align: center;
-	width:100vw
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
 }
 
-.container h1,
-.container h1::after{
+.container .mainWrapper h1,
+.container .mainWrapper h1::after{
     animation-delay: var(--animation-delay, 2s);
 	animation-iteration-count: var(--iterations, 1);
 	animation-duration: var(--duration, 1000ms);
@@ -53,7 +51,7 @@ body{
     
 } */
 
-.container h1{
+.container .mainWrapper h1{
     --animation-delay: var(--delay, 0);
 	--animation-duration: var(--duration, 1000ms);
 	--animation-iterations: var(--iterations, 1);
@@ -66,13 +64,6 @@ body{
     text-transform: uppercase;
     font-family: 'Fredoka One', cursive;
 }
-
-@media screen and (max-width: 600px){
-	.container h1{
-		font-size: 1.4rem;
-	}
-}
-
 .container::after{
     content: "";
 		position: absolute;
@@ -125,6 +116,25 @@ body{
     text-decoration: none;
 }
 
+.mainWrapper{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+@media screen and (max-width: 600px){
+	.container .mainWrapper h1{
+		font-size: 1.4rem;
+	}
+}
+
+@media screen and (max-width: 425px){
+	.container .mainWrapper h1{
+		font-size: 1.4rem;
+		margin-bottom: 0.5rem;
+	}
+}
 
 
 

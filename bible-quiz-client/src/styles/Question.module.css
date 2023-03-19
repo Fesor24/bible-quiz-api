@@ -9,21 +9,19 @@
 .container{
     padding: 20px 30px;
     font-family: 'Poppins', sans-serif;
-    height: 100vh;
-    width: 100%;
+    /* height: 100vh; */
+    /* width: 100%; */
 }
 
 .question{
-    font-size: 2.5rem;
-    height: auto;
+    font-size: 2.3rem;
     width: 100%;
     color: rgb(95, 52, 52);
 }
 
-.answer{
-    height: auto;
-    font-size: 2rem;
-    font-weight: 400;
+.answer p{
+    font-size: 1.9rem;
+    font-weight: 500;
     width: 100%;
     margin: 10px 0 0;
     color: rgb(95, 52, 52);
@@ -34,32 +32,6 @@
     flex-direction: row;
     justify-content: space-evenly;
 }
-
-@media screen and (max-width:600px){
-    .question{
-        font-size: 1.2rem;
-        font-weight: 800;
-    }
-
-    .answer{
-        font-size: 1.0rem;
-        font-weight: 500;
-        margin-bottom: 0.7rem;
-    }
-
-    .btnGroup{
-        display: flex;
-        flex-direction: column;
-
-    }
-}
-
-/* .question h4{
-    font-size: 1rem;
-} */
-
-
-
 
 
 .finishedQuestions{
@@ -76,17 +48,35 @@
     color: rgb(95, 52, 52);
 }
 
-.finishedQuestionsImage{
-    background-image: url("../images/meme.JPG");
-    background-size: cover;
-    background-position: center center;
-    /* background: url("../images/meme.JPG"); */
-    z-index: 1000;
-    height: 76vh;
-    width: 100%;
-}
 
 .finishedQuestions p{
     opacity: 0;
 }
+
+@media screen and (max-width:600px){
+    .question{
+        font-size: 1.2rem;
+        font-weight: 800;
+    }
+
+    .answer p{
+        font-size: 1.1rem;
+        font-weight: 500;
+        margin-bottom: 0.9rem;
+    }
+
+    .btnGroup{
+        display: flex;
+        flex-direction: column;
+
+    }
+
+    .finishedQuestions h2{
+    font-size: 1.6rem;
+    padding: 2rem;
+ 
+}
+}
+
+
 
