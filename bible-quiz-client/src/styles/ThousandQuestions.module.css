@@ -7,16 +7,20 @@
 *{
     padding: 0;
     margin: 0;
-    box-sizing: border-box;
+    box-sizing: content-box;
 }
 
 .container{
-    height: 100vh;    
+    height: 100vh;
+    max-height: fit-content;
+    width:100%; 
+    padding: 0;
+    margin: 0;   
     
 }
 
 .timer{
-    height: 15vh;
+    height: 15%;
     background-color: antiquewhite;
     display: flex;
     flex-direction: row;
@@ -25,7 +29,7 @@
 }
 
 .question{
-    height: 85vh;
+    height: 85%;
     background-color: antiquewhite;
 }
 

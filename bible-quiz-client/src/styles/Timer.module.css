@@ -13,9 +13,10 @@
     font-family: 'Poppins', sans-serif;
 }
 
-@media screen and (min-width: 350px) and (max-width: 600px){
+@media screen and (max-width: 600px){
     .timer p{
-        font-size: 2rem;
+        font-size: 1.6rem;
+        margin-top: 0.5rem;
         font-weight: bold;
     }
 }

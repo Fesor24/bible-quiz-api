@@ -147,27 +147,27 @@ function Question({
       {!questionsFinished && (
         <>
           <div className={style.container}>
-            <div className={style.question}>
-              <h4 key={state?.id}>
-                {state?.question}
-                {/* Nigeria fought her civil war in what year, when did the war ened and
-          who was president at that period ? */}
+            <div>
+              <h4 key={state?.id} className={style.question}>
+                {/* {state?.question} */}
+                Nigeria fought her civil war in what year, when did the war ened and
+          who was president at that period ?
               </h4>
             </div>
             <div className={style.answer}>
               <p style={{ opacity: opacity }}>
-                {state?.answer}
-                {/* The civil war was fought in year ...., it ended in year.... and the
-          president was President.... */}
+                {/* {state?.answer} */}
+                The civil war was fought in year ...., it ended in year.... and the
+          president was President....
               </p>
             </div>
 
             <div class={style.btnGroup}>
-              <Button name="Display answer" click={handleDisplayAnswer}>
+              <Button name="Answer" click={handleDisplayAnswer}>
                 <i class="fa fa-book" aria-hidden="true"></i>
               </Button>
               <Button
-                name="Mark as correct"
+                name="Right"
                 disabled={disabledButtons}
                 click={onSuccessClick}
                 backgroundColor={disabledButtons && "gray"}
@@ -176,7 +176,7 @@ function Question({
                 <i class="fa fa-check" aria-hidden="true"></i>
               </Button>
               <Button
-                name="Mark as wrong"
+                name="Wrong"
                 disabled={disabledButtons}
                 click={onFailClick}
                 backgroundColor={disabledButtons && "gray"}

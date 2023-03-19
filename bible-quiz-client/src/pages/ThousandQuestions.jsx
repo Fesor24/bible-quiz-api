@@ -196,73 +196,85 @@ function ThousandQuestions() {
     };
 
   return (
-    <Row>
-      <Col lg = {{ span:18, push: 6}} sm={{ span: 16, push: 8}} xs={{span: 16, push: 8}}>
-        {!questionsFinished && (
-          <>
-            <div className={style.timer}>
-              <Timer countdown={countdown} />
-              <div>
-                <div className={style.next}>
-                  <Button click={handleNextButtonClick}>
-                    <i class="fa fa-arrow-right" aria-hidden="true"></i>
-                  </Button>
-                  &nbsp; &nbsp;
-                  <Button click={handleSaveButtonClick}>
-                    <i class="fa fa-arrow-left"></i>
-                  </Button>
-                  &nbsp; &nbsp;
-                  <Button click={handleResetButtonClick}>
-                    <i class="fa-solid fa-ban"></i>
-                  </Button>
-                  &nbsp; &nbsp;
+    <div className={style.container}>
+      <Row>
+        <Col
+          lg={{ span: 18, push: 6}}
+          sm={{ span: 16, push: 8}}
+          xs={{ span: 16, push: 8 }}
+        >
+          {!questionsFinished && (
+            <>
+              <div className={style.timer}>
+                <Timer countdown={countdown} />
+                <div>
+                  <div className={style.next}>
+                    <Button click={handleNextButtonClick}>
+                      <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                    </Button>
+                    &nbsp; &nbsp;
+                    <Button click={handleSaveButtonClick}>
+                      <i class="fa fa-arrow-left"></i>
+                    </Button>
+                    &nbsp; &nbsp;
+                    <Button click={handleResetButtonClick}>
+                      <i class="fa-solid fa-ban"></i>
+                    </Button>
+                    &nbsp; &nbsp;
+                  </div>
                 </div>
               </div>
-            </div>
-          </>
-        )}
+            </>
+          )}
 
-        {questionsFinished && (
-          <>
-            <div className={style.startAgain}>
-              <Link to="/category">
-                <Button name="Back to Category" click={handleBackToCategory}>
-                  <i class="fa fa-arrow-left" aria-hidden="true"></i>
-                </Button>
-              </Link>
-            </div>
-          </>
-        )}
+          {questionsFinished && (
+            <>
+              <div className={style.startAgain}>
+                <Link to="/category">
+                  <Button name="Back to Category" click={handleBackToCategory}>
+                    <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                  </Button>
+                </Link>
+              </div>
+            </>
+          )}
 
-        <div className={style.question}>
-          <Question
-            disableButtons={disableButtons}
-            displayAnswer={finishedTimer}
-            clearTimer={clearTimer}
-            state={question}
-            handleWrongAnswerAndDisableButton={
-              handleWrongAnswerAndDisableButton
-            }
-            handleCorrectAnswerAndDisableButton={
-              handleCorrectAnswerAndDisableButton
-            }
-            handleShowAnswer={handleShowAnswer}
-            opacity={opacity}
-            disabledButtons={disabledButtons}
-            questionsFinished={questionsFinished}
-          />
-        </div>
-      </Col>
+          <div className={style.question}>
+            <Question
+              disableButtons={disableButtons}
+              displayAnswer={finishedTimer}
+              clearTimer={clearTimer}
+              state={question}
+              handleWrongAnswerAndDisableButton={
+                handleWrongAnswerAndDisableButton
+              }
+              handleCorrectAnswerAndDisableButton={
+                handleCorrectAnswerAndDisableButton
+              }
+              handleShowAnswer={handleShowAnswer}
+              opacity={opacity}
+              disabledButtons={disabledButtons}
+              questionsFinished={questionsFinished}
+            />
+          </div>
+        </Col>
 
-      <Col lg= {{span: 6, pull:18}} sm={{ span: 8, pull: 16}} xs={{span: 8, pull: 16}}>
-        <Sidebar        
-          correct={correctAnswers}
-          wrong={wrongAnswers}
-          remaining={questions?.length - questionsAttempted}
-          total={questions?.length}
-        />
-      </Col>
-    </Row>
+        <Col
+          lg={{ span: 6, pull: 18}}
+          sm={{ span: 8, pull: 16}}
+          xs={{ span: 8, pull: 16}}
+        >
+          <div className={style.container}>
+            <Sidebar
+              correct={correctAnswers}
+              wrong={wrongAnswers}
+              remaining={questions?.length - questionsAttempted}
+              total={questions?.length}
+            />
+          </div>
+        </Col>
+      </Row>
+    </div>
   );
 }
 

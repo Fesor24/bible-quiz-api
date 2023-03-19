@@ -3,9 +3,9 @@ import style from "../styles/Sidebar.module.css";
 
 function Circle({ borderWidth, circleText, colorText }) {
   return (
-    <div className={style.circle} style={borderWidth}>
+    <div id={style.circleId} className={style.circle} style={borderWidth}>
       <p className={style.metric} style={colorText}>
-        {circleText ?? 100}
+        {circleText}
       </p>
     </div>
   );

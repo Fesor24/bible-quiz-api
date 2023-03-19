@@ -29,7 +29,8 @@ body{
     align-items: center;
     justify-content: center;
     color: #fff;
-    text-align: center
+    text-align: center;
+	width:100vw
 }
 
 .container h1,

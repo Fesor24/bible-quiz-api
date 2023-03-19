@@ -15,8 +15,8 @@
 .container{
     background: linear-gradient(to right, rgb(29, 26, 26), rgb(95, 52, 52));
     height: 100vh;
-    max-height: 100vh;
     font-family: 'Poppins', sans-serif;
+    width: 100%;
 }
 
 .sidebar{
@@ -38,6 +38,7 @@
     flex-wrap: wrap;
 }
 
+
 .circle{
   width: 100px;
   height: 100px;
@@ -52,19 +53,20 @@
 }
 
 .circle p,
-.content p{
+.contentText{
     color:bisque;
 }
 
 
-.content p{
+.contentText{
     padding-bottom: 0.15rem;
     font-weight: bold;
     font-size: 1rem;
+    text-align: center;
 }
 
 .metric{
-    font-size: 1.8rem !important;
+    font-size: 1.7rem;
 }
 
 @media screen and (max-width: 600px){
@@ -75,41 +77,19 @@
 
     }
 
-    .content p{
-        font-size: 0.9rem;
-        margin-bottom: 0.4rem;
-        text-align: center;
-    }
-
-    .metric{
-        font-size: 1.2rem !important;
-        font-weight: bolder;
-        
-    }
-}
-
-@media screen and (max-width: 1000px){
-    .circle{
-        width: 140px;
-        height: 140px;
-        border-radius: 50%;
-
-    }
-
-    .content p{
-        font-size: 1.5rem;
-        margin-bottom: 1.4rem;
-        text-align: center;
-    }
-
-    .metric{
-        font-size: 2.2rem !important;
-        font-weight: bolder;
-        
-    }
-
     .content{
-        padding: 20px;
+        margin: 5px 0;
+    }
+
+    .contentText{
+        font-size: 1.0rem;
+    }
+
+    .metric{
+        font-size: 1.2rem;
+        font-weight: bold;    
     }
 }
+
+
 

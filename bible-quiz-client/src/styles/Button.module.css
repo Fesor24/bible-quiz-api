@@ -17,6 +17,8 @@
     animation-duration: 2s;
     animation-fill-mode: both;
     box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    display: inline-block;
+    width: auto;
 }
 
 @keyframes bounce{
@@ -71,12 +73,11 @@
 
 @media screen and (max-width: 600px){
     .btn{
-        padding: 12px 18px;
-    font-size: 1rem;
-    font-family: 'Poppins', sans-serif;
-    border-radius: 25px;
-    margin-top: 1rem;
-    font-weight: bold;
+        padding: 7px 10px;
+        font-size: 1rem;
+        border-radius: 25px;
+        margin-top: 0.5rem;
+        font-weight: bold;
     /* background-color: var(--secondary-color); */
     }
 }
