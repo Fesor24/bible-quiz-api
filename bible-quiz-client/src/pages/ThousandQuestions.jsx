@@ -34,7 +34,7 @@ function ThousandQuestions() {
 
   const navigate = useNavigate();
 
-  const countdownNumber = 10;
+  const countdownNumber = 45;
 
   const { correctAnswers, wrongAnswers, questionsAttempted, index } = useSelector(
     (state) => state.thousandQuestions
