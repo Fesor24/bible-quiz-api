@@ -7,29 +7,28 @@
 }
 
 .container{
-    padding: 20px 30px;
+    padding: 12px 25px 0;
     font-family: 'Poppins', sans-serif;
     /* height: 100vh; */
     /* width: 100%; */
 }
 
 .question{
-    font-size: 2.3rem;
-    width: 100%;
+    font-size: 1.28rem;
+    font-weight: 900;
     color: rgb(95, 52, 52);
 }
 
 .answer p{
-    font-size: 1.9rem;
-    font-weight: 500;
-    width: 100%;
-    margin: 10px 0 0;
-    color: rgb(95, 52, 52);
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 10px 0 4px;
+    color: peru;
 }
 
 .btnGroup{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-evenly;
 }
 
@@ -42,9 +41,10 @@
 }
 
 .finishedQuestions h2{
-    font-size: 2.6rem;
+    font-size: 1.6rem;
     text-transform: uppercase;
-    margin-top: 1rem;
+    margin-top: 2rem;
+    text-align: center;
     color: rgb(95, 52, 52);
 }
 
@@ -53,30 +53,98 @@
     opacity: 0;
 }
 
-@media screen and (max-width:600px){
+@media screen and (min-width: 440px) {
     .question{
-        font-size: 1.2rem;
-        font-weight: 800;
+        font-size: 1.5rem;
     }
 
     .answer p{
-        font-size: 1.1rem;
-        font-weight: 500;
-        margin-bottom: 0.9rem;
+        font-size: 1.4rem;
+    }
+}
+
+@media screen and (min-width: 460px) {
+    
+}
+
+@media screen and (min-width:530px) {
+    .question{
+        font-size: 1.7rem;
+    }
+
+    .answer p{
+        font-size: 1.5rem;
+    }
+}
+
+@media screen and (min-width: 560px) {
+    .question{
+        font-size: 1.9rem;
+    }
+
+    .answer p{
+        font-size: 1.67rem;
+        margin-bottom: 1rem;
+    }
+}
+
+@media screen and (min-width: 670px) {
+
+    .question{
+        font-size: 2.4rem;
+    }
+
+    .answer p{
+        font-size: 1.9rem;
+        margin-bottom: 1rem;
     }
 
     .btnGroup{
         display: flex;
         flex-direction: column;
+    }
+}
 
+@media screen and (min-width:735px) {
+    .btnGroup{
+        display: flex;
+        flex-direction: row;
+    }
+}
+
+@media screen and (min-width: 850px) {
+     .question{
+        font-size: 2.6rem;
     }
 
-    .finishedQuestions h2{
-    font-size: 1.6rem;
-    padding: 2rem;
- 
+    .answer p{
+        font-size: 2.0rem;
+        margin-bottom: 1rem;
+    }
 }
+
+@media screen and (min-width: 1000px) {
+     .question{
+        font-size: 3.0rem;
+    }
+
+    .answer p{
+        font-size: 2.4rem;
+        margin-bottom: 1rem;
+    }
 }
+
+@media screen and (min-width: 1000px) and (min-height:400px) {
+
+    .question{
+        font-size: 2rem;
+    }
+
+    .answer p{
+        font-size: 1.8rem;
+    }
+}
+
 
 
 

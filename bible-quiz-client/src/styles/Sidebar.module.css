@@ -42,8 +42,8 @@
 
 
 .circle{
-  width: 100px;
-  height: 100px;
+  width: 85px;
+  height: 85px;
   border-radius: 50%;
   border: 4px solid bisque;
   border-width: 4px 4px;
@@ -68,30 +68,102 @@
 }
 
 .metric{
-    font-size: 1.7rem;
+    font-size: 1.5rem;
 }
 
-@media screen and (max-width: 600px){
+@media screen and (min-width:440px) {
     .circle{
-        width: 75px;
-        height: 75px;
-        border-radius: 50%;
-
-    }
-
-    .content{
-        margin: 5px 0;
+        height: 90px;
+        width: 90px;
     }
 
     .contentText{
-        font-size: 1.0rem;
-    }
-
-    .metric{
         font-size: 1.2rem;
-        font-weight: bold;    
     }
 }
 
+@media screen and (min-width: 460px) {
+    .circle{
+        height:95px;
+        width:95px;
+    }
+
+    .metric{
+        font-size: 1.7rem;
+    }
+
+    .contentText{
+        font-size: 1.22rem;
+    }
+}
+
+@media screen and (min-width: 560px) {
+      .circle{
+        width:110px;
+        height:110px
+    }
+    
+    .metric{
+        font-size: 2.0rem;
+    }
+
+    .contentText{
+        font-size: 1.24rem;
+    }
+}
+@media screen and (min-width: 670px) {
+
+    .circle{
+        width:130px;
+        height:130px
+    }
+    
+    .metric{
+        font-size: 2.4rem;
+    }
+
+    .contentText{
+        font-size: 1.4rem;
+    }
+}
+@media screen and (min-width: 850px) {
+    .circle{
+        width: 145px;
+        height: 145px;
+    }
+
+    .contentText{
+        font-size: 1.6rem;
+    }
+}
+@media screen and (min-width: 1000px) {
+     .circle{
+        width:150px;
+        height:150px
+    }
+
+    .contentText{
+        font-size: 1.8rem;
+    }
+    
+    .metric{
+        font-size: 3.1rem;
+    }
+}
+
+@media screen and (min-width: 1000px) and (min-height:400px) {
+     .circle{
+        width:85px;
+        height:85px
+    }
+
+    .contentText{
+        font-size: 1.23rem;
+    }
+    
+    .metric{
+        font-size: 1.7rem;
+    }
+}
 
 

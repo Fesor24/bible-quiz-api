@@ -13,7 +13,8 @@ function Home() {
   return (
     <div className={style.container}>
       <div className={style.mainWrapper}>
-        <h1>gtcc quiz preparation</h1>
+        <h1 className = {style.mainTitle}>gtcc quiz preparation</h1>
+        
 
         <Link to="/category">
           <Button name="Get started">

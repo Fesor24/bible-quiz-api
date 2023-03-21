@@ -13,7 +13,7 @@ function Category() {
     <div className={style.container}>
       <div className={style.mainWrapper}>
 
-      <h1>Select a category</h1>
+      <h1 className={style.mainTitle}>Select a category</h1>
         <Link to="/thousand-questions">
           <Button name="1000 Questions">
             <i class="fa fa-file-text" aria-hidden="true"></i>

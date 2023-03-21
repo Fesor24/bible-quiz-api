@@ -56,7 +56,8 @@
 }
 
 .blank h3{
-    font-size: 1.7rem;
+    font-size: 1.2rem;
+    text-align: center;
 }
 
 .displayPage{
@@ -76,17 +77,35 @@
     padding-top: 2.5rem;
 }
 
+@media screen and (min-width:460px) {
+    
+}
 
-@media screen and (max-width: 600px){
-    .next{
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
+@media screen and (min-width:560px) {
+    .blank h3{
+        font-size: 1.35rem;
     }
 }
 
-@media screen and (max-width: 425px){
-    
+
+@media screen and (min-width:670px) {
+    .blank h3{
+        font-size: 1.5rem;
+    }
 }
+
+
+@media screen and (min-width:850px) {
+    .blank h3{
+        font-size: 1.75rem;
+    }
+}
+
+
+@media screen and (min-width:1000px) {
+    .blank h3{
+        font-size: 2.0rem;
+    }
+}
+
 

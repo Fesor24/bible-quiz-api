@@ -9,13 +9,13 @@
 .timer{
     /* background: antiquewhite; */
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-evenly !important;
+    justify-content: space-evenly;
 }
 
 .timerText{
-    font-size: 3.6rem;
+    font-size: 1.8rem;
     font-weight: bold;
     color: rgb(95, 52, 52);
     font-family: 'Poppins', sans-serif;
@@ -25,10 +25,44 @@
     align-items: center;
 }
 
-@media screen and (max-width: 600px){
-    .timer p{
-        font-size: 1.6rem;
-        margin-top: 0.5rem;
-        font-weight: bold;
+@media screen and (min-width:440px) {
+    .timerText{
+        font-size: 2.3rem;
+    }
+}
+
+@media screen and (min-width:460px) {
+    .timerText{
+        font-size: 2.4rem;
+    }
+}
+
+@media screen and (min-width:560px) {
+    .timerText{
+        font-size: 2.88rem;
+    }
+}
+
+@media screen and (min-width:670px) {
+    .timerText{
+        font-size: 3rem;
+    }
+}
+
+@media screen and (min-width:850px) {
+    .timerText{
+        font-size: 3.15rem;
+    }
+}
+
+@media screen and (min-width:1000px) {
+    .timerText{
+        font-size: 3.3rem;
+    }
+}
+
+@media screen and (min-width: 1000px) and (min-height:400px) {
+    .timer{
+        flex-direction: row;
     }
 }
