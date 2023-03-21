@@ -78,7 +78,7 @@
 @media screen and (max-width: 600px){
     .btn{
         padding: 7px 10px;
-        font-size: 1rem;
+        font-size: 1.2rem;
         border-radius: 25px;
         margin-top: 0.5rem;
         font-weight: bold;
@@ -88,7 +88,7 @@
 
 @media screen and (max-width: 425px){
     .btn{
-        font-size: .9rem;
+        font-size: 1.0rem;
         padding: .4rem;
     }
 }
