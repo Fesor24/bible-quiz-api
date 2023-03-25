@@ -79,16 +79,23 @@
 @media screen and (min-width: 355px) {
     .btn{
         font-size: .8rem;
-        padding: 6px 11px;
+        padding: 1rem 1.3rem;
+    }
+
+    .btnFirst{
+        font-size: 1.1rem;
+        border-radius: 7px;
     }
 }
 
-@media screen and (max-width: 360px){
+/* @media screen and (max-width: 360px){
     .btn{
         font-size: 1rem;
         padding: 7px 13px;
     }
-}
+
+    
+} */
 
 @media screen and (min-width:560px) {
     .btn{

@@ -49,6 +49,7 @@ body, html{
     padding-top: 1rem;
     color: bisque;
     text-decoration: none;
+	font-size: 1.2rem;
 }
 
 @keyframes slide-in{
