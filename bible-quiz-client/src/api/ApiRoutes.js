@@ -8,4 +8,8 @@ export default class ApiRoutes {
   static FetchRevisionQuestions = "api/revision-questions/fetch";
 
   static FetchFesorQuestions = "api/fesor-questions/fetch";
+
+  static LoginUser = "api/login";
+
+  static RegisterUser = "api/register";
 }

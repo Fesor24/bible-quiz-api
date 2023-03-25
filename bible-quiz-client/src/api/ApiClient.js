@@ -6,10 +6,10 @@ import ApiRoutes from "./ApiRoutes";
 
  // Hook to fetch thousand questions
  export function useFetchThousandQuestions(){
-    async function fetchThousandQuestions() {
-        var response = axios.get(
-         ApiRoutes.FetchThousandQuestions
-        );
+    async function fetchThousandQuestions(token) {
+        var response = axios.get(ApiRoutes.FetchThousandQuestions, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
         return response;
     }
@@ -51,4 +51,26 @@ import ApiRoutes from "./ApiRoutes";
     }
 
     return fetchFesorQuestions;
+ }
+
+ // Hook to login user
+ export function useLoginUser(){
+    async function loginUser(formData){
+        var response = axios.post(ApiRoutes.LoginUser, formData)
+
+        return response;
+    }
+
+    return loginUser;
+ }
+
+ // Hook to register a user
+ export function useRegisterUser(){
+    async function registerUser(formData){
+        var response = axios.post(ApiRoutes.RegisterUser, formData)
+
+        return response;
+    }
+
+    return registerUser;
  }
