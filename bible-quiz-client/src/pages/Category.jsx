@@ -12,8 +12,7 @@ function Category() {
   return (
     <div className={style.container}>
       <div className={style.mainWrapper}>
-
-      <h1 className={style.mainTitle}>Select a category</h1>
+        <h1 className={style.mainTitle}>Select a category</h1>
         <Link to="/thousand-questions">
           <Button name="1000 Questions">
             <i class="fa fa-file-text" aria-hidden="true"></i>
@@ -29,6 +28,12 @@ function Category() {
         <Link to="/revise-questions">
           <Button name="Revise Questions">
             <i class="fa-brands fa-think-peaks"></i>
+          </Button>
+        </Link>
+
+        <Link to="/login">
+          <Button name="Login" padding={'.7rem 2rem'}>
+            <i class="fa-solid fa-right-to-bracket"></i>
           </Button>
         </Link>
 
