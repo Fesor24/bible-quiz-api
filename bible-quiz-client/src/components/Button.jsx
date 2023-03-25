@@ -1,10 +1,11 @@
 import React from "react";
 import style from "../styles/Button.module.css";
 
-function Button({ name, click, children, disabled, color, backgroundColor, display, padding }) {
+function Button({ name, click, children, disabled, color, backgroundColor, display, padding, type }) {
   return (
     <button
-      class={style.btn}
+      className={`${style.btn} ${style.btnFirst}`}
+      type = {type}
       disabled={disabled}
       onClick={click}
       style={{
