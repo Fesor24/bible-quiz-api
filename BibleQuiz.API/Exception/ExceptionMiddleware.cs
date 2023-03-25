@@ -16,18 +16,12 @@ namespace BibleQuiz.API
         private readonly RequestDelegate next;
 
         /// <summary>
-        /// DI instance of ILogger
-        /// </summary>
-        private readonly ILogger<ExceptionMiddleware> logger;
-
-        /// <summary>
         /// DI instance of IHostEnvironment
         /// </summary>
         private readonly IHostEnvironment env;
-        public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger, IHostEnvironment env)
+        public ExceptionMiddleware(RequestDelegate next, IHostEnvironment env)
         {
             this.next = next;
-            this.logger = logger;
             this.env = env;
         }
 
