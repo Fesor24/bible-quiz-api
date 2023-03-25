@@ -1,7 +1,11 @@
-﻿using BibleQuiz.Core;
+﻿using System.Security.Claims;
+using System.Text;
+using BibleQuiz.Core;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BibleQuiz.API
 {
@@ -25,11 +29,23 @@ namespace BibleQuiz.API
                     // Getting the required service for AppDbContext
                     var context = services.GetRequiredService<ApplicationDbContext>();
 
+                    // Get service for user manager
+                    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+
+                    // Get service for role manager
+                    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
                     // Apply pending migrations to db
                     await context.Database.MigrateAsync();
 
-                    // Seed thousand questions to db
+                    // Seed questions to db
                     await AppDbContextSeed.SeedDataAsync(context, loggerFactory);
+
+                    // Seed roles to db
+                    await AppDbContextSeed.SeedRolesAsync(roleManager, loggerFactory);
+
+                    // Seed the user to db
+                    await AppDbContextSeed.SeedUserAsync(userManager, loggerFactory);
 
                 }
 
@@ -73,8 +89,11 @@ namespace BibleQuiz.API
             {
                 options.Password.RequiredUniqueChars = 0;
                 options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireDigit = false;
+                options.Password.RequireUppercase = false;
             }).AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
             return services;
         }
 
@@ -149,5 +168,59 @@ namespace BibleQuiz.API
             // Return services for further chaining
             return services;
         }
+
+        /// <summary>
+        /// Extension method to configure authorization
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static IServiceCollection ConfigureAuthorization(this IServiceCollection services)
+        {
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireAdminClaim", policy =>
+                {
+                    policy.RequireClaim(ClaimTypes.Role, "Admin");
+                });
+
+                options.AddPolicy("RequirePremiumClaim", policy =>
+                {
+                    policy.RequireClaim("premiumuser", "PremiumUser");
+                });
+            });
+
+            return services;
+        }
+
+        public static IServiceCollection ConfigureJwtAuthentication(this IServiceCollection services, IConfiguration config)
+        {
+            services.AddAuthentication(options =>
+            {
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JwtSettings:Key"])),
+                        ValidIssuer = config["JwtSettings:Issuer"],
+                        ValidateIssuer = true,
+                        ValidateAudience = false
+                    };
+                });
+
+            // Return services for further chaining
+            return services;
+        }
+
+        public static IServiceCollection AddTokenService(this IServiceCollection services)
+        {
+            services.AddScoped<ITokenService, TokenService>();
+
+            return services;
+        }
+
     }
 }
