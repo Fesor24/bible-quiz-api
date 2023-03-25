@@ -7,7 +7,7 @@ namespace BibleQuiz.Core
     /// <summary>
     /// Db context class
     /// </summary>
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -15,6 +15,12 @@ namespace BibleQuiz.Core
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<ApplicationUser>(options =>
+            {
+                // Setting the mail to be unique in db
+                options.HasIndex(e => e.Email).IsUnique();
+            });
+
             base.OnModelCreating(modelBuilder);
         }
 
