@@ -22,8 +22,11 @@ namespace BibleQuiz.API
 
             builder.Services.AddDbContext(builder.Configuration)
                 .AddIdentity()
+                .ConfigureJwtAuthentication(builder.Configuration)
+				.ConfigureAuthorization()
                 .ConfigureApiBehavior()
-                .AddGenericRepository()
+                .AddTokenService()
+				.AddGenericRepository()
                 .AddUnitOfWork()
                 .ConfigureCors()
                 .AddLogging(options =>
@@ -52,10 +55,13 @@ namespace BibleQuiz.API
 
             app.UseHttpsRedirection();
 
+            app.UseRouting();
+
             app.UseCors("CorsPolicy");
 
-            app.UseAuthorization();
+            app.UseAuthentication();
 
+            app.UseAuthorization();
 
             app.MapControllers();
 
