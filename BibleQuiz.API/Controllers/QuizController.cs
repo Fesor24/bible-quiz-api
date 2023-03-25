@@ -1,5 +1,7 @@
 ﻿using System.Net;
 using BibleQuiz.Core;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -48,7 +50,8 @@ namespace BibleQuiz.API.Controllers
         [HttpGet(ApiRoutes.FetchThousandQuestion)]
         [ProducesResponseType(statusCode: (int)HttpStatusCode.OK, type: typeof(ApiResponse))]
         [ProducesResponseType(statusCode:(int)HttpStatusCode.NotFound, type:typeof(ApiResponse))]
-        public async Task<ApiResponse> GetQuestionById(int id)
+		[Authorize(Policy = "RequirePremiumClaim")]
+		public async Task<ApiResponse> GetQuestionById(int id)
         {
             // Initialize thousand quiz data model
             var result = new ThousandQuizQuestionsDataModel();
@@ -91,7 +94,8 @@ namespace BibleQuiz.API.Controllers
         /// <returns></returns>
         [HttpGet(ApiRoutes.FetchThousandQuestions)]
         [ProducesResponseType(statusCode: (int)HttpStatusCode.OK, type: typeof(ApiResponse))]
-        public async Task<ApiResponse> GetAllQuestions()
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequirePremiumClaim")]
+		public async Task<ApiResponse> FetchAllThousandQuestions()
         {
             // Initialize new spec
             var spec = new ThousandQuestionsSpecification();
@@ -149,7 +153,8 @@ namespace BibleQuiz.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet(ApiRoutes.FetchRevisionQuestions)]
-        public async Task<ApiResponse> FetchRevisionQuestions()
+		[Authorize(Policy = "RequirePremiumClaim")]
+		public async Task<ApiResponse> FetchRevisionQuestions()
         {
             // We create an instance of revision specification
             var spec = new RevisionQuestionsSpecification();
@@ -169,6 +174,7 @@ namespace BibleQuiz.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet(ApiRoutes.FetchFesorQuestions)]
+        [Authorize(Policy = "RequirePremiumClaim")]
         public async Task<ApiResponse> FetchFesorsQuestions()
         {
             // Create an instance of the fesor specification
@@ -183,7 +189,7 @@ namespace BibleQuiz.API.Controllers
                 Result = questions
             };
 
-		}
+        }
 
         /// <summary>
         /// Private class to handle null result
