@@ -26,5 +26,20 @@
         /// Endpoint to fetch questions set by me
         /// </summary>
         public const string FetchFesorQuestions = "api/fesor-questions/fetch";
+
+        /// <summary>
+        /// Endpoint to register a user
+        /// </summary>
+        public const string Register = "api/register";
+
+        /// <summary>
+        /// Endpoint to login a user
+        /// </summary>
+        public const string Login = "api/login";
+
+        /// <summary>
+        /// Endpoint to grant access to users
+        /// </summary>
+        public const string GrantAccess = "api/grant-access";
     }
 }
