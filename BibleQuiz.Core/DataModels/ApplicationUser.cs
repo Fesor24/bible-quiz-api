@@ -14,6 +14,11 @@ namespace BibleQuiz.Core
         /// </summary>
         public string LastName { get; set; }
 
+        /// <summary>
+        /// Indicates whether the user has permission to access the question resource
+        /// </summary>
+        public Permission Permission { get; set; }
+
 
     }
 }
