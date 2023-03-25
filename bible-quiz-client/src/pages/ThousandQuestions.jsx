@@ -11,6 +11,7 @@ import {
 } from "../api/ApiClient";
 import { useSelector, useDispatch } from "react-redux";
 import * as Action from "../redux/thousandQuestionsSlice";
+import RequireAuth from "../components/Auth/requireAuth";
 
 function ThousandQuestions() {
   // const [correctAnswers, setCorrectAnswers] = useState(0);
@@ -19,14 +20,18 @@ function ThousandQuestions() {
 
   const [thousandQuestions, setThousandQuestions] = useState();
 
-  const [questionsFinished, setQuestionsFinished] = useState(false);
+  // const [permission, setPermission] = useState(false);
 
+  const [access, setAccess] = useState();
+
+  const [questionsFinished, setQuestionsFinished] = useState(false);
 
   const questions = useSelector((state) => state.thousandQuestions.queue);
 
    const { opacity, disabledButtons } = useSelector(
      (state) => state.thousandQuestions
    );
+
 
   const question = useSelector((state) => state.thousandQuestions.queue[state.thousandQuestions.index]);
 
@@ -45,8 +50,27 @@ function ThousandQuestions() {
   const addRevisionQuestion = useAddRevisionQuestion();
 
   useEffect(() => {
+
+    const access = localStorage.getItem("hasAccess");
+
+    setAccess(access);
+
+    console.log("access edit", access);
+
+    // setPermission(access);
+
+    // permission = access;
+
+    if (access){
     async function fetchAllThousandQuestions() {
-      await fetchThousandQuestions()
+      const token = localStorage.getItem("token");
+
+      console.log(token);
+
+      if (!token) {
+      }
+
+      await fetchThousandQuestions(token)
         .then((response) => {
           if (response.data.successful) {
             console.log(response.data.result);
@@ -57,12 +81,16 @@ function ThousandQuestions() {
           }
         })
         .catch((error) => {
-          console.log("error", error);
+          console.log("error from catch", error);
         });
     }
 
     if (!thousandQuestions) {
       fetchAllThousandQuestions();
+    }
+    }
+    else{
+      return;
     }
   }, [dispatch]);
 
@@ -98,41 +126,45 @@ function ThousandQuestions() {
 
   // Setting timer function in use effect
   useEffect(() => {
-    if (countdown > 0) {
-      timerId = setTimeout(() => {
-        setCountdown(countdown - 1);
-      }, 1000);
 
-      setFinishedTimer(true);
-      return () => clearTimeout(timerId);
-    } else {
-      setFinishedTimer(false);
-      setDisableButtons(true);
-      dispatch(Action.setOpacityAction(1));
-      dispatch(Action.setDisableButtonAction(true));
-      dispatch(Action.wrongAnswerAction());
+    // if (isAuthenticated){
+ if (countdown > 0) {
+   timerId = setTimeout(() => {
+     setCountdown(countdown - 1);
+   }, 1000);
 
-       let body = {
-         question: question?.question,
-         answer: question?.answer,
-       };
+   setFinishedTimer(true);
+   return () => clearTimeout(timerId);
+ } else {
+   setFinishedTimer(false);
+   setDisableButtons(true);
+   dispatch(Action.setOpacityAction(1));
+   dispatch(Action.setDisableButtonAction(true));
+   dispatch(Action.wrongAnswerAction());
 
-       const AddToRevision = async () => {
-         await addRevisionQuestion(body)
-           .then((response) => {
-             if (response.data.successful) {
-               console.log(response.data.result);
-             } else {
-               console.log(response.data.errorMessage);
-             }
-           })
-           .catch((error) => {
-             console.log(error);
-           });
-       };
+   let body = {
+     question: question?.question,
+     answer: question?.answer,
+   };
 
-       AddToRevision();
-    }
+   const AddToRevision = async () => {
+     await addRevisionQuestion(body)
+       .then((response) => {
+         if (response.data.successful) {
+           console.log(response.data.result);
+         } else {
+           console.log(response.data.errorMessage);
+         }
+       })
+       .catch((error) => {
+         console.log(error);
+       });
+   };
+
+   AddToRevision();
+ }
+    // }
+   
   }, [countdown, questionsAttempted]);
 
   const clearTimer = () => {
@@ -201,85 +233,116 @@ function ThousandQuestions() {
 
   return (
     <>
-      {questions.length === 0 && (
-        <div className={style.blankContainer}>
-          <div class={style.blank}>
-            <h3>No questions at the moment</h3>
-            <i class="fa-solid fa-magnifying-glass fa-4x"></i>
-            <h3>Questions will be available soon. Loading...</h3>
-            <i class="fa-solid fa-empty-set"></i>
-            <Link to="/category">
-              <Button name="Back to Category">
-                <i class="fa-sharp fa-solid fa-backward"></i>
-              </Button>
-            </Link>
-          </div>
-        </div>
-      )}
-
-      {questions.length > 0 && (
-        <div className={style.container}>
-          <div className={style.displayPage}>
-            <div className={style.sideBar}>
-              <Sidebar
-                correct={correctAnswers}
-                wrong={wrongAnswers}
-                remaining={questions?.length - questionsAttempted}
-                total={questions?.length}
-              />
-            </div>
-
-            <div className={style.questionBar}>
-              {!questionsFinished && (
-                <>
-                  <Timer
-                    countdown={countdown}
-                    handleNextButtonClick={handleNextButtonClick}
-                    handleResetButtonClick={handleResetButtonClick}
-                    handleSaveButtonClick={handleSaveButtonClick}
-                  />
-                </>
-              )}
-
-              {questionsFinished && (
-                <>
-                  <div className={style.startAgain}>
-                    <Link to="/category">
-                      <Button
-                        name="Back to Category"
-                        click={handleBackToCategory}
-                      >
-                        <i class="fa fa-arrow-left" aria-hidden="true"></i>
-                      </Button>
-                    </Link>
-                  </div>
-                </>
-              )}
-
-              <div className={style.question}>
-                <Question
-                  disableButtons={disableButtons}
-                  displayAnswer={finishedTimer}
-                  clearTimer={clearTimer}
-                  state={question}
-                  handleWrongAnswerAndDisableButton={
-                    handleWrongAnswerAndDisableButton
-                  }
-                  handleCorrectAnswerAndDisableButton={
-                    handleCorrectAnswerAndDisableButton
-                  }
-                  handleShowAnswer={handleShowAnswer}
-                  opacity={opacity}
-                  disabledButtons={disabledButtons}
-                  questionsFinished={questionsFinished}
-                />
+      {access ? (
+        <>
+          {questions.length === 0 ? (
+            
+            <div className={style.blankContainer}>
+              <div class={style.blank}>
+                <h3>No questions at the moment</h3>
+                <i class="fa-solid fa-magnifying-glass fa-4x"></i>
+                <h3>Questions will be available soon. Loading...</h3>
+                <i class="fa-solid fa-empty-set"></i>
+                <Link to="/category">
+                  <Button name="Back to Category">
+                    <i class="fa-sharp fa-solid fa-backward"></i>
+                  </Button>
+                </Link>
               </div>
             </div>
+          ) : (
+            <>
+              <div className={style.container}>
+                <div className={style.displayPage}>
+                  <div className={style.sideBar}>
+                    <Sidebar
+                      correct={correctAnswers}
+                      wrong={wrongAnswers}
+                      remaining={questions?.length - questionsAttempted}
+                      total={questions?.length}
+                    />
+                  </div>
+
+                  <div className={style.questionBar}>
+                    {!questionsFinished && (
+                      <>
+                        <Timer
+                          countdown={countdown}
+                          handleNextButtonClick={handleNextButtonClick}
+                          handleResetButtonClick={handleResetButtonClick}
+                          handleSaveButtonClick={handleSaveButtonClick}
+                        />
+                      </>
+                    )}
+
+                    {questionsFinished && (
+                      <>
+                        <div className={style.startAgain}>
+                          <Link to="/category">
+                            <Button
+                              name="Back to Category"
+                              click={handleBackToCategory}
+                            >
+                              <i
+                                class="fa fa-arrow-left"
+                                aria-hidden="true"
+                              ></i>
+                            </Button>
+                          </Link>
+                        </div>
+                      </>
+                    )}
+
+                    <div className={style.question}>
+                      <Question
+                        disableButtons={disableButtons}
+                        displayAnswer={finishedTimer}
+                        clearTimer={clearTimer}
+                        state={question}
+                        handleWrongAnswerAndDisableButton={
+                          handleWrongAnswerAndDisableButton
+                        }
+                        handleCorrectAnswerAndDisableButton={
+                          handleCorrectAnswerAndDisableButton
+                        }
+                        handleShowAnswer={handleShowAnswer}
+                        opacity={opacity}
+                        disabledButtons={disabledButtons}
+                        questionsFinished={questionsFinished}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          
+        </>
+      ) : (
+        <>
+          <div className={style.blankContainer}>
+            <div class={style.blank}>
+              <h3>You do not have permission</h3>
+              <i class="fa-solid fa-magnifying-glass fa-4x"></i>
+              <h3>Check back in a minute. Loading...</h3>
+              <i class="fa-solid fa-empty-set"></i>
+              <Link to="/category">
+                <Button name="Back to Category">
+                  <i class="fa-sharp fa-solid fa-backward"></i>
+                </Button>
+              </Link>
+            </div>
           </div>
-        </div>
+        </>
       )}
     </>
   );
+
 }
 
-export default ThousandQuestions;
+export default RequireAuth(ThousandQuestions);
+
+
+
+
