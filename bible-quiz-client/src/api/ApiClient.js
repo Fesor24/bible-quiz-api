@@ -19,9 +19,11 @@ import ApiRoutes from "./ApiRoutes";
 
  // Hook to add question to revision table
  export function useAddRevisionQuestion(){
-    async function addRevisionQuestion(question){
+    async function addRevisionQuestion(question, token){
         var response = axios.post(
-            ApiRoutes.AddRevisionQuestion, question
+            ApiRoutes.AddRevisionQuestion, question, {
+                headers: {Authorization: `Bearer ${token}`}
+            }
         )
 
         return response;
@@ -32,9 +34,10 @@ import ApiRoutes from "./ApiRoutes";
 
  // Hook to fetch revision questions
  export function useFetchRevisionQuestions(){
-    async function fetchRevisionQuestions(){
+    async function fetchRevisionQuestions(token){
         var response = axios.get(
-            ApiRoutes.FetchRevisionQuestions
+            ApiRoutes.FetchRevisionQuestions,
+            {headers: {Authorization: `Bearer ${token}`}}
         )
         return response;
     }
@@ -44,8 +47,10 @@ import ApiRoutes from "./ApiRoutes";
 
  // Hook to fetch fesor questions
  export function useFetchFesorQuestions(){
-    async function fetchFesorQuestions(){
-        var response = axios.get(ApiRoutes.FetchFesorQuestions);
+    async function fetchFesorQuestions(token){
+        var response = axios.get(ApiRoutes.FetchFesorQuestions, {
+            headers: {Authorization: `Bearer ${token}`}
+        });
 
         return response;
     }
@@ -73,4 +78,34 @@ import ApiRoutes from "./ApiRoutes";
     }
 
     return registerUser;
+ }
+
+ export function useFetchUsers(){
+    async function fetchUsers(pageIndex){
+        var response = axios.get(`${ApiRoutes.FetchAllUsers}?pageIndex=${pageIndex}`);
+
+        return response;
+    }
+
+    return fetchUsers;
+ }
+
+ export function useGrantAccess(){
+    async function grantAccess(email){
+        var response = axios.get(`${ApiRoutes.GrantAccess}?email=${email}`);
+
+        return response;
+    }
+
+    return grantAccess;
+ }
+
+ export function useFetchUserByEmail(){
+    async function fetchUserByEmail(email){
+        var response = axios.get(`${ApiRoutes.FetchUser}?email=${email}`)
+
+        return response;
+    }
+
+    return fetchUserByEmail;
  }
