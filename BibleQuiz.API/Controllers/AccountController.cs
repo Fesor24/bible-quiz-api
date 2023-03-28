@@ -20,13 +20,16 @@ namespace BibleQuiz.API.Controllers
 
 		private readonly IUnitOfWork unitOfWork;
 
+		private readonly ApplicationDbContext context;
+
 		public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, 
-			ITokenService tokenService, IUnitOfWork unitOfWork)
+			ITokenService tokenService, IUnitOfWork unitOfWork, ApplicationDbContext context)
 		{
 			this.userManager = userManager;
 			this.signInManager = signInManager;
 			this.tokenService = tokenService;
 			this.unitOfWork = unitOfWork;
+			this.context = context;
 		}
 
 		/// <summary>
@@ -56,7 +59,8 @@ namespace BibleQuiz.API.Controllers
 				FirstName = model.FirstName,
 				LastName = model.LastName,
 				UserName = model.Email,
-				Permission = Permission.Denied
+				// Change to denied if we want to use admin to grant access
+				Permission = Permission.Granted
 			}, model.Password);
 
 			// If it fails
@@ -72,6 +76,10 @@ namespace BibleQuiz.API.Controllers
 			// Fetch the user
 			var user = await userManager.FindByEmailAsync(model.Email);
 
+			// Add claims to user
+			//Remove if we want to grant access
+			await userManager.AddClaimAsync(user, new Claim("premiumuser", "PremiumUser"));
+
 			// Sign in the user
 			await signInManager.SignInAsync(user, true);
 
@@ -83,11 +91,14 @@ namespace BibleQuiz.API.Controllers
 
 			// Assign the email to it
 			userApiModel.Email = user.Email;
-
+			
+			// Pass the token
 			userApiModel.Token = tokenService.CreateToken(user, claims);
 
+			// Pass the permission
 			userApiModel.Permission = user.Permission;
 
+			// Return api response
 			return new ApiResponse
 			{
 				Result = userApiModel
@@ -108,6 +119,7 @@ namespace BibleQuiz.API.Controllers
 			// If user is null
 			if (user is null)
 			{
+				// Return api response
 				return new ApiResponse
 				{
 					ErrorMessage = "Unauthorized"
@@ -148,12 +160,12 @@ namespace BibleQuiz.API.Controllers
 		/// </summary>
 		/// <param name="model"></param>
 		/// <returns></returns>
-		[HttpPost(ApiRoutes.GrantAccess)]
+		[HttpGet(ApiRoutes.GrantAccess)]
 		[Authorize(Policy = "RequireAdminClaim")]
-		public async Task<ApiResponse> GrantAccessToResource([FromBody] GrantAccessApiModel model)
+		public async Task<ApiResponse> GrantAccessToResource([FromQuery] string email)
 		{
 			// Get the user
-			var user = await userManager.FindByEmailAsync(model.Email);
+			var user = await userManager.FindByEmailAsync(email);
 
 			// If the user is null
 			if (user is null)
@@ -193,6 +205,63 @@ namespace BibleQuiz.API.Controllers
 			{
 				Result = new { Message = "Claim added to user" }
 			};
+		}
+
+		/// <summary>
+		/// Endpoint to fetch all users
+		/// </summary>
+		/// <returns></returns>
+		[HttpGet(ApiRoutes.FetchAllUsers)]
+		[Authorize(Policy = "RequireAdminClaim")]
+		public async Task<ApiResponse> FetchAllUsers([FromQuery]int pageSize = 6, [FromQuery]int pageIndex = 1)
+		{
+			
+
+			// Fetch all users
+			var users = userManager
+				.Users
+				.Skip((pageIndex -1) * pageSize)
+				.Take(pageSize)
+				.ToList();
+
+			var usersDto = users.Select(x => new FetchAllUsersApiModel
+			{
+				Email = x.Email,
+				Id = x.Id
+			}).ToList();
+
+			return new ApiResponse
+			{
+				Result = usersDto
+			};
+		}
+
+		/// <summary>
+		/// Endpoint to fetch user by emails
+		/// </summary>
+		/// <param name="email"></param>
+		/// <returns></returns>
+		[HttpGet(ApiRoutes.FetchUser)]
+		[Authorize(Policy = "RequireAdminClaim")]
+		public async Task<ApiResponse> FetchUsersByEmail([FromQuery] string email)
+		{
+			// Get the users with the specified email
+			var users = context.Users
+				.Where(x => x.Email.ToLower().Contains(email.ToLower())).ToList();
+
+			// Data to be returned
+			var userDto = users.Select(x => new FetchAllUsersApiModel
+			{
+				Email = x.Email,
+				Id = x.Id
+			});
+
+			// Return data to client
+			return new ApiResponse
+			{
+				Result = userDto
+			};
+
 		}
 	}
 }
