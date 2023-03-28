@@ -1,7 +1,7 @@
 import React from "react";
 import style from "../styles/Button.module.css";
 
-function Button({ name, click, children, disabled, color, backgroundColor, display, padding, type }) {
+function Button({ name, click, children, disabled, color, backgroundColor, display, padding, type, height,width, borderRadius }) {
   return (
     <button
       className={`${style.btn} ${style.btnFirst}`}
@@ -13,6 +13,9 @@ function Button({ name, click, children, disabled, color, backgroundColor, displ
         backgroundColor: backgroundColor,
         display: display,
         padding: padding,
+        height:height,
+        width: width,
+        borderRadius: borderRadius
       }}
     >
       {name} &nbsp;{children}
