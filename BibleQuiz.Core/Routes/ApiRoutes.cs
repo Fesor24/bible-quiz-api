@@ -41,5 +41,15 @@
         /// Endpoint to grant access to users
         /// </summary>
         public const string GrantAccess = "api/grant-access";
-    }
+
+        /// <summary>
+        /// Endpoint to fetch all users
+        /// </summary>
+        public const string FetchAllUsers = "api/fetch-users";
+
+		/// <summary>
+		/// Endpoint to fetch user
+		/// </summary>
+		public const string FetchUser = "api/fetch-user";
+	}
 }
