@@ -11,8 +11,8 @@ function Login() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+    email: undefined,
+    password: undefined,
   });
 
   const [formErrors, setFormErrors] = useState({
@@ -26,12 +26,6 @@ function Login() {
 
   const handleValidation = (e) => {
     const { name, value } = e.target;
-
-    setFormData(
-      produce((draft) => {
-        draft[name] = value;
-      })
-    );
 
     switch (name) {
       case "email":
@@ -50,7 +44,7 @@ function Login() {
       case "password":
         setFormErrors(
           produce((draft) => {
-            if (value === undefined || value === null || value.length === 0) {
+            if (value === undefined || value === null || value.length < 1) {
               draft.password = "Password is required";
               setDisableButton(true);
             } else {
@@ -59,46 +53,57 @@ function Login() {
             }
           })
         );
+
         break;
       default:
         break;
     }
+
+    setFormData(
+      produce((draft) => {
+        draft[name] = value;
+      })
+    );
   };
 
   const handleSubmitForm = async (e) => {
     e.preventDefault();
 
-    if (formErrors.email || formErrors.password) {
+    if (
+      formErrors.email ||
+      formErrors.password ||
+      formData.email === undefined ||
+      formData.password === undefined
+    ) {
       toastr.error("Fill the missing fields");
       return;
     }
 
-      await loginUser(formData)
-        .then((response) => {
-          if (response.data.successful) {
-            localStorage.removeItem("token");
-            localStorage.setItem("token", response.data.result.token);
+    console.log(formData);
+    await loginUser(formData)
+      .then((response) => {
+        if (response.data.successful) {
+          localStorage.setItem(
+            "token",
+            JSON.stringify(response.data.result.token)
+          );
 
-            if (response.data.result.permission === 1) {
-              localStorage.setItem("hasAccess", true);
-              navigate("category");
-            }
-            else{
-              localStorage.setItem('hasAccess', false);
-            }
-
-            navigate("/category");
+          if (response.data.result.permission === 1) {
+            localStorage.setItem("hasAccess", JSON.stringify(true));
+            navigate("category");
           } else {
-            toastr.error(response.data.errorMessage);
+            localStorage.setItem("hasAccess", JSON.stringify(false));
           }
-        })
-        .catch((error) => {
-          console.log(error)
-          toastr.error("Unauthorized");
-        })
 
-      
-   
+          navigate("/category");
+        } else {
+          toastr.error(response.data.errorMessage);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        toastr.error("Unauthorized");
+      });
   };
 
   return (
@@ -131,21 +136,22 @@ function Login() {
                 type="submit"
                 name="Proceed"
                 disabled={disableButton}
-                color={disableButton ? "rgb(29, 26, 26)" : "bisque"}
+                color={disableButton ? "rgb(29, 26, 26)" : "hsl(38, 61%, 73%)"}
                 backgroundColor={
-                  disableButton ? "bisque" : "rgb(29, 26, 26)"
+                  disableButton ? "hsl(38, 61%, 73%)" : "rgb(29, 26, 26)"
                 }
               />
               &nbsp;&nbsp;
-              <Link to="/">
+              <Link to="/category">
                 <Button name="Back" />
               </Link>
             </div>
           </div>
         </form>
-        <p className={authStyles.validateText}>
+        <br />
+        <p className={authStyles.linkText}>
           Don't have an account?
-          <Link to="/register" className={authStyles.validateText}>
+          <Link to="/register" className={authStyles.linkText}>
             {" "}
             Click to register
           </Link>
