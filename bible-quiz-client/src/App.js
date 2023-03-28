@@ -14,6 +14,7 @@ import FesorQuestions from "./pages/FesorQuestions";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import RequireAuth from "./components/Auth/requireAuth";
+import Admin from "./pages/Admin";
 
 function App() {
   // const ThousandQuestionsWithAuth = RequireAuth(ThousandQuestions);
@@ -23,9 +24,12 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="category" element={<Category />} />
+        <Route path="fesor-questions" element={<FesorQuestions />} />
+        <Route path="revise-questions" element={<RevisionQuestions />} />
+        <Route path="thousand-questions" element={<ThousandQuestions />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
-        <Route path="thousand-questions" element={<ThousandQuestions />} />
+        <Route path="admin" element={<Admin/>}/>
       </Routes>
     </BrowserRouter>
   );
