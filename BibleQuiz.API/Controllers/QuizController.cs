@@ -50,7 +50,8 @@ namespace BibleQuiz.API.Controllers
         [HttpGet(ApiRoutes.FetchThousandQuestion)]
         [ProducesResponseType(statusCode: (int)HttpStatusCode.OK, type: typeof(ApiResponse))]
         [ProducesResponseType(statusCode:(int)HttpStatusCode.NotFound, type:typeof(ApiResponse))]
-		[Authorize(Policy = "RequirePremiumClaim")]
+		//[Authorize(Policy = "RequirePremiumClaim")]
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 		public async Task<ApiResponse> GetQuestionById(int id)
         {
             // Initialize thousand quiz data model
@@ -94,7 +95,8 @@ namespace BibleQuiz.API.Controllers
         /// <returns></returns>
         [HttpGet(ApiRoutes.FetchThousandQuestions)]
         [ProducesResponseType(statusCode: (int)HttpStatusCode.OK, type: typeof(ApiResponse))]
-		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequirePremiumClaim")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequirePremiumClaim")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 		public async Task<ApiResponse> FetchAllThousandQuestions()
         {
             // Initialize new spec
@@ -116,7 +118,8 @@ namespace BibleQuiz.API.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost(ApiRoutes.AddRevisionQuestion)]
-        public async Task<ApiResponse> AddRevisionQuestion(RevisionQuestionApiModel model)
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+		public async Task<ApiResponse> AddRevisionQuestion(RevisionQuestionApiModel model)
         {
             // Check if the question exist
             var questionExist = await context.RevisionQuestions.AnyAsync(x => x.Question.ToLower() == model.Question.ToLower());
@@ -153,7 +156,8 @@ namespace BibleQuiz.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet(ApiRoutes.FetchRevisionQuestions)]
-		[Authorize(Policy = "RequirePremiumClaim")]
+		//[Authorize(Policy = "RequirePremiumClaim")]
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 		public async Task<ApiResponse> FetchRevisionQuestions()
         {
             // We create an instance of revision specification
@@ -174,8 +178,9 @@ namespace BibleQuiz.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet(ApiRoutes.FetchFesorQuestions)]
-        [Authorize(Policy = "RequirePremiumClaim")]
-        public async Task<ApiResponse> FetchFesorsQuestions()
+        //[Authorize(Policy = "RequirePremiumClaim")]
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+		public async Task<ApiResponse> FetchFesorsQuestions()
         {
             // Create an instance of the fesor specification
             var spec = new FesorQuestionsSpecification();
