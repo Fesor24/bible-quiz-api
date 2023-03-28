@@ -14,7 +14,7 @@
 }
 
 .question{
-    font-size: 1.28rem;
+    font-size: 1.27rem;
     font-weight: 900;
     color: rgb(95, 52, 52);
 }
@@ -55,11 +55,11 @@
 
 @media screen and (min-width: 355px) {
     .question{
-        font-size: 1.15rem;
+        font-size: 1.27rem;
     }
 
     .answer p{
-        font-size: 1rem;
+        font-size: 1.1rem;
     }
 }
 

@@ -10,12 +10,12 @@
     margin-top: .5rem;
     /* background-color: var(--secondary-color); */
     background-color: rgb(29, 26, 26);
-    color: bisque;
+    color: hsl(38, 61%, 73%);
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    animation: bounce 2s;
-    animation-duration: 2s;
+    animation: bounce 2s ease-in;
+    /* animation-duration: 2s; */
     animation-fill-mode: both;
     box-shadow: 0 0 5px rgba(153, 76, 76, 0.9);
     display: inline-block;
@@ -67,7 +67,7 @@
 }
 
 .btn:hover{
-    background-color: bisque;
+    background-color: hsl(38, 61%, 73%);
     color:rgb(95, 52, 52);
     font-weight: bold;
 }
@@ -79,7 +79,7 @@
 @media screen and (min-width: 355px) {
     .btn{
         font-size: .8rem;
-        padding: 1rem 1.3rem;
+        padding: .6rem 1rem;
     }
 
     .btnFirst{
@@ -88,14 +88,12 @@
     }
 }
 
-/* @media screen and (max-width: 360px){
+@media screen and (min-width: 460px){
     .btn{
-        font-size: 1rem;
+        font-size: 1.3rem;
         padding: 7px 13px;
-    }
-
-    
-} */
+    }    
+}
 
 @media screen and (min-width:560px) {
     .btn{
@@ -129,5 +127,8 @@
 @media screen and (min-width: 1000px) and (max-height:800px) {
     .btn{
         font-size: 1.6rem;
+        padding: 20px 35px;
+        margin: .7rem 0 .7rem 0;
+        border-radius: 25px;
     }
 }
