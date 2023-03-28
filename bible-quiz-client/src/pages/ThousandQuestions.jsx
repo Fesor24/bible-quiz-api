@@ -4,7 +4,7 @@ import Sidebar from "../components/Sidebar";
 import Timer from "../components/Timer";
 import Question from "../components/Question";
 import Button from "../components/Button";
-import { useNavigate, Link} from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import {
   useFetchThousandQuestions,
   useAddRevisionQuestion,
@@ -14,26 +14,23 @@ import * as Action from "../redux/thousandQuestionsSlice";
 import RequireAuth from "../components/Auth/requireAuth";
 
 function ThousandQuestions() {
-  // const [correctAnswers, setCorrectAnswers] = useState(0);
-  // const [wrongAnswers, setWrongAsnwers] = useState(0);
   const [disableButtons, setDisableButtons] = useState(false);
 
   const [thousandQuestions, setThousandQuestions] = useState();
 
-  // const [permission, setPermission] = useState(false);
-
-  const [access, setAccess] = useState();
+  const [access, setAccess] = useState(false);
 
   const [questionsFinished, setQuestionsFinished] = useState(false);
 
   const questions = useSelector((state) => state.thousandQuestions.queue);
 
-   const { opacity, disabledButtons } = useSelector(
-     (state) => state.thousandQuestions
-   );
+  const { opacity, disabledButtons } = useSelector(
+    (state) => state.thousandQuestions
+  );
 
-
-  const question = useSelector((state) => state.thousandQuestions.queue[state.thousandQuestions.index]);
+  const question = useSelector(
+    (state) => state.thousandQuestions.queue[state.thousandQuestions.index]
+  );
 
   const dispatch = useDispatch();
 
@@ -41,7 +38,7 @@ function ThousandQuestions() {
 
   const countdownNumber = 45;
 
-  const { correctAnswers, wrongAnswers, questionsAttempted, index } = useSelector(
+  const { correctAnswers, wrongAnswers, questionsAttempted } = useSelector(
     (state) => state.thousandQuestions
   );
 
@@ -50,69 +47,55 @@ function ThousandQuestions() {
   const addRevisionQuestion = useAddRevisionQuestion();
 
   useEffect(() => {
-
-    const access = localStorage.getItem("hasAccess");
+    const access = JSON.parse(localStorage.getItem("hasAccess"));
 
     setAccess(access);
 
-    console.log("access edit", access);
+    if (access) {
+      async function fetchAllThousandQuestions() {
+        const token = JSON.parse(localStorage.getItem("token"));
 
-    // setPermission(access);
-
-    // permission = access;
-
-    if (access){
-    async function fetchAllThousandQuestions() {
-      const token = localStorage.getItem("token");
-
-      console.log(token);
-
-      if (!token) {
+        await fetchThousandQuestions(token)
+          .then((response) => {
+            if (response.data.successful) {
+              console.log(response.data.result);
+              setThousandQuestions(response.data.result);
+              dispatch(Action.startQuizAction(response.data.result));
+            } else {
+              console.log(response.data.errorMessage);
+            }
+          })
+          .catch((error) => {
+            console.log("error from catch", error);
+          });
       }
 
-      await fetchThousandQuestions(token)
-        .then((response) => {
-          if (response.data.successful) {
-            console.log(response.data.result);
-            setThousandQuestions(response.data.result);
-            dispatch(Action.startQuizAction(response.data.result));
-          } else {
-            console.log(response.data.errorMessage);
-          }
-        })
-        .catch((error) => {
-          console.log("error from catch", error);
-        });
-    }
-
-    if (!thousandQuestions) {
-      fetchAllThousandQuestions();
-    }
-    }
-    else{
+      if (!thousandQuestions) {
+        fetchAllThousandQuestions();
+      }
+    } else {
       return;
     }
   }, [dispatch]);
 
   useEffect(() => {
-
     document.title = "Thousand Questions";
 
     // dispatch(Action.resetOpacityAction());
 
     const correct = JSON.parse(localStorage.getItem("thousandCorrectAnswer"));
     const wrong = JSON.parse(localStorage.getItem("thousandWrongAnswer"));
-    const index = JSON.parse(localStorage.getItem("thousandQuestionsAttempted"));
+    const index = JSON.parse(
+      localStorage.getItem("thousandQuestionsAttempted")
+    );
 
-    console.log(correct, wrong, index);
-
-    if(index){
+    if (index) {
       dispatch(Action.setCorrectNumberAction(correct));
       dispatch(Action.setWrongNumberAction(wrong));
       dispatch(Action.setIndexNumberAction(index));
       dispatch(Action.setQuestionsAttemptedAction(index));
 
-      if (correct + wrong === index){
+      if (correct + wrong === index) {
         setDisableButtons(true);
       }
     }
@@ -126,76 +109,76 @@ function ThousandQuestions() {
 
   // Setting timer function in use effect
   useEffect(() => {
-
     // if (isAuthenticated){
- if (countdown > 0) {
-   timerId = setTimeout(() => {
-     setCountdown(countdown - 1);
-   }, 1000);
+    if (countdown > 0) {
+      timerId = setTimeout(() => {
+        setCountdown(countdown - 1);
+      }, 1000);
 
-   setFinishedTimer(true);
-   return () => clearTimeout(timerId);
- } else {
-   setFinishedTimer(false);
-   setDisableButtons(true);
-   dispatch(Action.setOpacityAction(1));
-   dispatch(Action.setDisableButtonAction(true));
-   dispatch(Action.wrongAnswerAction());
+      setFinishedTimer(true);
+      return () => clearTimeout(timerId);
+    } else {
+      setFinishedTimer(false);
+      setDisableButtons(true);
+      dispatch(Action.setOpacityAction(1));
+      dispatch(Action.setDisableButtonAction(true));
+      dispatch(Action.wrongAnswerAction());
 
-   let body = {
-     question: question?.question,
-     answer: question?.answer,
-   };
+      let body = {
+        question: question?.question,
+        answer: question?.answer,
+      };
 
-   const AddToRevision = async () => {
-     await addRevisionQuestion(body)
-       .then((response) => {
-         if (response.data.successful) {
-           console.log(response.data.result);
-         } else {
-           console.log(response.data.errorMessage);
-         }
-       })
-       .catch((error) => {
-         console.log(error);
-       });
-   };
+      const token = JSON.parse(localStorage.getItem("token"));
 
-   AddToRevision();
- }
+      const AddToRevision = async () => {
+        await addRevisionQuestion(body, token)
+          .then((response) => {
+            if (response.data.successful) {
+              console.log(response.data.result);
+            } else {
+              console.log(response.data.errorMessage);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      };
+
+      AddToRevision();
+    }
     // }
-   
   }, [countdown, questionsAttempted]);
 
   const clearTimer = () => {
     clearTimeout(timerId);
-  }
-
+  };
 
   const handleNextButtonClick = () => {
-    // setFinishedTimer(true);
-
     setCountdown(countdownNumber);
     setDisableButtons(false);
     dispatch(Action.nextQuestionAction());
     dispatch(Action.remainingQuestionsAction());
     dispatch(Action.setOpacityAction(0));
     dispatch(Action.setDisableButtonAction(false));
-    console.log(index);
 
     if (questions?.length - questionsAttempted === 1) {
       setQuestionsFinished(true);
     }
-    // setAttemptedQuestions(attemptedQuestions + 1);
   };
 
   const handleSaveButtonClick = () => {
-    localStorage.setItem("thousandCorrectAnswer", JSON.stringify(correctAnswers));
+    localStorage.setItem(
+      "thousandCorrectAnswer",
+      JSON.stringify(correctAnswers)
+    );
     localStorage.setItem("thousandWrongAnswer", JSON.stringify(wrongAnswers));
-    localStorage.setItem("thousandQuestionsAttempted", JSON.stringify(questionsAttempted));
+    localStorage.setItem(
+      "thousandQuestionsAttempted",
+      JSON.stringify(questionsAttempted)
+    );
     navigate("/category");
-  }
-
+  };
 
   const handleResetButtonClick = () => {
     localStorage.removeItem("thousandCorrectAnswer");
@@ -205,38 +188,37 @@ function ThousandQuestions() {
     setCountdown(countdownNumber);
     dispatch(Action.setOpacityAction(0));
     dispatch(Action.setDisableButtonAction(false));
-  }
+  };
 
-   const handleWrongAnswerAndDisableButton = () => {
-     dispatch(Action.wrongAnswerAction());
+  const handleWrongAnswerAndDisableButton = () => {
+    dispatch(Action.wrongAnswerAction());
 
-     dispatch(Action.setDisableButtonAction(true));
-   };
+    dispatch(Action.setDisableButtonAction(true));
+  };
 
-   const handleCorrectAnswerAndDisableButton = () => {
+  const handleCorrectAnswerAndDisableButton = () => {
     dispatch(Action.correctAnswerAction());
 
     dispatch(Action.setDisableButtonAction(true));
-   }
+  };
 
-   const handleShowAnswer = () => {
+  const handleShowAnswer = () => {
     dispatch(Action.setOpacityAction(1));
-   }
+  };
 
-    const handleBackToCategory = () => {
-      setQuestionsFinished(false);
-      localStorage.removeItem("thousandCorrectAnswer");
-      localStorage.removeItem("thousandWrongAnswer");
-      localStorage.removeItem("thousandQuestionsAttempted");
-      dispatch(Action.resetIndexAction());
-    };
+  const handleBackToCategory = () => {
+    setQuestionsFinished(false);
+    localStorage.removeItem("thousandCorrectAnswer");
+    localStorage.removeItem("thousandWrongAnswer");
+    localStorage.removeItem("thousandQuestionsAttempted");
+    dispatch(Action.resetIndexAction());
+  };
 
   return (
     <>
       {access ? (
         <>
           {questions.length === 0 ? (
-            
             <div className={style.blankContainer}>
               <div class={style.blank}>
                 <h3>No questions at the moment</h3>
@@ -316,16 +298,15 @@ function ThousandQuestions() {
               </div>
             </>
           )}
-
-          
         </>
       ) : (
         <>
           <div className={style.blankContainer}>
             <div class={style.blank}>
               <h3>You do not have permission</h3>
-              <i class="fa-solid fa-magnifying-glass fa-4x"></i>
-              <h3>Check back in a minute. Loading...</h3>
+              <i class="fa-solid fa-hand-point-left fa-3x"></i>
+              <h3>Check back in a minute</h3>
+              <h3>Might let you in...</h3>
               <i class="fa-solid fa-empty-set"></i>
               <Link to="/category">
                 <Button name="Back to Category">
@@ -338,11 +319,6 @@ function ThousandQuestions() {
       )}
     </>
   );
-
 }
 
 export default RequireAuth(ThousandQuestions);
-
-
-
-

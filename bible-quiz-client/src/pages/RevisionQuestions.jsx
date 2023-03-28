@@ -8,11 +8,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { useFetchRevisionQuestions } from "../api/ApiClient";
 import { useSelector, useDispatch } from "react-redux";
 import * as Action from "../redux/revisionQuestionSlice";
+import RequireAuth from "../components/Auth/requireAuth";
 
 function RevisionQuestions() {
   // const [correctAnswers, setCorrectAnswers] = useState(0);
   // const [wrongAnswers, setWrongAsnwers] = useState(0);
   const [disableButtons, setDisableButtons] = useState(false);
+
+  const [access, setAccess] = useState(false);
 
   const [revisionQuestions, setRevisionQuestions] = useState();
 
@@ -20,11 +23,13 @@ function RevisionQuestions() {
 
   const questions = useSelector((state) => state.revisionQuestions.queue);
 
-   const { opacity, disabledButtons } = useSelector(
-     (state) => state.revisionQuestions
-   );
+  const { opacity, disabledButtons } = useSelector(
+    (state) => state.revisionQuestions
+  );
 
-  const question = useSelector((state) => state.revisionQuestions.queue[state.revisionQuestions.index]);
+  const question = useSelector(
+    (state) => state.revisionQuestions.queue[state.revisionQuestions.index]
+  );
 
   const dispatch = useDispatch();
 
@@ -38,24 +43,32 @@ function RevisionQuestions() {
   const fetchRevisionQuestions = useFetchRevisionQuestions();
 
   useEffect(() => {
-    async function fetchAllRevisionQuestions() {
-      await fetchRevisionQuestions()
-        .then((response) => {
-          if (response.data.successful) {
-            console.log("revision" ,response.data.result);
-            setRevisionQuestions(response.data.result);
-            dispatch(Action.startQuizAction(response.data.result));
-          } else {
-            console.log(response.data.errorMessage);
-          }
-        })
-        .catch((error) => {
-          console.log("error", error);
-        });
-    }
+    const access = JSON.parse(localStorage.getItem("hasAccess"));
 
-    if (!revisionQuestions) {
-      fetchAllRevisionQuestions();
+    setAccess(access);
+
+    if (access) {
+      async function fetchAllRevisionQuestions() {
+        const token = JSON.parse(localStorage.getItem("token"));
+
+        await fetchRevisionQuestions(token)
+          .then((response) => {
+            if (response.data.successful) {
+              console.log("revision", response.data.result);
+              setRevisionQuestions(response.data.result);
+              dispatch(Action.startQuizAction(response.data.result));
+            } else {
+              console.log(response.data.errorMessage);
+            }
+          })
+          .catch((error) => {
+            console.log("error", error);
+          });
+      }
+
+      if (!revisionQuestions) {
+        fetchAllRevisionQuestions();
+      }
     }
   }, [dispatch]);
 
@@ -66,7 +79,9 @@ function RevisionQuestions() {
 
     const correct = JSON.parse(localStorage.getItem("revisionCorrectAnswer"));
     const wrong = JSON.parse(localStorage.getItem("revisionWrongAnswer"));
-    const index = JSON.parse(localStorage.getItem("revisionQuestionsAttempted"));
+    const index = JSON.parse(
+      localStorage.getItem("revisionQuestionsAttempted")
+    );
 
     console.log(correct, wrong, index);
 
@@ -81,7 +96,6 @@ function RevisionQuestions() {
       }
     }
   }, []);
-  
 
   // Countdown state
   const [countdown, setCountdown] = useState(countdownNumber);
@@ -129,7 +143,6 @@ function RevisionQuestions() {
     dispatch(Action.setOpacityAction(1));
   };
 
-
   const handleNextButtonClick = () => {
     // setFinishedTimer(true);
     setCountdown(countdownNumber);
@@ -145,7 +158,7 @@ function RevisionQuestions() {
     }
 
     console.log(questionsFinished);
-   
+
     // setAttemptedQuestions(attemptedQuestions + 1);
   };
 
@@ -179,96 +192,111 @@ function RevisionQuestions() {
     localStorage.removeItem("revisionWrongAnswer");
     localStorage.removeItem("revisionQuestionsAttempted");
     dispatch(Action.resetIndexAction());
-    
-  }
+  };
 
   return (
     <>
-      {questions.length === 0 && (
-        <div className={style.blankContainer}>
-          <div class={style.blank}>
-            <h3>No questions to revise at the moment</h3>
-            <i class="fa-solid fa-magnifying-glass fa-4x"></i>
-            <h3>Questions will be added here when you miss any question</h3>
-            <i class="fa-solid fa-empty-set"></i>
-            <Link to="/category">
-              <Button name="Back to Category">
-                <i class="fa-sharp fa-solid fa-backward"></i>
-              </Button>
-            </Link>
-          </div>
-        </div>
-      )}
-      {questions.length > 0 && (
-        <div className={style.container}>
-          <div className={style.displayPage}>
-            <div className={style.sideBar}>
-                <Sidebar
-              correct={correctAnswers}
-              wrong={wrongAnswers}
-              remaining={questions?.length - questionsAttempted}
-              total={questions?.length}
-            />
+      {access ? (
+        <>
+          {questions.length === 0 ? (
+            <div className={style.blankContainer}>
+              <div class={style.blank}>
+                <h3>No questions to revise at the moment</h3>
+                <i class="fa-solid fa-magnifying-glass fa-4x"></i>
+                <h3>Questions will be added here when you miss any question</h3>
+                <i class="fa-solid fa-empty-set"></i>
+                <Link to="/category">
+                  <Button name="Back to Category">
+                    <i class="fa-sharp fa-solid fa-backward"></i>
+                  </Button>
+                </Link>
+              </div>
             </div>
-
-            <div className={style.questionBar}>
-
-            {!questionsFinished && (
-              <>
-                
-                  <Timer countdown={countdown}
-                  handleNextButtonClick = {handleNextButtonClick}
-                  handleResetButtonClick = {handleResetButtonClick}
-                  handleSaveButtonClick = {handleSaveButtonClick} />
-                
-                
-              </>
-            )}
-
-            {questionsFinished && (
-              <>
-                <div className={style.startAgain}>
-                  <Link to="/category">
-                    <Button
-                      name="Back to Category"
-                      click={handleBackToCategory}
-                    >
-                      <i class="fa fa-arrow-left" aria-hidden="true"></i>
-                    </Button>
-                  </Link>
+          ) : (
+            <div className={style.container}>
+              <div className={style.displayPage}>
+                <div className={style.sideBar}>
+                  <Sidebar
+                    correct={correctAnswers}
+                    wrong={wrongAnswers}
+                    remaining={questions?.length - questionsAttempted}
+                    total={questions?.length}
+                  />
                 </div>
-              </>
-            )}
 
-            <div className={style.question}>
-              <Question
-                disableButtons={disableButtons}
-                // correctAnswers={increaseCorrectAnswers}
-                // wrongAnswers={increaseWrongAnswers}
-                displayAnswer={finishedTimer}
-                clearTimer={clearTimer}
-                onFailAddToRevise={false}
-                state={question}
-                questionsFinished={questionsFinished}
-                handleWrongAnswerAndDisableButton={
-                  handleWrongAnswerAndDisableButton
-                }
-                handleCorrectAnswerAndDisableButton={
-                  handleCorrectAnswerAndDisableButton
-                }
-                handleShowAnswer={handleShowAnswer}
-                opacity={opacity}
-                disabledButtons={disabledButtons}
-              />
+                <div className={style.questionBar}>
+                  {!questionsFinished && (
+                    <>
+                      <Timer
+                        countdown={countdown}
+                        handleNextButtonClick={handleNextButtonClick}
+                        handleResetButtonClick={handleResetButtonClick}
+                        handleSaveButtonClick={handleSaveButtonClick}
+                      />
+                    </>
+                  )}
+
+                  {questionsFinished && (
+                    <>
+                      <div className={style.startAgain}>
+                        <Link to="/category">
+                          <Button
+                            name="Back to Category"
+                            click={handleBackToCategory}
+                          >
+                            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                          </Button>
+                        </Link>
+                      </div>
+                    </>
+                  )}
+
+                  <div className={style.question}>
+                    <Question
+                      disableButtons={disableButtons}
+                      // correctAnswers={increaseCorrectAnswers}
+                      // wrongAnswers={increaseWrongAnswers}
+                      displayAnswer={finishedTimer}
+                      clearTimer={clearTimer}
+                      onFailAddToRevise={false}
+                      state={question}
+                      questionsFinished={questionsFinished}
+                      handleWrongAnswerAndDisableButton={
+                        handleWrongAnswerAndDisableButton
+                      }
+                      handleCorrectAnswerAndDisableButton={
+                        handleCorrectAnswerAndDisableButton
+                      }
+                      handleShowAnswer={handleShowAnswer}
+                      opacity={opacity}
+                      disabledButtons={disabledButtons}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      ) : (
+        <>
+          <div className={style.blankContainer}>
+            <div class={style.blank}>
+              <h3>You do not have permission</h3>
+              <i class="fa-solid fa-hand-point-left fa-3x"></i>
+              <h3>Check back in a minute</h3>
+              <h3>Might let you in...</h3>
+              <i class="fa-solid fa-empty-set"></i>
+              <Link to="/category">
+                <Button name="Back to Category">
+                  <i class="fa-sharp fa-solid fa-backward"></i>
+                </Button>
+              </Link>
             </div>
           </div>
-
-          
-        </div>
-        </div>
+        </>
       )}
     </>
   );
 }
 
-export default RevisionQuestions;
+export default RequireAuth(RevisionQuestions);
