@@ -12,4 +12,10 @@ export default class ApiRoutes {
   static LoginUser = "api/login";
 
   static RegisterUser = "api/register";
+
+  static FetchAllUsers = "api/fetch-users";
+
+  static FetchUser = "api/fetch-user";
+
+  static GrantAccess = "api/grant-access";
 }
