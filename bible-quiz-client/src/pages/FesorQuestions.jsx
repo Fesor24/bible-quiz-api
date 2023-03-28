@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Row, Col } from "antd";
 import style from "../styles/ThousandQuestions.module.css";
 import Sidebar from "../components/Sidebar";
 import Timer from "../components/Timer";
@@ -12,13 +11,15 @@ import {
 } from "../api/ApiClient";
 import { useSelector, useDispatch } from "react-redux";
 import * as Action from "../redux/fesorQuestionsSlice";
+import RequireAuth from "../components/Auth/requireAuth";
 
 function FesorQuestions() {
-  // const [correctAnswers, setCorrectAnswers] = useState(0);
-  // const [wrongAnswers, setWrongAsnwers] = useState(0);
+ 
   const [disableButtons, setDisableButtons] = useState(false);
 
   const [fesorQuestions, setFesorQuestions] = useState();
+
+  const [access, setAccess] = useState(false);
 
   const [questionsFinished, setQuestionsFinished] = useState(false);
 
@@ -36,9 +37,9 @@ function FesorQuestions() {
 
   const navigate = useNavigate();
 
-  const countdownNumber = 10;
+  const countdownNumber = 45;
 
-  const { correctAnswers, wrongAnswers, questionsAttempted, index } =
+  const { correctAnswers, wrongAnswers, questionsAttempted } =
     useSelector((state) => state.fesorQuestions);
 
   const fetchFesorQuestions = useFetchFesorQuestions();
@@ -46,37 +47,43 @@ function FesorQuestions() {
   const addRevisionQuestion = useAddRevisionQuestion();
 
   useEffect(() => {
-    async function fetchAllFesorQuestions() {
-      await fetchFesorQuestions()
-        .then((response) => {
-          if (response.data.successful) {
-            console.log(response.data.result);
-            setFesorQuestions(response.data.result);
-            dispatch(Action.startQuizAction(response.data.result));
-          } else {
-            console.log(response.data.errorMessage);
-          }
-        })
-        .catch((error) => {
-          console.log("error", error);
-        });
-    }
+    const access = JSON.parse(localStorage.getItem("hasAccess"));
 
-    if (!fesorQuestions) {
-      fetchAllFesorQuestions();
+    setAccess(access);
+
+    const token = JSON.parse(localStorage.getItem("token"));
+
+    if (access) {
+      async function fetchAllFesorQuestions() {
+        await fetchFesorQuestions(token)
+          .then((response) => {
+            if (response.data.successful) {
+              console.log(response.data.result);
+              setFesorQuestions(response.data.result);
+              dispatch(Action.startQuizAction(response.data.result));
+            } else {
+              console.log(response.data.errorMessage);
+            }
+          })
+          .catch((error) => {
+            console.log("error", error);
+          });
+      }
+
+      if (!fesorQuestions) {
+        fetchAllFesorQuestions();
+      }
     }
   }, [dispatch]);
 
   useEffect(() => {
-    document.title = "Thousand Questions";
+    document.title = "Fesor's Questions";
 
     // dispatch(Action.resetOpacityAction());
 
     const correct = JSON.parse(localStorage.getItem("fesorCorrectAnswer"));
     const wrong = JSON.parse(localStorage.getItem("fesorWrongAnswer"));
     const index = JSON.parse(localStorage.getItem("fesorQuestionsAttempted"));
-
-    console.log(correct, wrong, index);
 
     if (index) {
       dispatch(Action.setCorrectNumberAction(correct));
@@ -114,25 +121,26 @@ function FesorQuestions() {
 
       let body = {
         question: question?.question,
-        answer: question?.answer
-      }
+        answer: question?.answer,
+      };
+
+      const token = JSON.parse(localStorage.getItem("token"));
 
       const AddToRevision = async () => {
-          await addRevisionQuestion(body)
-            .then((response) => {
-              if (response.data.successful) {
-                console.log(response.data.result);
-              } else {
-                console.log(response.data.errorMessage);
-              }
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-      }
+        await addRevisionQuestion(body, token)
+          .then((response) => {
+            if (response.data.successful) {
+              console.log(response.data.result);
+            } else {
+              console.log(response.data.errorMessage);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      };
 
       AddToRevision();
-    
 
       // increaseWrongAnswers();
       // console.log(state);
@@ -151,7 +159,6 @@ function FesorQuestions() {
     dispatch(Action.remainingQuestionsAction());
     dispatch(Action.setOpacityAction(0));
     dispatch(Action.setDisableButtonAction(false));
-    console.log(index);
 
     if (questions?.length - questionsAttempted === 1) {
       setQuestionsFinished(true);
@@ -205,86 +212,112 @@ function FesorQuestions() {
 
   return (
     <>
-      {questions?.length === 0 && (
-        <div className={style.blankContainer}>
-          <div class={style.blank}>
-            <h3>No questions at the moment</h3>
-            <i class="fa-solid fa-magnifying-glass fa-4x"></i>
-            <h3>Questions will be available soon. Loading...</h3>
-            <i class="fa-solid fa-empty-set"></i>
-            <Link to="/category">
-              <Button name="Back to Category">
-                <i class="fa-sharp fa-solid fa-backward"></i>
-              </Button>
-            </Link>
-          </div>
-        </div>
-      )}
-
-      {questions?.length > 0 && (
-        <div className={style.container}>
-          <div className={style.displayPage}>
-            <div className={style.sideBar}>
-              <Sidebar
-                key={"fesor-question"}
-                correct={correctAnswers}
-                wrong={wrongAnswers}
-                remaining={questions?.length - questionsAttempted}
-                total={questions?.length}
-              />
-            </div>
-
-            <div className={style.questionBar}>
-              {!questionsFinished && (
-                <>               
-                    <Timer
-                      countdown={countdown}
-                      handleNextButtonClick={handleNextButtonClick}
-                      handleResetButtonClick={handleResetButtonClick}
-                      handleSaveButtonClick={handleSaveButtonClick}
-                    />
-                </>
-              )}
-
-              {questionsFinished && (
-                <>
-                  <div className={style.startAgain}>
-                    <Link to="/category">
-                      <Button
-                        name="Back to Category"
-                        click={handleBackToCategory}
-                      >
-                        <i class="fa fa-arrow-left" aria-hidden="true"></i>
-                      </Button>
-                    </Link>
-                  </div>
-                </>
-              )}
-
-              <div className={style.question}>
-                <Question
-                  disableButtons={disableButtons}
-                  displayAnswer={finishedTimer}
-                  clearTimer={clearTimer}
-                  state={question}
-                  handleWrongAnswerAndDisableButton={
-                    handleWrongAnswerAndDisableButton
-                  }
-                  handleCorrectAnswerAndDisableButton={
-                    handleCorrectAnswerAndDisableButton
-                  }
-                  handleShowAnswer={handleShowAnswer}
-                  opacity={opacity}
-                  disabledButtons={disabledButtons}
-                  questionsFinished={questionsFinished}
-                />
+      {access ? (
+        <>
+          {questions?.length === 0 ? (
+            <>
+              <div className={style.blankContainer}>
+                <div class={style.blank}>
+                  <h3>No questions at the moment</h3>
+                  <i class="fa-solid fa-magnifying-glass fa-4x"></i>
+                  <h3>Questions will be available soon. Loading...</h3>
+                  <i class="fa-solid fa-empty-set"></i>
+                  <Link to="/category">
+                    <Button name="Back to Category">
+                      <i class="fa-sharp fa-solid fa-backward"></i>
+                    </Button>
+                  </Link>
+                </div>
               </div>
+            </>
+          ) : (
+            <>
+              <div className={style.container}>
+                <div className={style.displayPage}>
+                  <div className={style.sideBar}>
+                    <Sidebar
+                      key={"fesor-question"}
+                      correct={correctAnswers}
+                      wrong={wrongAnswers}
+                      remaining={questions?.length - questionsAttempted}
+                      total={questions?.length}
+                    />
+                  </div>
+
+                  <div className={style.questionBar}>
+                    {!questionsFinished && (
+                      <>
+                        <Timer
+                          countdown={countdown}
+                          handleNextButtonClick={handleNextButtonClick}
+                          handleResetButtonClick={handleResetButtonClick}
+                          handleSaveButtonClick={handleSaveButtonClick}
+                        />
+                      </>
+                    )}
+
+                    {questionsFinished && (
+                      <>
+                        <div className={style.startAgain}>
+                          <Link to="/category">
+                            <Button
+                              name="Back to Category"
+                              click={handleBackToCategory}
+                            >
+                              <i
+                                class="fa fa-arrow-left"
+                                aria-hidden="true"
+                              ></i>
+                            </Button>
+                          </Link>
+                        </div>
+                      </>
+                    )}
+
+                    <div className={style.question}>
+                      <Question
+                        disableButtons={disableButtons}
+                        displayAnswer={finishedTimer}
+                        clearTimer={clearTimer}
+                        state={question}
+                        handleWrongAnswerAndDisableButton={
+                          handleWrongAnswerAndDisableButton
+                        }
+                        handleCorrectAnswerAndDisableButton={
+                          handleCorrectAnswerAndDisableButton
+                        }
+                        handleShowAnswer={handleShowAnswer}
+                        opacity={opacity}
+                        disabledButtons={disabledButtons}
+                        questionsFinished={questionsFinished}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+        </>
+      ) : (
+        <>
+          <div className={style.blankContainer}>
+            <div class={style.blank}>
+              <h3>You do not have permission</h3>
+              <i class="fa-solid fa-hand-point-left fa-3x"></i>
+              <h3>Check back in a minute</h3>
+              <h3>Might let you in...</h3>
+              <i class="fa-solid fa-empty-set"></i>
+              <Link to="/category">
+                <Button name="Back to Category">
+                  <i class="fa-sharp fa-solid fa-backward"></i>
+                </Button>
+              </Link>
             </div>
           </div>
-        </div>
+        </>
       )}
     </>
   );
 }
 
-export default FesorQuestions;
+export default RequireAuth(FesorQuestions);
