@@ -156,9 +156,9 @@ namespace BibleQuiz.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet(ApiRoutes.FetchRevisionQuestions)]
-		//[Authorize(Policy = "RequirePremiumClaim")]
-		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-		public async Task<ApiResponse> FetchRevisionQuestions()
+        //[Authorize(Policy = "RequirePremiumClaim")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ApiResponse> FetchRevisionQuestions()
         {
             // We create an instance of revision specification
             var spec = new RevisionQuestionsSpecification();
