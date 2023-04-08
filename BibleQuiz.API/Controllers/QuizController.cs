@@ -113,11 +113,75 @@ namespace BibleQuiz.API.Controllers
         }
 
         /// <summary>
-        /// Endpoint to add question to the revision table
+        /// Endpoint to add a list of questions to the thousand questions db
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="questions"></param>
         /// <returns></returns>
-        [HttpPost(ApiRoutes.AddRevisionQuestion)]
+        [HttpPost(ApiRoutes.AddThousandQuestions)]
+		[Authorize(Policy = "RequireAdminClaim")]
+		public async Task<ApiResponse> AddThousandQuestions(List<CreateQuestionsApiModel> questions)
+        {
+            // Create list of Thousand quiz questions
+            List<ThousandQuizQuestionsDataModel> questionList = new();
+
+            // Iterate over the loop
+            foreach(var question in questions)
+            {
+                // Create instance of thousand quiz question data model
+                var questionToAdd = new ThousandQuizQuestionsDataModel { Question = question.Question, Answer = question.Answer };
+
+                // Add it to the question list
+                questionList.Add(questionToAdd);
+            }
+
+            // Add it to the db
+            await unit.Repository<ThousandQuizQuestionsDataModel>().AddQuestionRange(questionList);
+
+            // Save the changes
+            await unit.Complete();
+
+            // Return response
+            return new ApiResponse { Result = "Questions added to db" };
+        }
+
+        /// <summary>
+        /// Endpoint to add questions to fesor's db
+        /// </summary>
+        /// <param name="questions"></param>
+        /// <returns></returns>
+		[HttpPost(ApiRoutes.AddFesorQuestions)]
+		[Authorize(Policy = "RequireAdminClaim")]
+		public async Task<ApiResponse> AddFesorQuestions(List<CreateQuestionsApiModel> questions)
+		{
+			// Create list of Thousand quiz questions
+			List<FesorQuestionsDataModel> questionList = new();
+
+			// Iterate over the loop
+			foreach (var question in questions)
+			{
+				// Create instance of thousand quiz question data model
+				var questionToAdd = new FesorQuestionsDataModel { Question = question.Question, Answer = question.Answer };
+
+				// Add it to the question list
+				questionList.Add(questionToAdd);
+			}
+
+			// Add it to the db
+			await unit.Repository<FesorQuestionsDataModel>().AddQuestionRange(questionList);
+
+			// Save the changes
+			await unit.Complete();
+
+			// Return response
+			return new ApiResponse { Result = "Questions added to db" };
+		}
+
+		/// <summary>
+		/// Endpoint to add question to the revision table
+		/// </summary>
+		/// <param name="model"></param>
+		/// <returns></returns>
+		[HttpPost(ApiRoutes.AddRevisionQuestion)]
 		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 		public async Task<ApiResponse> AddRevisionQuestion(RevisionQuestionApiModel model)
         {
