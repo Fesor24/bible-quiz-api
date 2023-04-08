@@ -45,7 +45,7 @@ namespace BibleQuiz.API
 
                 // Get the error details
                 var errorDetails = env.IsDevelopment() ? new ApiResponse { ErrorMessage = $"Message: {ex.Message}.{Environment.NewLine} StackTrace: {ex.StackTrace}"} : 
-                    new ApiResponse { ErrorMessage = ex.Message };
+                    new ApiResponse { ErrorMessage = $"Message: {ex.Message}.{Environment.NewLine} StackTrace: {ex.StackTrace}" };
 
                 // Set json options
                 var jsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
