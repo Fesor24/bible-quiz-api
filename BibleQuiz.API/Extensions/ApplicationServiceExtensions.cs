@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using System.Text;
+using AspNetCoreRateLimit;
 using BibleQuiz.Core;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -215,10 +216,51 @@ namespace BibleQuiz.API
             return services;
         }
 
+        /// <summary>
+        /// Add token service to ServiceCollection
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
         public static IServiceCollection AddTokenService(this IServiceCollection services)
         {
             services.AddScoped<ITokenService, TokenService>();
 
+            return services;
+        }
+
+        /// <summary>
+        /// Configure the rate limit for all endpoints
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static IServiceCollection ConfigureRateLimitOptions(this IServiceCollection services)
+        {
+            var rateLimitRules = new List<RateLimitRule>
+            {
+                new RateLimitRule
+                {
+                    Endpoint = "*",
+                    Limit = 3,
+                    Period = "5m"
+                }
+            };
+
+            // Configure the IpRateLimitOptions
+            services.Configure<IpRateLimitOptions>(options => options.GeneralRules = rateLimitRules);
+
+            // Add the IRateLimitCounterStore as a singleton
+            services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
+
+            // Add the IIpPolicyStore as a singleton
+            services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
+
+            // Add the IRateLimitConfiguration as a singleton
+            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+
+            // Add the processing strategy as a singleton
+            services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
+
+            // Return services for further chaining
             return services;
         }
 
