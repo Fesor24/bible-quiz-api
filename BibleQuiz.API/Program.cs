@@ -1,3 +1,4 @@
+using AspNetCoreRateLimit;
 using Serilog;
 using Serilog.Events;
 
@@ -23,10 +24,10 @@ namespace BibleQuiz.API
             builder.Services.AddDbContext(builder.Configuration)
                 .AddIdentity()
                 .ConfigureJwtAuthentication(builder.Configuration)
-				.ConfigureAuthorization()
+                .ConfigureAuthorization()
                 .ConfigureApiBehavior()
                 .AddTokenService()
-				.AddGenericRepository()
+                .AddGenericRepository()
                 .AddUnitOfWork()
                 .ConfigureCors()
                 .AddLogging(options =>
@@ -56,6 +57,8 @@ namespace BibleQuiz.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            //app.UseIpRateLimiting();
 
             app.UseCors("CorsPolicy");
 
