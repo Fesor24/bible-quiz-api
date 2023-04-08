@@ -1,0 +1,33 @@
+services:
+  api:
+    build: .
+    command: dotnet run
+    ports: 
+      - "4000:80"
+      - "4500:443"
+    depends_on:
+      - db
+    volumes:
+      - ./BibleQuiz.Core/DataSeed:/app/BibleQuiz.Core/DataSeed
+
+  db:
+    image: mcr.microsoft.com/mssql/server
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Guard@@2@@
+      - MSSQL_TCP_PORT=1433
+    ports:
+      - "1433:1433"
+    volumes:
+      - "api_db:/data/db"
+
+  nginx:
+    image: nginx:stable-alpine-slim
+    ports: 
+      - "80:80"
+    depends_on:
+      - api
+    volumes: 
+      - "./nginx/nginx.conf:/etc/nginx/nginx.conf:ro"
+volumes:
+  api_db:
