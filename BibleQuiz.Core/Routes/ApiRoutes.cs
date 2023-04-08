@@ -18,9 +18,19 @@
         public const string AddRevisionQuestion = "api/revision-question/add";
 
         /// <summary>
-        /// Endpoint to fetch all revision questions
+        /// Endpoint to add thousand questions to db
         /// </summary>
-        public const string FetchRevisionQuestions = "api/revision-questions/fetch";
+        public const string AddThousandQuestions = "api/thousand-questions/add";
+
+		/// <summary>
+		/// Endpoint to add thousand questions to db
+		/// </summary>
+		public const string AddFesorQuestions = "api/fesor-questions/add";
+
+		/// <summary>
+		/// Endpoint to fetch all revision questions
+		/// </summary>
+		public const string FetchRevisionQuestions = "api/revision-questions/fetch";
 
         /// <summary>
         /// Endpoint to fetch questions set by me
