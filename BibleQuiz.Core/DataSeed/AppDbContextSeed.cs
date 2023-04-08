@@ -19,6 +19,8 @@ namespace BibleQuiz.Core
                     // Read the content of the file
                     var thousandQuestions = File.ReadAllText("../BibleQuiz.Core/DataSeed/ThousandQuestions.json");
 
+                    //var thousandQuestions = File.ReadAllText("/app/BibleQuiz.Core/DataSeed/ThousandQuestions.json");
+
                     // Deserialize it into a list of thousand questions
                     var questions = JsonSerializer.Deserialize<List<ThousandQuizQuestionsDataModel>>(thousandQuestions);
 
@@ -36,7 +38,7 @@ namespace BibleQuiz.Core
                 if(!context.FesorQuestions.Any())
                 {
                     // Read the content from the file
-                    var fesorsQuestion = File.ReadAllText("../BibleQuiz.Core/DataSeed/fesor.json");
+                    var fesorsQuestion = File.ReadAllText("/app/BibleQuiz.Core/DataSeed/fesor.json");
 
                     // Deserialize it into a list of fesor questions
                     var questions = JsonSerializer.Deserialize<List<FesorQuestionsDataModel>>(fesorsQuestion);
@@ -60,7 +62,7 @@ namespace BibleQuiz.Core
                 var logger = loggerFactory.CreateLogger<AppDbContextSeed>();
 
                 // Log error to console
-                logger.LogError("An error occurred", ex.Message);
+                logger.LogError("An error occurred.Details: {error}", ex.Message);
             }
         }
 
