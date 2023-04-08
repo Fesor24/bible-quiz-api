@@ -17,45 +17,43 @@ namespace BibleQuiz.Core
         }
 
         /// <summary>
-        /// To add questions to the db
+        /// Add list of questions to db
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="entities"></param>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-		public async Task AddQuestions(T entity)
-		{
-            // We add it to the db
-			await dbSet.AddAsync(entity);
-		}
+		public async Task AddQuestionRange(List<T> entities) => await dbSet.AddRangeAsync(entities);
+
+		/// <summary>
+		/// To add questions to the db
+		/// </summary>
+		/// <param name="entity"></param>
+		/// <returns></returns>
+		/// <exception cref="NotImplementedException"></exception>
+		public async Task AddQuestions(T entity) => await dbSet.AddAsync(entity);
+		
 
 		/// <summary>
 		/// Fetch a list based on the specified specification
 		/// </summary>
 		/// <param name="spec"></param>
 		/// <returns></returns>
-		public async Task<IReadOnlyList<T>> GetQuestionsAsync(ISpecification<T> spec)
-        {
-            return await ApplySpecification(spec).ToListAsync();
-        }
+		public async Task<IReadOnlyList<T>> GetQuestionsAsync(ISpecification<T> spec) => await ApplySpecification(spec).ToListAsync();
+        
 
         /// <summary>
         /// Fetch a question based on the specified specification
         /// </summary>
         /// <param name="spec"></param>
         /// <returns></returns>
-        public async Task<T> GetQuestionWithSpec(ISpecification<T> spec)
-        {
-            return await ApplySpecification(spec).FirstOrDefaultAsync();
-        }
+        public async Task<T> GetQuestionWithSpec(ISpecification<T> spec) => await ApplySpecification(spec).FirstOrDefaultAsync();
 
-        /// <summary>
-        /// Private method to apply the specification
-        /// </summary>
-        /// <param name="spec"></param>
-        /// <returns></returns>
-        private IQueryable<T> ApplySpecification(ISpecification<T> spec)
-        {
-            return SpecificationEvaluator<T>.GetQuery(dbSet.AsQueryable(), spec);
-        }
+
+		/// <summary>
+		/// Private method to apply the specification
+		/// </summary>
+		/// <param name="spec"></param>
+		/// <returns></returns>
+		private IQueryable<T> ApplySpecification(ISpecification<T> spec) => SpecificationEvaluator<T>.GetQuery(dbSet.AsQueryable(), spec);
+        
     }
 }

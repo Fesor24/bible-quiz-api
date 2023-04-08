@@ -32,5 +32,12 @@ namespace BibleQuiz.Core
         /// <param name="entity"></param>
         /// <returns></returns>
         Task AddQuestions(T entity);
+
+        /// <summary>
+        /// To add multiple questions to the db
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <returns></returns>
+        Task AddQuestionRange(List<T> entities);
     }
 }
