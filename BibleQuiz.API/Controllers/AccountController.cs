@@ -212,11 +212,9 @@ namespace BibleQuiz.API.Controllers
 		/// </summary>
 		/// <returns></returns>
 		[HttpGet(ApiRoutes.FetchAllUsers)]
-		[Authorize(Policy = "RequireAdminClaim")]
-		public async Task<ApiResponse> FetchAllUsers([FromQuery]int pageSize = 6, [FromQuery]int pageIndex = 1)
+		//[Authorize(Policy = "RequireAdminClaim")]
+		public ApiResponse FetchAllUsers([FromQuery]int pageSize = 6, [FromQuery]int pageIndex = 1)
 		{
-			
-
 			// Fetch all users
 			var users = userManager
 				.Users
@@ -243,7 +241,7 @@ namespace BibleQuiz.API.Controllers
 		/// <returns></returns>
 		[HttpGet(ApiRoutes.FetchUser)]
 		[Authorize(Policy = "RequireAdminClaim")]
-		public async Task<ApiResponse> FetchUsersByEmail([FromQuery] string email)
+		public ApiResponse FetchUsersByEmail([FromQuery] string email)
 		{
 			// Get the users with the specified email
 			var users = context.Users
