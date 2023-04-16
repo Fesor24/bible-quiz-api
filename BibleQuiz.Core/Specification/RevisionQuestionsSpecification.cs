@@ -5,7 +5,7 @@
 	/// </summary>
 	public class RevisionQuestionsSpecification: BaseSpecification<RevisionQuestionsDataModel>
 	{
-		public RevisionQuestionsSpecification()
+		public RevisionQuestionsSpecification(string userId): base(x => x.UserId == userId)
 		{
 			AddOrderBy(x => x.Id);
 		}
