@@ -16,5 +16,10 @@
 		/// The answer to this questions
 		/// </summary>
 		public string Answer { get; set; }
+
+		/// <summary>
+		/// The user associated with this revision questions
+		/// </summary>
+		public string UserId { get; set; }
 	}
 }
