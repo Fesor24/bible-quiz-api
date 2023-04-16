@@ -16,13 +16,13 @@ namespace BibleQuiz.Core
             {
                 if (!context.ThousandQuizQuestions.Any())
                 {
-                    // Read the content of the file
-                    var thousandQuestions = File.ReadAllText("../BibleQuiz.Core/DataSeed/ThousandQuestions.json");
+					// Read the content of the file
+					//var thousandQuestions = File.ReadAllText("/app/Data/ThousandQuestions.json");
 
-                    //var thousandQuestions = File.ReadAllText("/app/BibleQuiz.Core/DataSeed/ThousandQuestions.json");
+					var thousandQuestions = File.ReadAllText("../BibleQuiz.Core/DataSeed/ThousandQuestions.json");
 
-                    // Deserialize it into a list of thousand questions
-                    var questions = JsonSerializer.Deserialize<List<ThousandQuizQuestionsDataModel>>(thousandQuestions);
+					// Deserialize it into a list of thousand questions
+					var questions = JsonSerializer.Deserialize<List<ThousandQuizQuestionsDataModel>>(thousandQuestions);
 
                     // We loop over the questions and add it to db
                     foreach (var question in questions)
@@ -37,11 +37,13 @@ namespace BibleQuiz.Core
 
                 if(!context.FesorQuestions.Any())
                 {
-                    // Read the content from the file
-                    var fesorsQuestion = File.ReadAllText("/app/BibleQuiz.Core/DataSeed/fesor.json");
+					// Read the content from the file
+					//var fesorsQuestion = File.ReadAllText("/app/Data/fesor.json");
 
-                    // Deserialize it into a list of fesor questions
-                    var questions = JsonSerializer.Deserialize<List<FesorQuestionsDataModel>>(fesorsQuestion);
+					var fesorsQuestion = File.ReadAllText("../BibleQuiz.Core/DataSeed/fesor.json");
+
+					// Deserialize it into a list of fesor questions
+					var questions = JsonSerializer.Deserialize<List<FesorQuestionsDataModel>>(fesorsQuestion);
 
                     // Loop over the questions and add to db
                     foreach(var question in questions)
