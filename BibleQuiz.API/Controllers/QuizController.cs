@@ -1,8 +1,10 @@
 ﻿using System.Net;
+using System.Security.Claims;
 using BibleQuiz.Core;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +22,12 @@ namespace BibleQuiz.API.Controllers
         private readonly ApplicationDbContext context;
 
         /// <summary>
+        /// DI instance of UserManager
+        /// </summary>
+
+        private readonly UserManager<ApplicationUser> userManager;
+
+        /// <summary>
         /// DI instance of ILogger
         /// </summary>
         private readonly ILogger<QuizController> logger;
@@ -33,11 +41,12 @@ namespace BibleQuiz.API.Controllers
 
         #region Constructor
         public QuizController(ApplicationDbContext context, ILogger<QuizController> logger,
-            IUnitOfWork unit)
+            IUnitOfWork unit, UserManager<ApplicationUser> userManager)
         {
             this.context = context;
             this.logger = logger;
             this.unit = unit;
+            this.userManager = userManager;
         }
 
         #endregion
@@ -185,8 +194,25 @@ namespace BibleQuiz.API.Controllers
 		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 		public async Task<ApiResponse> AddRevisionQuestion(RevisionQuestionApiModel model)
         {
-            // Check if the question exist
-            var questionExist = await context.RevisionQuestions.AnyAsync(x => x.Question.ToLower() == model.Question.ToLower());
+            // Fetch the user email
+            var userEmail = HttpContext.User.FindFirstValue(ClaimTypes.Email);
+
+            // Fetch the user
+            var user = await userManager.FindByEmailAsync(userEmail);
+
+            // If the user is null
+            if(user is null)
+            {
+                // Return error response
+                return new ApiResponse
+                {
+                    ErrorMessage = "User not found"
+                };
+            }
+
+            // Check if the question exist for the particular user
+            var questionExist = await context.RevisionQuestions.AnyAsync(x => x.Question.ToLower() == model.Question.ToLower() 
+            && x.UserId == user.Id);
 
             // If the question exist
             if (questionExist)
@@ -202,7 +228,8 @@ namespace BibleQuiz.API.Controllers
             await unit.Repository<RevisionQuestionsDataModel>().AddQuestions(new RevisionQuestionsDataModel
             {
                 Question = model.Question,
-                Answer = model.Answer
+                Answer = model.Answer,
+                UserId = user.Id
             });
 
             // Save the changes
@@ -224,8 +251,18 @@ namespace BibleQuiz.API.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ApiResponse> FetchRevisionQuestions()
         {
+            //Get the user mail
+            var userMail = HttpContext.User.FindFirstValue(ClaimTypes.Email);
+
+            // Get the user
+            var user = await userManager.FindByEmailAsync(userMail);
+
+            // If the user is null
+            if (user is null)
+                return new ApiResponse { ErrorMessage = "User not found" };
+
             // We create an instance of revision specification
-            var spec = new RevisionQuestionsSpecification();
+            var spec = new RevisionQuestionsSpecification(user.Id);
 
             // Fetch all the questions
             var questions = await unit.Repository<RevisionQuestionsDataModel>().GetQuestionsAsync(spec);
@@ -259,6 +296,12 @@ namespace BibleQuiz.API.Controllers
             };
 
         }
+
+
+        //public async Task<ApiResponse> UpdateFesorQuestions()
+        //{
+
+        //}
 
         /// <summary>
         /// Private class to handle null result
