@@ -56,7 +56,7 @@ namespace BibleQuiz.API
                     var logger = loggerFactory.CreateLogger<Program>();
 
                     // Log error to console
-                    logger.LogError($"An error occurred while applying migrations. Details: {ex.Message}");
+                    logger.LogError($"An error occurred while applying migrations. Details: {ex.Message + ex.StackTrace}");
                 }
             }
         }
@@ -71,7 +71,7 @@ namespace BibleQuiz.API
         {
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseSqlServer(config.GetConnectionString("DefaultConnection"),
+                options.UseNpgsql(config.GetConnectionString("DefaultConnection"),
                     migrations => migrations.MigrationsAssembly(typeof(Program).Assembly.GetName().Name));
 
             });
