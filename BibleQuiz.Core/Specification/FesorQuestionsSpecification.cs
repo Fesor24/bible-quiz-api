@@ -6,5 +6,7 @@
 		{
 			AddOrderBy(x => x.Id);
 		}
+
+		public FesorQuestionsSpecification(int id) : base(x => x.Id == id) { }
 	}
 }
