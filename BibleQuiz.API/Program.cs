@@ -1,4 +1,4 @@
-using AspNetCoreRateLimit;
+using System.Reflection;
 using Serilog;
 using Serilog.Events;
 
@@ -8,11 +8,16 @@ namespace BibleQuiz.API
     {
         public static async Task Main(string[] args)
         {
+            // Get the executing path location for assembly
+            var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
             // Setting the logger configuration
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
                 .WriteTo.Console()
-                .WriteTo.File("Logs/log.txt", restrictedToMinimumLevel: LogEventLevel.Information ,rollingInterval: RollingInterval.Day)
+                .WriteTo.File($"{path}/log.txt", restrictedToMinimumLevel: LogEventLevel.Information ,rollingInterval: RollingInterval.Day,
+                fileSizeLimitBytes: 30_000_000, rollOnFileSizeLimit: true, shared: false, flushToDiskInterval: TimeSpan.FromSeconds(2),
+                buffered: true, retainedFileCountLimit: 10)
                 .CreateLogger();
 
             var builder = WebApplication.CreateBuilder(args);
@@ -56,6 +61,8 @@ namespace BibleQuiz.API
 
             app.UseHttpsRedirection();
 
+            app.UseStaticFiles();
+
             app.UseRouting();
 
             //app.UseIpRateLimiting();
@@ -67,6 +74,8 @@ namespace BibleQuiz.API
             app.UseAuthorization();
 
             app.MapControllers();
+
+            app.MapFallbackToController("Index", "Fallback");
 
             app.Run();
         }
