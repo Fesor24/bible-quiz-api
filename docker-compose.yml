@@ -1,39 +1,17 @@
 services:
+
   db:
     image: postgres
-    container_name: biblequiz-docker-api-db
     restart: always
-    networks:
-      - local_net
     environment:
-      - POSTGRES_PASSWORD=secret
-      - POSTGRES_DB=gtcc-quiz
+      POSTGRES_PASSWORD: Eskimo@910
+      POSTGRES_USER: postgres
+      POSTGRES_DB: gtcc-quiz
     ports:
       - "5432:5432"
-    volumes:
-      - "api_db:/data/db"
-
-  api:
-    build: .
-    container_name: biblequiz-docker-api
-    command: dotnet run
-    networks:
-      - local_net
-    ports: 
-      - "80:80"
-    depends_on:
-      - db 
-    restart: unless-stopped
 
   adminer:
     image: adminer
     restart: always
     ports:
       - 8080:8080
-
-networks:
-  local_net:
-    driver: bridge
-
-volumes:
-  api_db:
