@@ -30,14 +30,29 @@ namespace BibleQuiz.Core
 		/// <returns></returns>
 		/// <exception cref="NotImplementedException"></exception>
 		public async Task AddQuestions(T entity) => await dbSet.AddAsync(entity);
+
+		/// <summary>
+		/// Remove a question from the db
+		/// </summary>
+		/// <param name="entity"></param>
+		public void DeleteQuestion(T entity) => dbSet.Remove(entity);
 		
+
+		/// <summary>
+		/// To remove multiple questions from the db
+		/// </summary>
+		/// <param name="entities"></param>
+		/// <returns></returns>
+		public void DeleteQuestionsRange(List<T> entities) => dbSet.RemoveRange(entities);
+
+
 
 		/// <summary>
 		/// Fetch a list based on the specified specification
 		/// </summary>
 		/// <param name="spec"></param>
 		/// <returns></returns>
-		public async Task<IReadOnlyList<T>> GetQuestionsAsync(ISpecification<T> spec) => await ApplySpecification(spec).ToListAsync();
+		public async Task<List<T>> GetQuestionsAsync(ISpecification<T> spec) => await ApplySpecification(spec).ToListAsync();
         
 
         /// <summary>

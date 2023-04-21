@@ -24,7 +24,7 @@ namespace BibleQuiz.Core
         /// </summary>
         /// <param name="spec"></param>
         /// <returns></returns>
-        Task<IReadOnlyList<T>> GetQuestionsAsync(ISpecification<T> spec);
+        Task<List<T>> GetQuestionsAsync(ISpecification<T> spec);
 
         /// <summary>
         /// To add question to the table
@@ -39,5 +39,19 @@ namespace BibleQuiz.Core
         /// <param name="entities"></param>
         /// <returns></returns>
         Task AddQuestionRange(List<T> entities);
-    }
+
+        /// <summary>
+        /// To delete multiple questions
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <returns></returns>
+        void DeleteQuestionsRange(List<T> entities);
+
+		/// <summary>
+		/// To delete multiple questions
+		/// </summary>
+		/// <param name="entities"></param>
+		/// <returns></returns>
+		void DeleteQuestion(T entity);
+	}
 }
