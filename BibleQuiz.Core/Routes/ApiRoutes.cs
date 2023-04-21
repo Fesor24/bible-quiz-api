@@ -18,6 +18,16 @@
         public const string AddRevisionQuestion = "api/revision-question/add";
 
         /// <summary>
+        /// Endpoint to delete revision questions for a user
+        /// </summary>
+        public const string DeleteRevisionQuestionsForUser = "api/revision-question/delete";
+
+        /// <summary>
+        /// Endpoint to delete fesor question
+        /// </summary>
+        public const string DeleteQuestionById = "api/fesor-question/delete";
+
+        /// <summary>
         /// Endpoint to add thousand questions to db
         /// </summary>
         public const string AddThousandQuestions = "api/thousand-questions/add";
