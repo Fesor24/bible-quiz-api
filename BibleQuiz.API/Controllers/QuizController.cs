@@ -297,6 +297,76 @@ namespace BibleQuiz.API.Controllers
 
         }
 
+        /// <summary>
+        /// Endpoint to delete revision questions for a user
+        /// </summary>
+        /// <returns></returns>
+        [HttpDelete(ApiRoutes.DeleteRevisionQuestionsForUser)]
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+		public async Task<ApiResponse> DeleteRevisionQuestionForUser()
+        {
+            // Get the user mail
+            var email = HttpContext.User.FindFirstValue(ClaimTypes.Email);
+
+            // Get the user
+            var user = await userManager.FindByEmailAsync(email);
+
+            // If the user is null
+            if(user is null)
+            {
+                // Return error message
+                return new ApiResponse
+                {
+                    ErrorMessage = "User not found"
+                };
+            }
+
+            // Create a new specification
+            var spec = new RevisionQuestionsSpecification(user.Id);
+
+            // Fetch the revision questions associated with this user
+            var revisionQuestions = await unit.Repository<RevisionQuestionsDataModel>().GetQuestionsAsync(spec);
+
+            // We delete the questions
+            unit.Repository<RevisionQuestionsDataModel>().DeleteQuestionsRange(revisionQuestions);
+
+            // Save the changes
+            await unit.Complete();
+
+            // Return the api response
+            return new ApiResponse
+            {
+                Result = "Questions deleted"
+            };
+
+        }
+
+        /// <summary>
+        /// To delete a fesor question
+        /// </summary>
+        /// <returns></returns>
+        [HttpDelete(ApiRoutes.DeleteQuestionById)]
+		[Authorize(Policy = "RequireAdminClaim")]
+		public async Task<ApiResponse> DeleteFesorQuestionById([FromQuery] int questionId)
+        {
+            // Initialize a spec
+            var spec = new FesorQuestionsSpecification(questionId);
+
+            // Fetch the question
+            var question = await unit.Repository<FesorQuestionsDataModel>().GetQuestionWithSpec(spec);
+
+            // Delete the question
+            unit.Repository<FesorQuestionsDataModel>().DeleteQuestion(question);
+
+            // Save the changes
+            await unit.Complete();
+
+            return new ApiResponse
+            {
+                Result = "Question deleted"
+            };
+        }
+
 
         //public async Task<ApiResponse> UpdateFesorQuestions()
         //{
