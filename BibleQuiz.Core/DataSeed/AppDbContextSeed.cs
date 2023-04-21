@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Reflection;
+using System.Security.Claims;
 using System.Text.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -14,12 +15,16 @@ namespace BibleQuiz.Core
         {
             try
             {
+                // Returns the directory name of the location of the executing assembly
+                var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+                // If no questions are available in the thousand questions db
                 if (!context.ThousandQuizQuestions.Any())
                 {
 					// Read the content of the file
 					//var thousandQuestions = File.ReadAllText("/app/Data/ThousandQuestions.json");
 
-					var thousandQuestions = File.ReadAllText("../BibleQuiz.Core/DataSeed/ThousandQuestions.json");
+					var thousandQuestions = File.ReadAllText(path + @"/Data/ThousandQuestions.json");
 
 					// Deserialize it into a list of thousand questions
 					var questions = JsonSerializer.Deserialize<List<ThousandQuizQuestionsDataModel>>(thousandQuestions);
@@ -40,7 +45,7 @@ namespace BibleQuiz.Core
 					// Read the content from the file
 					//var fesorsQuestion = File.ReadAllText("/app/Data/fesor.json");
 
-					var fesorsQuestion = File.ReadAllText("../BibleQuiz.Core/DataSeed/fesor.json");
+					var fesorsQuestion = File.ReadAllText(path + @"/Data/fesor.json");
 
 					// Deserialize it into a list of fesor questions
 					var questions = JsonSerializer.Deserialize<List<FesorQuestionsDataModel>>(fesorsQuestion);
