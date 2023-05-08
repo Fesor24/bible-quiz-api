@@ -5,18 +5,6 @@ namespace BibleQuiz.Core
 	public class RegisterCredentialsApiModel
 	{
 		/// <summary>
-		/// The first name of the user
-		/// </summary>
-		[Required(ErrorMessage = "First name is a required field")]
-		public string FirstName { get; set; }
-
-		/// <summary>
-		/// The last name of the user
-		/// </summary>
-		[Required(ErrorMessage = "Last name is a required field")]
-		public string LastName { get; set; }
-
-		/// <summary>
 		/// The email of the user
 		/// </summary>
 		[EmailAddress]
