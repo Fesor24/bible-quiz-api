@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using System.Text.Json;
 using BibleQuiz.Core;
-using Serilog;
 
 namespace BibleQuiz.API
 {
@@ -19,10 +18,17 @@ namespace BibleQuiz.API
         /// DI instance of IHostEnvironment
         /// </summary>
         private readonly IHostEnvironment env;
-        public ExceptionMiddleware(RequestDelegate next, IHostEnvironment env)
+
+        /// <summary>
+        /// DI instance of ILogger
+        /// </summary>
+        private readonly ILogger<ExceptionMiddleware> logger;
+
+        public ExceptionMiddleware(RequestDelegate next, IHostEnvironment env, ILogger<ExceptionMiddleware> logger)
         {
             this.next = next;
             this.env = env;
+            this.logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -35,7 +41,7 @@ namespace BibleQuiz.API
             catch(Exception ex)
             {
                 // Log the error to console
-                Log.Error(ex.Message);
+                logger.LogError(ex.Message);
 
                 // Set status code to 500
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
