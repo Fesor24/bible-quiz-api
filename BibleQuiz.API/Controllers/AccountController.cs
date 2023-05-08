@@ -56,8 +56,6 @@ namespace BibleQuiz.API.Controllers
 			var result = await userManager.CreateAsync(new ApplicationUser
 			{
 				Email = model.Email,
-				FirstName = model.FirstName,
-				LastName = model.LastName,
 				UserName = model.Email,
 				// Change to denied if we want to use admin to grant access
 				Permission = Permission.Granted
