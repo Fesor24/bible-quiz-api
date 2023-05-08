@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -26,11 +22,22 @@ namespace BibleQuiz.Core
 		{
 			var claims = new List<Claim>();
 
+			// Extract values before @ in mail
+			var emailSplit = user.Email.Split('@');
+
+			// Initialize the username
+			string userName = default;
+
+			// If email split has a length of 2
+			if(emailSplit is { Length: 2 })
+			{
+				userName = emailSplit[0];
+			}
+
 			claims = new List<Claim>
 			{
 				new Claim(ClaimTypes.Email, user.Email),
-				new Claim(ClaimTypes.GivenName, user.FirstName),
-				new Claim("familyname", user.LastName),
+				new Claim(ClaimTypes.GivenName, userName ??= "user"),
 
 			};
 
