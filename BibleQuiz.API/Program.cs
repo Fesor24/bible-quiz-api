@@ -1,6 +1,5 @@
-using System.Reflection;
-using Serilog;
-using Serilog.Events;
+using Dna;
+using Dna.AspNet;
 
 namespace BibleQuiz.API
 {
@@ -8,19 +7,17 @@ namespace BibleQuiz.API
     {
         public static async Task Main(string[] args)
         {
-            // Get the executing path location for assembly
-            var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
-            // Setting the logger configuration
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Information()
-                .WriteTo.Console()
-                .WriteTo.File($"{path}/log.txt", restrictedToMinimumLevel: LogEventLevel.Information ,rollingInterval: RollingInterval.Day,
-                fileSizeLimitBytes: 30_000_000, rollOnFileSizeLimit: true, shared: false, flushToDiskInterval: TimeSpan.FromSeconds(2),
-                buffered: true, retainedFileCountLimit: 10)
-                .CreateLogger();
 
             var builder = WebApplication.CreateBuilder(args);
+
+            // Add Dna framework to IOC container
+            builder.WebHost.UseDnaFramework(construct =>
+            {
+                construct.AddConfiguration(builder.Configuration);
+
+                // Add file logger
+                construct.AddFileLogger();
+            });
 
             // Add services to the container.
 
@@ -34,12 +31,7 @@ namespace BibleQuiz.API
                 .AddTokenService()
                 .AddGenericRepository()
                 .AddUnitOfWork()
-                .ConfigureCors()
-                .AddLogging(options =>
-                {
-                    options.ClearProviders();
-                    options.AddSerilog(dispose: true);
-                });
+                .ConfigureCors();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -59,6 +51,8 @@ namespace BibleQuiz.API
                 app.UseSwaggerUI();
             }
 
+            app.UseDnaFramework();
+
             app.UseHttpsRedirection();
 
             app.UseStaticFiles();
@@ -75,7 +69,7 @@ namespace BibleQuiz.API
 
             app.MapControllers();
 
-            app.MapFallbackToController("Index", "Fallback");
+            //app.MapFallbackToController("Index", "Fallback");
 
             app.Run();
         }
