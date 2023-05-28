@@ -38,5 +38,10 @@ namespace BibleQuiz.Core
         /// Table containing questions set by me
         /// </summary>
         public DbSet<FesorQuestionsDataModel> FesorQuestions { get; set;}
+
+        /// <summary>
+        /// Table containing different bible verses
+        /// </summary>
+        public DbSet<VerseOfTheDayDataModel> VerseOfTheDay { get; set; }
     }
 }
