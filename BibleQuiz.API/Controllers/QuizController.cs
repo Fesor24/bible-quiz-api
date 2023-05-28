@@ -59,9 +59,9 @@ namespace BibleQuiz.API.Controllers
         [HttpGet(ApiRoutes.FetchThousandQuestion)]
         [ProducesResponseType(statusCode: (int)HttpStatusCode.OK, type: typeof(ApiResponse))]
         [ProducesResponseType(statusCode:(int)HttpStatusCode.NotFound, type:typeof(ApiResponse))]
-		//[Authorize(Policy = "RequirePremiumClaim")]
-		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-		public async Task<ApiResponse> GetQuestionById(int id)
+        //[Authorize(Policy = "RequirePremiumClaim")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ApiResponse> GetQuestionById(int id)
         {
             // Initialize thousand quiz data model
             var result = new ThousandQuizQuestionsDataModel();
@@ -72,7 +72,7 @@ namespace BibleQuiz.API.Controllers
                 var spec = new ThousandQuestionsSpecification(id);
 
                 // Get the question
-                var question = await unit.Repository<ThousandQuizQuestionsDataModel>().GetQuestionWithSpec(spec);            
+                var question = await unit.Repository<ThousandQuizQuestionsDataModel>().GetDataWithSpec(spec);            
 
                 // If question is null
                 if (question is null) return NullResult();
@@ -106,13 +106,14 @@ namespace BibleQuiz.API.Controllers
         [ProducesResponseType(statusCode: (int)HttpStatusCode.OK, type: typeof(ApiResponse))]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequirePremiumClaim")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-		public async Task<ApiResponse> FetchAllThousandQuestions()
+        [ResponseCache(Location = ResponseCacheLocation.Any, Duration = 5000)]
+        public async Task<ApiResponse> FetchAllThousandQuestions()
         {
             // Initialize new spec
             var spec = new ThousandQuestionsSpecification();
 
             // Fetch all the questions
-            var result = await unit.Repository<ThousandQuizQuestionsDataModel>().GetQuestionsAsync(spec);
+            var result = await unit.Repository<ThousandQuizQuestionsDataModel>().GetAllDataAsync(spec);
 
             // return it to client
             return new ApiResponse
@@ -144,7 +145,7 @@ namespace BibleQuiz.API.Controllers
             }
 
             // Add it to the db
-            await unit.Repository<ThousandQuizQuestionsDataModel>().AddQuestionRange(questionList);
+            await unit.Repository<ThousandQuizQuestionsDataModel>().AddDataRange(questionList);
 
             // Save the changes
             await unit.Complete();
@@ -176,7 +177,7 @@ namespace BibleQuiz.API.Controllers
 			}
 
 			// Add it to the db
-			await unit.Repository<FesorQuestionsDataModel>().AddQuestionRange(questionList);
+			await unit.Repository<FesorQuestionsDataModel>().AddDataRange(questionList);
 
 			// Save the changes
 			await unit.Complete();
@@ -225,7 +226,7 @@ namespace BibleQuiz.API.Controllers
             }
 
             // Add the question to db
-            await unit.Repository<RevisionQuestionsDataModel>().AddQuestions(new RevisionQuestionsDataModel
+            await unit.Repository<RevisionQuestionsDataModel>().AddData(new RevisionQuestionsDataModel
             {
                 Question = model.Question,
                 Answer = model.Answer,
@@ -265,7 +266,7 @@ namespace BibleQuiz.API.Controllers
             var spec = new RevisionQuestionsSpecification(user.Id);
 
             // Fetch all the questions
-            var questions = await unit.Repository<RevisionQuestionsDataModel>().GetQuestionsAsync(spec);
+            var questions = await unit.Repository<RevisionQuestionsDataModel>().GetAllDataAsync(spec);
 
             // Return questions to client
             return new ApiResponse
@@ -280,14 +281,15 @@ namespace BibleQuiz.API.Controllers
         /// <returns></returns>
         [HttpGet(ApiRoutes.FetchFesorQuestions)]
         //[Authorize(Policy = "RequirePremiumClaim")]
-		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-		public async Task<ApiResponse> FetchFesorsQuestions()
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [ResponseCache(Location = ResponseCacheLocation.Any, Duration = 5000)]
+        public async Task<ApiResponse> FetchFesorsQuestions()
         {
             // Create an instance of the fesor specification
             var spec = new FesorQuestionsSpecification();
 
             // Fetch all questions
-            var questions = await unit.Repository<FesorQuestionsDataModel>().GetQuestionsAsync(spec);
+            var questions = await unit.Repository<FesorQuestionsDataModel>().GetAllDataAsync(spec);
 
             // Return the questions
             return new ApiResponse
@@ -325,10 +327,10 @@ namespace BibleQuiz.API.Controllers
             var spec = new RevisionQuestionsSpecification(user.Id);
 
             // Fetch the revision questions associated with this user
-            var revisionQuestions = await unit.Repository<RevisionQuestionsDataModel>().GetQuestionsAsync(spec);
+            var revisionQuestions = await unit.Repository<RevisionQuestionsDataModel>().GetAllDataAsync(spec);
 
             // We delete the questions
-            unit.Repository<RevisionQuestionsDataModel>().DeleteQuestionsRange(revisionQuestions);
+            unit.Repository<RevisionQuestionsDataModel>().DeleteDataRange(revisionQuestions);
 
             // Save the changes
             await unit.Complete();
@@ -353,10 +355,10 @@ namespace BibleQuiz.API.Controllers
             var spec = new FesorQuestionsSpecification(questionId);
 
             // Fetch the question
-            var question = await unit.Repository<FesorQuestionsDataModel>().GetQuestionWithSpec(spec);
+            var question = await unit.Repository<FesorQuestionsDataModel>().GetDataWithSpec(spec);
 
             // Delete the question
-            unit.Repository<FesorQuestionsDataModel>().DeleteQuestion(question);
+            unit.Repository<FesorQuestionsDataModel>().DeleteData(question);
 
             // Save the changes
             await unit.Complete();
