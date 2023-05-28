@@ -104,6 +104,39 @@ namespace BibleQuiz.API.Controllers
 		}
 
 		/// <summary>
+		/// Endpoint to get current user
+		/// </summary>
+		/// <returns></returns>
+		[HttpGet(ApiRoutes.GetCurrentUser)]
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+		public async Task<ApiResponse> GetCurrentUser()
+		{
+			// Get the email of the user
+			var email = User.FindFirstValue(ClaimTypes.Email);
+
+			// Get the user with associated emil from db
+			var user = await userManager.FindByEmailAsync(email);
+
+			// Get the associated claims of this user
+			var userClaims = await userManager.GetClaimsAsync(user);
+
+			// Create instance of userApiModer
+			var userApiModel = new UserApiModel
+			{
+				Email = user.Email,
+				Permission = user.Permission,
+				Token = tokenService.CreateToken(user, userClaims)
+			};
+
+			// Return the result
+			return new ApiResponse
+			{
+				Result = userApiModel
+			};
+
+		}
+
+		/// <summary>
 		/// Endpoint to login a user
 		/// </summary>
 		/// <param name="model"></param>
