@@ -95,6 +95,6 @@
         /// <summary>
         /// Endpoint to Add verses
         /// </summary>
-        public const string FetchVerses = "api/verse/fetch";
+        public const string FetchVerses = "api/verses/fetch";
     }
 }
