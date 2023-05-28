@@ -11,13 +11,13 @@ namespace BibleQuiz.API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add Dna framework to IOC container
-            builder.WebHost.UseDnaFramework(construct =>
-            {
-                construct.AddConfiguration(builder.Configuration);
+            //builder.WebHost.UseDnaFramework(construct =>
+            //{
+            //    construct.AddConfiguration(builder.Configuration);
 
-                // Add file logger
-                construct.AddFileLogger();
-            });
+            //    // Add file logger
+            //    construct.AddFileLogger();
+            //});
 
             // Add services to the container.
 
@@ -32,6 +32,8 @@ namespace BibleQuiz.API
                 .AddGenericRepository()
                 .AddUnitOfWork()
                 .ConfigureCors();
+
+            builder.Services.AddResponseCaching();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -51,7 +53,7 @@ namespace BibleQuiz.API
                 app.UseSwaggerUI();
             }
 
-            app.UseDnaFramework();
+            //app.UseDnaFramework();
 
             app.UseHttpsRedirection();
 
@@ -59,17 +61,17 @@ namespace BibleQuiz.API
 
             app.UseRouting();
 
-            //app.UseIpRateLimiting();
-
             app.UseCors("CorsPolicy");
 
             app.UseAuthentication();
 
             app.UseAuthorization();
 
+            app.UseResponseCaching();
+
             app.MapControllers();
 
-            //app.MapFallbackToController("Index", "Fallback");
+            app.MapFallbackToController("Index", "Fallback");
 
             app.Run();
         }
