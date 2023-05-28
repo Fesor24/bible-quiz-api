@@ -6,5 +6,8 @@
         {
 
         }
+
+        public VerseSpecification(int id): base(x => x.Id == id) { } 
+        
     }
 }

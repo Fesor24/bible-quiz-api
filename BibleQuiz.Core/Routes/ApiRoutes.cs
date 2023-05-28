@@ -86,5 +86,15 @@
         /// Endpoint to Add verses
         /// </summary>
         public const string FetchVerse = "api/verse";
+
+        /// <summary>
+        /// Endpoint to Add verses
+        /// </summary>
+        public const string DeleteVerse = "api/verse/delete";
+
+        /// <summary>
+        /// Endpoint to Add verses
+        /// </summary>
+        public const string FetchVerses = "api/verse/fetch";
     }
 }

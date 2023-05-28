@@ -1,5 +1,7 @@
-﻿using BibleQuiz.Core;
+﻿using System.Net;
+using BibleQuiz.Core;
 using BibleQuiz.Core.Specification;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,7 +25,7 @@ namespace BibleQuiz.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet(ApiRoutes.FetchVerse)]
-        [ResponseCache(Location = ResponseCacheLocation.Any, Duration = 86400)]
+        [ResponseCache(Location = ResponseCacheLocation.Any, Duration = 3600)]
         public async Task<ApiResponse> GetVerseOfTheDay()
         {
             var spec = new VerseSpecification();
@@ -53,11 +55,73 @@ namespace BibleQuiz.API.Controllers
         }
 
         /// <summary>
+        /// Endpoint to delete a verse
+        /// </summary>
+        /// <param name="verseId"></param>
+        /// <returns></returns>
+        [HttpDelete(ApiRoutes.DeleteVerse)]
+        [Authorize(Policy = "RequireAdminClaim")]
+        public async Task<ApiResponse> DeleteVerse([FromQuery] int verseId)
+        {
+            // Create new spec
+            var spec = new VerseSpecification(verseId);
+
+            // Get the verse
+            var verse = await unit.Repository<VerseOfTheDayDataModel>().GetDataWithSpec(spec);
+
+            // If verse is null
+            if (verse is null)
+            {
+                // Set the status code
+                Response.StatusCode = (int)HttpStatusCode.NotFound;
+
+                return new ApiResponse
+                {
+                    ErrorMessage = "Verse not found"
+                };
+            }
+
+            // Delete the verse
+            unit.Repository<VerseOfTheDayDataModel>().DeleteData(verse);
+
+            // Save changes
+            await unit.Complete();
+
+            // Return the response
+            return new ApiResponse
+            {
+                Result = new { Message = "Verse deleted" }
+            };
+        }
+
+        /// <summary>
+        /// Endpoint to fetch all verses
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet(ApiRoutes.FetchVerses)]
+        [Authorize(Policy = "RequireAdminClaim")]
+        public async Task<ApiResponse> FetchAllVerses()
+        {
+            // Create a new spec
+            var spec = new VerseSpecification();
+
+            // Get all the verses
+            var verses = await unit.Repository<VerseOfTheDayDataModel>().GetAllDataAsync(spec);
+
+            // Return it
+            return new ApiResponse
+            {
+                Result = verses
+            };
+        }     
+
+        /// <summary>
         /// Endpoint to add verses
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost(ApiRoutes.AddVerses)]
+        [Authorize(Policy = "RequireAdminClaim")]
         public async Task<ApiResponse> AddVerses(List<VerseOfTheDayApiModel> model)
         {
             // Create list of verse of the day api model
