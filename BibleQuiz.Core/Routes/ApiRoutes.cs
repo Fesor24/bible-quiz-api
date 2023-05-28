@@ -58,6 +58,11 @@
         public const string Login = "api/login";
 
         /// <summary>
+        /// Endpoint to get the current user
+        /// </summary>
+        public const string GetCurrentUser = "api/current-user";
+
+        /// <summary>
         /// Endpoint to grant access to users
         /// </summary>
         public const string GrantAccess = "api/grant-access";
@@ -71,5 +76,15 @@
 		/// Endpoint to fetch user
 		/// </summary>
 		public const string FetchUser = "api/fetch-user";
-	}
+
+        /// <summary>
+        /// Endpoint to Add verses
+        /// </summary>
+        public const string AddVerses = "api/verses";
+
+        /// <summary>
+        /// Endpoint to Add verses
+        /// </summary>
+        public const string FetchVerse = "api/verse";
+    }
 }
