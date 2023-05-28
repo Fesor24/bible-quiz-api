@@ -13,45 +13,45 @@ namespace BibleQuiz.Core
     public interface IGenericRepository<T> where T : class
     {
         /// <summary>
-        /// Get a question by a specified condition
+        /// Get data by a specified condition
         /// </summary>
         /// <param name="spec"></param>
         /// <returns></returns>
-        Task<T> GetQuestionWithSpec(ISpecification<T> spec);
+        Task<T> GetDataWithSpec(ISpecification<T> spec);
 
         /// <summary>
         /// Get all questions by a specified condition
         /// </summary>
         /// <param name="spec"></param>
         /// <returns></returns>
-        Task<List<T>> GetQuestionsAsync(ISpecification<T> spec);
+        Task<List<T>> GetAllDataAsync(ISpecification<T> spec);
 
         /// <summary>
         /// To add question to the table
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        Task AddQuestions(T entity);
+        Task AddData(T entity);
 
         /// <summary>
         /// To add multiple questions to the db
         /// </summary>
         /// <param name="entities"></param>
         /// <returns></returns>
-        Task AddQuestionRange(List<T> entities);
+        Task AddDataRange(List<T> entities);
 
         /// <summary>
         /// To delete multiple questions
         /// </summary>
         /// <param name="entities"></param>
         /// <returns></returns>
-        void DeleteQuestionsRange(List<T> entities);
+        void DeleteDataRange(List<T> entities);
 
 		/// <summary>
 		/// To delete multiple questions
 		/// </summary>
 		/// <param name="entities"></param>
 		/// <returns></returns>
-		void DeleteQuestion(T entity);
+		void DeleteData(T entity);
 	}
 }

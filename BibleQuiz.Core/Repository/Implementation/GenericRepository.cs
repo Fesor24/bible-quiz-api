@@ -2,7 +2,7 @@
 
 namespace BibleQuiz.Core
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class
+	public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         /// <summary>
         /// Scoped instance of app db context
@@ -21,7 +21,7 @@ namespace BibleQuiz.Core
         /// </summary>
         /// <param name="entities"></param>
         /// <returns></returns>
-		public async Task AddQuestionRange(List<T> entities) => await dbSet.AddRangeAsync(entities);
+		public async Task AddDataRange(List<T> entities) => await dbSet.AddRangeAsync(entities);
 
 		/// <summary>
 		/// To add questions to the db
@@ -29,13 +29,13 @@ namespace BibleQuiz.Core
 		/// <param name="entity"></param>
 		/// <returns></returns>
 		/// <exception cref="NotImplementedException"></exception>
-		public async Task AddQuestions(T entity) => await dbSet.AddAsync(entity);
+		public async Task AddData(T entity) => await dbSet.AddAsync(entity);
 
 		/// <summary>
 		/// Remove a question from the db
 		/// </summary>
 		/// <param name="entity"></param>
-		public void DeleteQuestion(T entity) => dbSet.Remove(entity);
+		public void DeleteData(T entity) => dbSet.Remove(entity);
 		
 
 		/// <summary>
@@ -43,7 +43,7 @@ namespace BibleQuiz.Core
 		/// </summary>
 		/// <param name="entities"></param>
 		/// <returns></returns>
-		public void DeleteQuestionsRange(List<T> entities) => dbSet.RemoveRange(entities);
+		public void DeleteDataRange(List<T> entities) => dbSet.RemoveRange(entities);
 
 
 
@@ -52,7 +52,7 @@ namespace BibleQuiz.Core
 		/// </summary>
 		/// <param name="spec"></param>
 		/// <returns></returns>
-		public async Task<List<T>> GetQuestionsAsync(ISpecification<T> spec) => await ApplySpecification(spec).ToListAsync();
+		public async Task<List<T>> GetAllDataAsync(ISpecification<T> spec) => await ApplySpecification(spec).ToListAsync();
         
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace BibleQuiz.Core
         /// </summary>
         /// <param name="spec"></param>
         /// <returns></returns>
-        public async Task<T> GetQuestionWithSpec(ISpecification<T> spec) => await ApplySpecification(spec).FirstOrDefaultAsync();
+        public async Task<T> GetDataWithSpec(ISpecification<T> spec) => await ApplySpecification(spec).FirstOrDefaultAsync();
 
 
 		/// <summary>
