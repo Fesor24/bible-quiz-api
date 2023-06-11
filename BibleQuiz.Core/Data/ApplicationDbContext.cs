@@ -43,5 +43,10 @@ namespace BibleQuiz.Core
         /// Table containing different bible verses
         /// </summary>
         public DbSet<VerseOfTheDayDataModel> VerseOfTheDay { get; set; }
+
+        /// <summary>
+        /// Table containing Bible books
+        /// </summary>
+        public DbSet<BibleBooksDataModel> BibleBooks { get;set; }
     }
 }

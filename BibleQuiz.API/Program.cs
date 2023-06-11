@@ -31,7 +31,9 @@ namespace BibleQuiz.API
                 .AddTokenService()
                 .AddGenericRepository()
                 .AddUnitOfWork()
-                .ConfigureCors();
+                .ConfigureCors()
+                .AddOptionsPattern(builder.Configuration)
+                .AddBibleApi();
 
             builder.Services.AddResponseCaching();
 

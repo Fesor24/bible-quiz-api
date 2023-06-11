@@ -96,5 +96,20 @@
         /// Endpoint to Add verses
         /// </summary>
         public const string FetchVerses = "api/verses/fetch";
+
+        /// <summary>
+        /// Endpoint to get scriptures for questions
+        /// </summary>
+        public const string GetScriptureForQuestion = "api/scriptures";
+
+        /// <summary>
+        /// Endpoint to get 
+        /// </summary>
+        public const string GetBibleBookNames = "api/bible-books";
+
+        /// <summary>
+        /// Endpoint to add bible books to the db
+        /// </summary>
+        public const string AddBibleBooksToDb = "api/bible-books/add";
     }
 }

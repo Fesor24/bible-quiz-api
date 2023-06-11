@@ -264,5 +264,31 @@ namespace BibleQuiz.API
             return services;
         }
 
+        /// <summary>
+        /// Add options to IOC container
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="config"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddOptionsPattern(this IServiceCollection services, IConfiguration config)
+        {
+            // Configure the bible api creds
+            services.Configure<BibleCredentials>(config.GetSection("BibleApi"));
+
+            // Return services for further chaining
+            return services;
+        }
+
+        public static IServiceCollection AddBibleApi(this IServiceCollection services)
+        {
+            services.AddHttpClient();
+
+            services.AddTransient<IApiClient, ApiClient>();
+
+            services.AddScoped<IBibleService, BibleService>();
+
+            return services;
+        }
+
     }
 }
