@@ -164,7 +164,7 @@ namespace BibleQuiz.API.Controllers
 			{
 				return new ApiResponse
 				{
-					ErrorMessage = "Unauthorized"
+					ErrorMessage = "Invalid username or password"
 				};
 			}
 

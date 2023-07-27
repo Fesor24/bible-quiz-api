@@ -228,7 +228,6 @@ namespace BibleQuiz.API.Controllers
 
                         }
                     }
-
                     
                 }
             }
@@ -296,6 +295,7 @@ namespace BibleQuiz.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet(ApiRoutes.GetBibleBookNames)]
+        [Authorize(Policy = "RequireAdminClaim")]
         public async Task<ApiResponse> GetBibleBookNames()
         {
             // Create a specification
