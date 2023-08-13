@@ -38,7 +38,8 @@ namespace BibleQuiz.API.Controllers
 		/// <param name="model"></param>
 		/// <returns></returns>
 		[HttpPost(ApiRoutes.Register)]
-		public async Task<ApiResponse> CreateUserAsync([FromBody] RegisterCredentialsApiModel model)
+        [Authorize(Policy = "RequireAdminClaim")]
+        public async Task<ApiResponse> CreateUserAsync([FromBody] RegisterCredentialsApiModel model)
 		{
 			// Check if we have existing user in db
 			var userExist = await userManager.FindByEmailAsync(model.Email);
