@@ -1,17 +1,38 @@
 services:
-
-  db:
+  postgres:
     image: postgres
     restart: always
+    container_name: gtcc_db
     environment:
-      POSTGRES_PASSWORD: Eskimo@910
-      POSTGRES_USER: postgres
-      POSTGRES_DB: gtcc-quiz
+        - POSTGRES_PASSWORD=gtccpw
     ports:
-      - "5432:5432"
+        - 5522:5432    
+    volumes:
+        - data:/var/lib/postgressql/data
 
   adminer:
     image: adminer
     restart: always
+    container_name: gtcc_adminer
     ports:
-      - 8080:8080
+        - 8080:8080
+
+  gtcc-api:
+    image: fesor24/gtcc
+    container_name: gtcc
+    build: 
+        context: .
+        dockerfile: BibleQuiz.API/Dockerfile
+    environment:
+        - ASPNETCORE_URLS=http://+:80
+        - ConnectionStrings__DefaultConnection=Server=postgres:5432;Database=gtcc;User Id=postgres;Password=gtccpw
+        - JwtSettings__Key=D73642D3-01C6-4BE8-A99A-8585B4720E3E
+        - JwtSettings__Issuer=gtcc-quiz
+        - BibleApi__ApiKey=3cc385f11d4635a26f8074517dfa076c
+    ports:
+        - 7230:80
+    depends_on:
+        - postgres
+
+volumes:
+  data:
