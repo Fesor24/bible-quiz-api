@@ -6,6 +6,7 @@ using BibleQuiz.Domain.Enums;
 using BibleQuiz.Domain.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using BibleQuiz.API.Extensions;
 
 namespace BibleQuiz.API.Controllers;
 
@@ -26,7 +27,7 @@ public class TestQuestionsController : ControllerBase
     {
         var res = await _sender.Send(new GetQuestionsBySourceRequest { Source = source });
 
-        return res.Match<IActionResult>(value => Ok(value), err => BadRequest(res.Error));
+        return res.Match(value => Ok(value), this.HandleErrorResult);
     }
 
     [HttpPost("/api/questions")]
@@ -36,7 +37,7 @@ public class TestQuestionsController : ControllerBase
     {
         var res = await _sender.Send(new CreateQuestionsCommand { Questions = questions });
 
-        return res.Match<IActionResult>(value => Ok(value), err => BadRequest(err));
+        return res.Match(value => Ok(value), this.HandleErrorResult);
     }
 
     [HttpDelete("/api/question/:id")]
@@ -46,6 +47,6 @@ public class TestQuestionsController : ControllerBase
     {
         var res = await _sender.Send(new DeleteQuestionCommand { Id = id });
 
-        return res.Match<IActionResult>(value => NoContent(), err => NotFound(err));
+        return res.Match(value => NoContent(), this.HandleErrorResult);
     }
 }
