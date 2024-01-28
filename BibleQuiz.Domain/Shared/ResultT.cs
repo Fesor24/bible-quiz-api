@@ -19,4 +19,7 @@ public class Result<TValue, TError> : Result where TError : Error
 
     public static implicit operator Result<TValue, TError>(TValue value) => new(value);
     public static implicit operator Result<TValue, TError>(TError error) => new(error, false);
+
+    public TResult Match<TResult>(Func<TValue, TResult> success, Func<TError, TResult> error) =>
+        IsSuccess ? success(_value) : error(_error);
 }
