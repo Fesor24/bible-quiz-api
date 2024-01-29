@@ -10,6 +10,6 @@ public sealed class TestQuestionsMappings : Profile
     {
         CreateMap<TestQuestion, GetQuestionResponse>();
 
-        CreateMap<CreateQuestionsDto, TestQuestion>();
+        CreateMap<CreateQuestionDto, TestQuestion>();
     }
 }
