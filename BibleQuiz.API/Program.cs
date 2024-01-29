@@ -1,39 +1,31 @@
-using Dna;
-using Dna.AspNet;
+using BibleQuiz.Application;
+using BibleQuiz.Domain.Models;
+using BibleQuiz.Infrastructure;
 
 namespace BibleQuiz.API
 {
     public class Program
     {
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
 
             var builder = WebApplication.CreateBuilder(args);
-
-            // Add Dna framework to IOC container
-            //builder.WebHost.UseDnaFramework(construct =>
-            //{
-            //    construct.AddConfiguration(builder.Configuration);
-
-            //    // Add file logger
-            //    construct.AddFileLogger();
-            //});
 
             // Add services to the container.
 
             builder.Services.AddControllers();
 
-            builder.Services.AddDbContext(builder.Configuration)
-                .AddIdentity()
-                .ConfigureJwtAuthentication(builder.Configuration)
-                .ConfigureAuthorization()
+            builder.Services.AddInfrastructureServices(builder.Configuration)
+                .AddApplicationServices(builder.Configuration)
+                .AddApiServices();
+
+            builder.Services.Configure<BibleCredentials>(
+                builder.Configuration.GetSection(BibleCredentials.CONFIGURATION));
+
+            builder.Services
                 .ConfigureApiBehavior()
                 .AddTokenService()
-                .AddGenericRepository()
-                .AddUnitOfWork()
-                .ConfigureCors()
-                .AddOptionsPattern(builder.Configuration)
-                .AddBibleApi();
+                .ConfigureCors();
 
             builder.Services.AddResponseCaching();
 
@@ -46,7 +38,7 @@ namespace BibleQuiz.API
             app.UseMiddleware<ExceptionMiddleware>();
 
             // Apply pending migrations
-            await app.ApplyMigrationsAsync();
+            //await app.ApplyMigrationsAsync();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
