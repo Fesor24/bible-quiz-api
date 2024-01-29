@@ -11,6 +11,8 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration config)
     {
+        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddDbContext<QuizDbContext>(opt =>
