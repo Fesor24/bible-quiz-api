@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BibleQuiz.Infrastructure.Data.EntityConfigurations;
-internal class TestQuestionEntityConfiguration : IEntityTypeConfiguration<TestQuestion>
+internal sealed class TestQuestionEntityConfiguration : IEntityTypeConfiguration<TestQuestion>
 {
     public void Configure(EntityTypeBuilder<TestQuestion> builder)
     {

@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BibleQuiz.Infrastructure.Data.EntityConfigurations;
-internal sealed class VerseEntityConfiguration : IEntityTypeConfiguration<Verse>
+internal sealed class BibleBookEntityConfiguration : IEntityTypeConfiguration<BibleBook>
 {
-    public void Configure(EntityTypeBuilder<Verse> builder)
+    public void Configure(EntityTypeBuilder<BibleBook> builder)
     {
-        builder.ToTable(nameof(Verse), QuizDbContext.COMMON);
+        builder.ToTable(nameof(BibleBook), QuizDbContext.COMMON);
         builder.HasKey(x => x.Id);
     }
 }
