@@ -7,6 +7,7 @@ using BibleQuiz.Domain.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using BibleQuiz.API.Extensions;
+using BibleQuiz.Application.Features.TestQuestion.Commands.CreatePastQuestions;
 
 namespace BibleQuiz.API.Controllers;
 
@@ -33,7 +34,7 @@ public class TestQuestionsController : ControllerBase
     [HttpPost("/api/questions")]
     [ProducesResponseType(typeof(Unit), StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(Error))]
-    public async Task<IActionResult> AddQuestions(List<CreateQuestionsDto> questions)
+    public async Task<IActionResult> AddQuestions(List<CreateQuestionDto> questions)
     {
         var res = await _sender.Send(new CreateQuestionsCommand { Questions = questions });
 
@@ -48,5 +49,35 @@ public class TestQuestionsController : ControllerBase
         var res = await _sender.Send(new DeleteQuestionCommand { Id = id });
 
         return res.Match(value => NoContent(), this.HandleErrorResult);
+    }
+
+    [HttpPost("/api/question")]
+    [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+    [ProducesErrorResponseType(typeof(Error))]
+    public async Task<IActionResult> AddQuestion(CreateQuestionDto question)
+    {
+        var res = await _sender.Send(new CreateQuestionCommand
+        {
+            Answer = question.Answer,
+            Question = question.Question,
+            Verse = question.Verse
+        });
+
+        return res.Match(value => CreatedAtRoute(value, question), this.HandleErrorResult);
+    }
+
+    [HttpPost("/api/past-questions")]
+    [ProducesResponseType(typeof(Unit), StatusCodes.Status200OK)]
+    [ProducesErrorResponseType(typeof(Error))]
+    public async Task<IActionResult> AddPastQuestions([FromBody] List<CreatePastQuestionsDto> questions, 
+        [FromQuery] QuestionSource source)
+    {
+        var res = await _sender.Send(new CreatePastQuestionsCommand
+        {
+            Questions = questions,
+            Source = source
+        });
+
+        return res.Match(value => Ok(value), this.HandleErrorResult);
     }
 }
