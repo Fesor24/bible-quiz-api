@@ -15,4 +15,6 @@ public class QuizDbContext : DbContext
 
     public DbSet<TestQuestion> TestQuestions => Set<TestQuestion>();
     public DbSet<Verse> Verse => Set<Verse>();
+
+    public DbSet<BibleBook> BibleBook => Set<BibleBook>();
 }
