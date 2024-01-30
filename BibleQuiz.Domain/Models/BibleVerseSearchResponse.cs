@@ -1,14 +1,11 @@
 ﻿namespace BibleQuiz.Domain.Models;
 public class BibleVerseSearchResponse
 {
-    public class BibleApiVerseSearchResponse
-    {
-        public Data Data { get; set; }
+    public ScriptureData Data { get; set; }
 
-        public Meta Meta { get; set; }
-    }
+    public ScriptureMeta Meta { get; set; }
 
-    public class Data
+    public class ScriptureData
     {
         public List<Passages> Passages { get; set; }
     }
@@ -34,7 +31,7 @@ public class BibleVerseSearchResponse
         public string Copyright { get; set; }
     }
 
-    public class Meta
+    public class ScriptureMeta
     {
         public string Fums { get; set; }
 
