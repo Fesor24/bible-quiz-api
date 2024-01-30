@@ -8,6 +8,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using BibleQuiz.API.Extensions;
 using BibleQuiz.Application.Features.TestQuestion.Commands.CreatePastQuestions;
+using BibleQuiz.Application.Features.TestQuestion.Commands.UpdateQuestionPassage;
+using BibleQuiz.Application.Features.TestQuestion.Queries.GetQuestionPassage;
 
 namespace BibleQuiz.API.Controllers;
 
@@ -41,7 +43,7 @@ public class TestQuestionsController : ControllerBase
         return res.Match(value => Ok(value), this.HandleErrorResult);
     }
 
-    [HttpDelete("/api/question/:id")]
+    [HttpDelete("/api/question/{id}")]
     [ProducesResponseType(typeof(Unit), StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(Error))]
     public async Task<IActionResult> DeleteQuestion(int id)
@@ -77,6 +79,26 @@ public class TestQuestionsController : ControllerBase
             Questions = questions,
             Source = source
         });
+
+        return res.Match(value => Ok(value), this.HandleErrorResult);
+    }
+
+    [HttpPost("/api/question/passage")]
+    [ProducesResponseType(typeof(Unit), StatusCodes.Status204NoContent)]
+    [ProducesErrorResponseType(typeof(Error))]
+    public async Task<IActionResult> UpdateQuestionPassage(UpdateQuestionPassageDto passage)
+    {
+        var res = await _sender.Send(new UpdateQuestionPassageCommand { Data = passage });
+
+        return res.Match(value => NoContent(), this.HandleErrorResult);
+    }
+
+    [HttpGet("/api/question/passage/{questionId}")]
+    [ProducesResponseType(typeof(GetQuestionPassageResponse), StatusCodes.Status200OK)]
+    [ProducesErrorResponseType(typeof(Error))]
+    public async Task<IActionResult> GetQuestionPassage(int questionId)
+    {
+        var res = await _sender.Send(new GetQuestionPassageRequest(questionId));
 
         return res.Match(value => Ok(value), this.HandleErrorResult);
     }
