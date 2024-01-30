@@ -10,6 +10,7 @@ public sealed class TestQuestion : Entity
     public string Answer { get; private set; }
     public string Verse { get; private set; }
     public QuestionSource Source { get; private set; }
+    public string Passage { get; private set; }
 
     public TestQuestion()
     {
@@ -50,6 +51,15 @@ public sealed class TestQuestion : Entity
         Question = question;
 
         return this;
+    }
 
+    public Result<TestQuestion, Error> UpdatePassage(string passage)
+    {
+        if (string.IsNullOrWhiteSpace(passage))
+            return DomainErrors.TestQuestion.InvalidPassage;
+
+        Passage = passage;
+
+        return this;
     }
 }
