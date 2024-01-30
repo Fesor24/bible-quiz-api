@@ -45,7 +45,7 @@ public class CustomHttpClient : IHttpClient
         {
             var serializedResult = await response.Content.ReadFromJsonAsync<TResult>(jsonOptions);
 
-            return new Result<TResult, TError>(value: serializedResult);
+            return new Result<TResult, TError>(serializedResult);
         }
         else
         {
