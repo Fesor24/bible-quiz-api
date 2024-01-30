@@ -34,7 +34,7 @@ public class BibleService : IBibleService
                 Headers = headers
             });
 
-        return bibleVerse;
+        return bibleVerse.Value;
     }
 
     public async Task<Result<BibleBooks, Error>> GetBibleBooks()
