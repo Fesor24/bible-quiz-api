@@ -8,6 +8,7 @@ internal static class DomainErrors
         internal static Error InvalidQuestion = new("400", "Invalid question");
 
         internal static Error InvalidAnswer = new("400", "Invalid answer");
+        internal static Error InvalidPassage = new("400", "Invalid passage");
     }
 
     internal static class Verse
