@@ -6,5 +6,6 @@ public class GetTestQuestionsBySourceSpecification : BaseSpecification<TestQuest
 {
     public GetTestQuestionsBySourceSpecification(QuestionSource source) : base(x => x.Source == source)
     {
+        SetOrderBy(x => x.Id);
     }
 }
