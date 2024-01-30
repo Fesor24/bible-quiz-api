@@ -12,6 +12,9 @@ internal static class SpecificationEvaluator
         if (spec.OrderByDesc is not null)
             query = query.OrderByDescending(spec.OrderByDesc);
 
+        if (spec.OrderBy is not null)
+            query = query.OrderBy(spec.OrderBy);
+
         return query;
     }
 }
