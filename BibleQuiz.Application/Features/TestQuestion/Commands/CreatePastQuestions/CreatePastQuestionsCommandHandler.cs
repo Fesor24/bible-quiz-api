@@ -6,7 +6,7 @@ using BibleQuiz.Domain.Entities;
 
 namespace BibleQuiz.Application.Features.TestQuestion.Commands.CreatePastQuestions;
 internal sealed class CreatePastQuestionsCommandHandler : 
-    IRequestHandler<CreatePastQuestionsCommand, Result<List<TestQuestions>, Error>>
+    IRequestHandler<CreatePastQuestionsCommand, Result<Unit, Error>>
 {
     private readonly IUnitOfWork _unitOfWork;
 
@@ -15,7 +15,7 @@ internal sealed class CreatePastQuestionsCommandHandler :
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Result<List<TestQuestions>, Error>> Handle(CreatePastQuestionsCommand request, 
+    public async Task<Result<Unit, Error>> Handle(CreatePastQuestionsCommand request, 
         CancellationToken cancellationToken)
     {
         List<TestQuestions> questions = new();
@@ -55,7 +55,7 @@ internal sealed class CreatePastQuestionsCommandHandler :
 
         await _unitOfWork.Complete();
 
-        return questions;
+        return Unit.Value;
     }
 
 
