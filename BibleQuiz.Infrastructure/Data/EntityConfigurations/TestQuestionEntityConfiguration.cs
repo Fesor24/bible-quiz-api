@@ -13,5 +13,8 @@ internal sealed class TestQuestionEntityConfiguration : IEntityTypeConfiguration
         builder.Property(x => x.Source)
             .HasConversion(sr => sr.ToString(),
             c => (QuestionSource)Enum.Parse(typeof(QuestionSource), c));
+
+        builder.Property(x => x.Passage)
+            .IsRequired(false);
     }
 }
