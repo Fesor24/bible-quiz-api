@@ -18,6 +18,11 @@ public class BaseSpecification<TEntity> : ISpecification<TEntity> where TEntity:
 
     public Expression<Func<TEntity, object>> OrderByDesc { get; private set; }
 
+    public Expression<Func<TEntity, object>> OrderBy { get; private set; }
+
     protected void SetOrderByDesc(Expression<Func<TEntity, object>> orderByDesc) =>
         OrderByDesc = orderByDesc;
+
+    protected void SetOrderBy(Expression<Func<TEntity, object>> orderBy) =>
+        OrderBy = orderBy;
 }
