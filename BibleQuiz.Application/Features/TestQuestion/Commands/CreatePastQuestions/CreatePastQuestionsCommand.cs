@@ -4,7 +4,7 @@ using MediatR;
 using TestQuestions = BibleQuiz.Domain.Entities.TestQuestion;
 
 namespace BibleQuiz.Application.Features.TestQuestion.Commands.CreatePastQuestions;
-public class CreatePastQuestionsCommand : IRequest<Result<List<TestQuestions>, Error>>
+public class CreatePastQuestionsCommand : IRequest<Result<Unit, Error>>
 {
     public List<CreatePastQuestionsDto> Questions { get; set; }
     public QuestionSource Source { get; set; }
