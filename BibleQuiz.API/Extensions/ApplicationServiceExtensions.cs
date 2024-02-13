@@ -164,17 +164,5 @@ namespace BibleQuiz.API
             return services;
         }
 
-
-        //public static IServiceCollection AddBibleApi(this IServiceCollection services)
-        //{
-        //    services.AddHttpClient();
-
-        //    services.AddTransient<IApiClient, ApiClient>();
-
-        //    services.AddScoped<IBibleService, BibleService>();
-
-        //    return services;
-        //}
-
     }
 }
