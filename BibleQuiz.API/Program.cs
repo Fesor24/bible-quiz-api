@@ -1,3 +1,4 @@
+using BibleQuiz.API.Middleware;
 using BibleQuiz.Application;
 using BibleQuiz.Domain.Models;
 using BibleQuiz.Infrastructure;

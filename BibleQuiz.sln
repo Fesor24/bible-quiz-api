@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BibleQuiz.Infrastructure", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BibleQuiz.Application", "BibleQuiz.Application\BibleQuiz.Application.csproj", "{FE7BD017-090E-4363-BC59-3CFBD58C344D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BibleQuiz.UnitTests", "BibleQuiz.UnitTests\BibleQuiz.UnitTests.csproj", "{D91E6334-A6FB-443C-93C8-587E7FA670F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +46,10 @@ Global
 		{FE7BD017-090E-4363-BC59-3CFBD58C344D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE7BD017-090E-4363-BC59-3CFBD58C344D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE7BD017-090E-4363-BC59-3CFBD58C344D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D91E6334-A6FB-443C-93C8-587E7FA670F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D91E6334-A6FB-443C-93C8-587E7FA670F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D91E6334-A6FB-443C-93C8-587E7FA670F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D91E6334-A6FB-443C-93C8-587E7FA670F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
