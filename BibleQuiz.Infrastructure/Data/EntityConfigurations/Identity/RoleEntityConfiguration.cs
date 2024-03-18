@@ -7,6 +7,6 @@ internal sealed class RoleEntityConfiguration : IEntityTypeConfiguration<Role>
 {
     public void Configure(EntityTypeBuilder<Role> builder)
     {
-        builder.ToTable(nameof(Role), QuizDbContext.USER);
+        builder.ToTable(nameof(Role), QuizDbContext.SECURITY);
     }
 }

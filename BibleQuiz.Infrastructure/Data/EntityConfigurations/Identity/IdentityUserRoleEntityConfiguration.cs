@@ -7,6 +7,6 @@ internal class IdentityUserRoleEntityConfiguration : IEntityTypeConfiguration<Id
 {
     public void Configure(EntityTypeBuilder<IdentityUserRole<string>> builder)
     {
-        builder.ToTable("IdentityUserRole", QuizDbContext.USER);
+        builder.ToTable("IdentityUserRole", QuizDbContext.SECURITY);
     }
 }

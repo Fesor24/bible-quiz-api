@@ -7,6 +7,6 @@ internal class IdentityUserClaimEntityConfiguration : IEntityTypeConfiguration<I
 {
     public void Configure(EntityTypeBuilder<IdentityUserClaim<string>> builder)
     {
-        builder.ToTable("IdentityUserClaim", QuizDbContext.USER);
+        builder.ToTable("IdentityUserClaim", QuizDbContext.SECURITY);
     }
 }

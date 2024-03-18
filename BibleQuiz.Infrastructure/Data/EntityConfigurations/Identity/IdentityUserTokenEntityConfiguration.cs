@@ -7,6 +7,6 @@ internal class IdentityUserTokenEntityConfiguration : IEntityTypeConfiguration<I
 {
     public void Configure(EntityTypeBuilder<IdentityUserToken<string>> builder)
     {
-        builder.ToTable("IdentityUserToken", QuizDbContext.USER);
+        builder.ToTable("IdentityUserToken", QuizDbContext.SECURITY);
     }
 }

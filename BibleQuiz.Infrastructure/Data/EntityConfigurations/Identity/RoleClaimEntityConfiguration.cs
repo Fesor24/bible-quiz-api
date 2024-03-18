@@ -7,6 +7,6 @@ internal sealed class RoleClaimEntityConfiguration : IEntityTypeConfiguration<Ro
 {
     public void Configure(EntityTypeBuilder<RoleClaim> builder)
     {
-        builder.ToTable(nameof(RoleClaim), QuizDbContext.USER);
+        builder.ToTable(nameof(RoleClaim), QuizDbContext.SECURITY);
     }
 }

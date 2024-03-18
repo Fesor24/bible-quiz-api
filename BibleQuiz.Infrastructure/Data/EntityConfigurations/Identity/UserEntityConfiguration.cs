@@ -7,6 +7,6 @@ internal sealed class UserEntityConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
-        builder.ToTable(nameof(User), QuizDbContext.USER);
+        builder.ToTable(nameof(User), QuizDbContext.SECURITY);
     }
 }
