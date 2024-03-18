@@ -1,10 +1,13 @@
 ﻿using BibleQuiz.Domain.Entities;
+using BibleQuiz.Domain.Entities.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace BibleQuiz.Infrastructure.Data;
-public class QuizDbContext : DbContext
+public class QuizDbContext : IdentityDbContext<User, Role, string, IdentityUserClaim<string>, IdentityUserRole<string>,
+    IdentityUserLogin<string>, RoleClaim, IdentityUserToken<string>>
 {
     internal const string USER = "usr";
     internal const string COMMON = "com";
