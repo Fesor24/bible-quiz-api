@@ -9,7 +9,7 @@ namespace BibleQuiz.Infrastructure.Data;
 public class QuizDbContext : IdentityDbContext<User, Role, string, IdentityUserClaim<string>, IdentityUserRole<string>,
     IdentityUserLogin<string>, RoleClaim, IdentityUserToken<string>>
 {
-    internal const string USER = "usr";
+    internal const string SECURITY = "Security";
     internal const string COMMON = "com";
 
     public QuizDbContext(DbContextOptions options) : base(options)
