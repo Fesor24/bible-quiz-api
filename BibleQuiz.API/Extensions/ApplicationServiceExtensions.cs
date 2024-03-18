@@ -67,32 +67,26 @@ namespace BibleQuiz.API
         //    return services;
         //}
 
-        /// <summary>
-        /// Configure api validation error response
-        /// </summary>
-        /// <param name="services"></param>
-        /// <returns></returns>
         public static IServiceCollection ConfigureApiBehavior(this IServiceCollection services)
         {
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = actionContext =>
                 {
-                    var errors = actionContext.ModelState.Where(x => x.Value.Errors.Count > 0)
+                    var errors = actionContext.ModelState.Where(x => x.Value != null && x.Value.Errors.Count > 0)
                     .SelectMany(x => x.Value.Errors)
                     .Select(x => x.ErrorMessage).ToArray();
 
-                    var errorResponse = new ApiResponse
-                    {
-                        ErrorMessage = "An error occurred",
-                        ErrorResult = errors
-                    };
+                    ProblemDetails problem = new();
 
-                    return new BadRequestObjectResult(errorResponse);
+                    problem.Title = "An error occurred";
+                    problem.Status = 400;
+                    problem.Detail = string.Join(",", errors);
+
+                    return new BadRequestObjectResult(problem);
                 };
             });
 
-            // Return services for further chaining
             return services;
         }
 
