@@ -9,10 +9,7 @@ namespace BibleQuiz.API
     {
         public static void Main(string[] args)
         {
-
             var builder = WebApplication.CreateBuilder(args);
-
-            // Add services to the container.
 
             builder.Services.AddControllers();
 
@@ -24,9 +21,7 @@ namespace BibleQuiz.API
                 builder.Configuration.GetSection(BibleCredentials.CONFIGURATION));
 
             builder.Services
-                .ConfigureApiBehavior()
-                .AddTokenService()
-                .ConfigureCors();
+                .AddTokenService();
 
             builder.Services.AddResponseCaching();
 
