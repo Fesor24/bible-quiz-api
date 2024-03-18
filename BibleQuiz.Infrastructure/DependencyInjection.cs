@@ -1,4 +1,5 @@
-﻿using BibleQuiz.Domain.Primitives;
+﻿using BibleQuiz.Domain.Entities.Identity;
+using BibleQuiz.Domain.Primitives;
 using BibleQuiz.Infrastructure.Data;
 using BibleQuiz.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,16 @@ public static class DependencyInjection
             opt.UseNpgsql(config.GetConnectionString("DefaultConnection"),
                 migrations => migrations.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName));
         });
+
+        services.AddIdentity<User, Role>(opt =>
+        {
+            opt.Password.RequireNonAlphanumeric = false;
+            opt.Password.RequiredLength = 5;
+            opt.Password.RequiredUniqueChars = 0;
+            opt.Password.RequireDigit = false;
+            opt.Password.RequireUppercase = false;
+
+        }).AddEntityFrameworkStores<QuizDbContext>();
 
         return services;
     }
