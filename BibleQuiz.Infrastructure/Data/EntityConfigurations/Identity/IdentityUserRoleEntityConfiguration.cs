@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BibleQuiz.Infrastructure.Data.EntityConfigurations.Identity;
-internal class IdentityUserRoleEntityConfiguration
+internal class IdentityUserRoleEntityConfiguration : IEntityTypeConfiguration<IdentityUserRole<string>>
 {
+    public void Configure(EntityTypeBuilder<IdentityUserRole<string>> builder)
+    {
+        builder.ToTable("IdentityUserRole", QuizDbContext.USER);
+    }
 }
