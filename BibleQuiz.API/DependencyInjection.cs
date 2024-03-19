@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BibleQuiz.API.Permissions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BibleQuiz.API;
 
@@ -39,6 +41,9 @@ internal static class DependencyInjection
             };
         });
 
+        services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
+
+        services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
 
         return services;
 
