@@ -8,13 +8,11 @@
 
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BibleQuiz.Domain\BibleQuiz.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\BibleQuiz.Application\BibleQuiz.Application.csproj" />
     <ProjectReference Include="..\BibleQuiz.Shared\BibleQuiz.Shared.csproj" />
   </ItemGroup>
 
