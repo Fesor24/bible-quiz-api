@@ -1,7 +1,7 @@
 ﻿using BibleQuiz.Application.Errors;
 using BibleQuiz.Domain.Primitives;
 using BibleQuiz.Domain.Shared;
-using BibleQuiz.Infrastructure.Specifications;
+using BibleQuiz.Domain.Specifications;
 using MediatR;
 using TestQuestions = BibleQuiz.Domain.Entities.TestQuestion;
 

@@ -2,7 +2,7 @@
 using BibleQuiz.Domain.Primitives;
 using BibleQuiz.Domain.Services;
 using BibleQuiz.Domain.Shared;
-using BibleQuiz.Infrastructure.Specifications;
+using BibleQuiz.Domain.Specifications;
 using MediatR;
 using BibleQuiz.Application.Errors;
 

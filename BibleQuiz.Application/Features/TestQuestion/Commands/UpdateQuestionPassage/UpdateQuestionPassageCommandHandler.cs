@@ -1,9 +1,9 @@
-﻿using TestQuestionEntity = BibleQuiz.Domain.Entities.TestQuestion;
+﻿using BibleQuiz.Application.Errors;
 using BibleQuiz.Domain.Primitives;
 using BibleQuiz.Domain.Shared;
-using BibleQuiz.Infrastructure.Specifications;
+using BibleQuiz.Domain.Specifications;
 using MediatR;
-using BibleQuiz.Application.Errors;
+using TestQuestionEntity = BibleQuiz.Domain.Entities.TestQuestion;
 
 namespace BibleQuiz.Application.Features.TestQuestion.Commands.UpdateQuestionPassage;
 internal sealed class UpdateQuestionPassageCommandHandler : 
