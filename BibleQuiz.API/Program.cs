@@ -31,10 +31,9 @@ namespace BibleQuiz.API
 
             var app = builder.Build();
 
-            app.UseMiddleware<ExceptionMiddleware>();
+            app.DatabaseMigrationAndDataSeed();
 
-            // Apply pending migrations
-            //await app.ApplyMigrationsAsync();
+            app.UseMiddleware<ExceptionMiddleware>();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -42,8 +41,6 @@ namespace BibleQuiz.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
-            //app.UseDnaFramework();
 
             app.UseHttpsRedirection();
 
