@@ -3,7 +3,7 @@
 namespace BibleQuiz.Shared.Authorization;
 public record AppPermission(string Feature, string Action, string Group, string Description, bool IsUser = false)
 {
-    public string Name { get; set; }
+    public string Name => NameFor(Feature, Action);
     public static string NameFor(string feature, string action) =>
         $"Permission.{feature}.{action}";
 }
