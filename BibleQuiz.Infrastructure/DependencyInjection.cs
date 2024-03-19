@@ -22,6 +22,8 @@ public static class DependencyInjection
                 migrations => migrations.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName));
         });
 
+        services.AddTransient<QuizDbContextSeeder>();
+
         services.AddIdentity<User, Role>(opt =>
         {
             opt.Password.RequireNonAlphanumeric = false;
@@ -29,6 +31,8 @@ public static class DependencyInjection
             opt.Password.RequiredUniqueChars = 0;
             opt.Password.RequireDigit = false;
             opt.Password.RequireUppercase = false;
+            opt.User.RequireUniqueEmail = true;
+            opt.Password.RequireLowercase = false;
 
         }).AddEntityFrameworkStores<QuizDbContext>();
 
