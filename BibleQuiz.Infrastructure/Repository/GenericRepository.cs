@@ -1,7 +1,7 @@
 ﻿using BibleQuiz.Domain.Primitives;
 using BibleQuiz.Infrastructure.Data;
-using BibleQuiz.Infrastructure.Specifications;
 using Microsoft.EntityFrameworkCore;
+using BibleQuiz.Domain.Specifications;
 
 namespace BibleQuiz.Infrastructure.Repository;
 internal class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : Entity, new()
