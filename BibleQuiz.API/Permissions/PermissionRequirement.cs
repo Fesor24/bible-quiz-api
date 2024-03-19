@@ -2,7 +2,7 @@
 
 namespace BibleQuiz.API.Permissions;
 
-internal class PermissionRequirement : IAuthorizationRequirement
+public class PermissionRequirement : IAuthorizationRequirement
 {
     public PermissionRequirement(string permission)
     {
