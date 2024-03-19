@@ -1,5 +1,12 @@
-﻿namespace BibleQuiz.API.Permissions;
+﻿using Microsoft.AspNetCore.Authorization;
 
-public class PermissionRequirement
+namespace BibleQuiz.API.Permissions;
+
+internal class PermissionRequirement : IAuthorizationRequirement
 {
+    public PermissionRequirement(string permission)
+    {
+        Permission = permission;
+    }
+    public string Permission { get; set; }
 }
