@@ -4,7 +4,7 @@ using TestQuestions = BibleQuiz.Domain.Entities.TestQuestion;
 using BibleQuiz.Domain.Primitives;
 using BibleQuiz.Domain.Shared;
 using MediatR;
-using BibleQuiz.Infrastructure.Specifications;
+using BibleQuiz.Domain.Specifications;
 
 namespace BibleQuiz.Application.Features.TestQuestion.Queries.GetQuestionsBySource;
 internal sealed class GetQuestionsBySourceRequestHandler : IRequestHandler<GetQuestionsBySourceRequest,
