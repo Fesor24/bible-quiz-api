@@ -1,6 +1,5 @@
 ﻿using BibleQuiz.Core;
 using BibleQuiz.Infrastructure.Data;
-using Microsoft.AspNetCore.Mvc;
 
 namespace BibleQuiz.API
 {
