@@ -1,57 +1,36 @@
 ﻿using BibleQuiz.Core;
+using BibleQuiz.Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BibleQuiz.API
 {
-    public static class ApplicationServiceExtensions
+    internal static class ApplicationServiceExtensions
     {
-        /// <summary>
-        /// Apply migrations to db
-        /// </summary>
-        /// <param name="app"></param>
-        /// <returns></returns>
-        //public static async Task ApplyMigrationsAsync(this WebApplication app)
-        //{
-        //    using (var scope = app.Services.CreateScope())
-        //    {
-        //        var services = scope.ServiceProvider;
+        internal static IApplicationBuilder DatabaseMigrationAndDataSeed(this IApplicationBuilder builder)
+        {
+            using var scope = builder.ApplicationServices.CreateScope();
 
-        //        var loggerFactory = services.GetRequiredService<ILoggerFactory>();
+            var services = scope.ServiceProvider;
 
-        //        try
-        //        {     
-        //            var context = services.GetRequiredService<QuizDbContext>();
+            var loggerFactory = services.GetRequiredService<ILoggerFactory>();
 
-        //            // Get service for user manager
-        //            //var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+            try
+            {
+                var seeder = services.GetRequiredService<QuizDbContextSeeder>();
 
-        //            //// Get service for role manager
-        //            //var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                seeder.SeedDataAsync().GetAwaiter().GetResult();
+            }
 
-        //            // Apply pending migrations to db
-        //            await context.Database.MigrateAsync();
+            catch (Exception ex)
+            {
+                var logger = loggerFactory.CreateLogger<Program>();
 
-        //            // Seed questions to db
-        //            //await AppDbContextSeed.SeedDataAsync(context, loggerFactory);
+                logger.LogError($"An error occurred while applying migrations. " +
+                    $"Message: {ex.Message} \n Details: { ex.StackTrace}");
+            }
 
-        //            //// Seed roles to db
-        //            //await AppDbContextSeed.SeedRolesAsync(roleManager, loggerFactory);
-
-        //            //// Seed the user to db
-        //            //await AppDbContextSeed.SeedUserAsync(userManager, loggerFactory);
-
-        //        }
-
-        //        catch(Exception ex)
-        //        {
-        //            // Create logger
-        //            var logger = loggerFactory.CreateLogger<Program>();
-
-        //            // Log error to console
-        //            logger.LogError($"An error occurred while applying migrations. Details: {ex.Message + ex.StackTrace}");
-        //        }
-        //    }
-        //}
+            return builder;
+        }
 
         //public static IServiceCollection AddIdentity(this IServiceCollection services)
         //{
@@ -66,44 +45,6 @@ namespace BibleQuiz.API
 
         //    return services;
         //}
-
-        public static IServiceCollection ConfigureApiBehavior(this IServiceCollection services)
-        {
-            services.Configure<ApiBehaviorOptions>(options =>
-            {
-                options.InvalidModelStateResponseFactory = actionContext =>
-                {
-                    var errors = actionContext.ModelState.Where(x => x.Value != null && x.Value.Errors.Count > 0)
-                    .SelectMany(x => x.Value.Errors)
-                    .Select(x => x.ErrorMessage).ToArray();
-
-                    ProblemDetails problem = new();
-
-                    problem.Title = "An error occurred";
-                    problem.Status = 400;
-                    problem.Detail = string.Join(",", errors);
-
-                    return new BadRequestObjectResult(problem);
-                };
-            });
-
-            return services;
-        }
-
-        public static IServiceCollection ConfigureCors(this IServiceCollection services)
-        {
-            services.AddCors(options =>
-            {
-                options.AddPolicy("CorsPolicy", options =>
-                {
-                    options.AllowAnyHeader();
-                    options.AllowAnyMethod();
-                    options.AllowAnyOrigin();
-                });
-            });
-
-            return services;
-        }
 
         //public static IServiceCollection ConfigureAuthorization(this IServiceCollection services)
         //{
