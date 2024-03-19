@@ -2,9 +2,9 @@
 
 namespace BibleQuiz.API;
 
-public static class DependencyInjection
+internal static class DependencyInjection
 {
-    public static IServiceCollection AddApiServices(this IServiceCollection services)
+    internal static IServiceCollection AddApiServices(this IServiceCollection services)
     {
         services.AddMediatR(opt =>
         {
