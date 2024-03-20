@@ -3,7 +3,7 @@ using BibleQuiz.Infrastructure.Data;
 using System.Collections;
 
 namespace BibleQuiz.Infrastructure.Repository;
-public class UnitOfWork : IUnitOfWork
+internal class UnitOfWork : IUnitOfWork
 {
     private readonly QuizDbContext _context;
     private Hashtable _repos;
