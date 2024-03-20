@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BibleQuiz.Infrastructure.Data.EntityConfigurations.Identity;
-internal class IdentityUserClaimEntityConfiguration : IEntityTypeConfiguration<IdentityUserClaim<string>>
+internal sealed class IdentityUserClaimEntityConfiguration : IEntityTypeConfiguration<IdentityUserClaim<string>>
 {
     public void Configure(EntityTypeBuilder<IdentityUserClaim<string>> builder)
     {
