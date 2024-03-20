@@ -2,9 +2,12 @@
 using BibleQuiz.Shared.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("BibleQuiz.API")]
 
 namespace BibleQuiz.Infrastructure.Data;
-public class QuizDbContextSeeder
+internal class QuizDbContextSeeder
 {
     private readonly UserManager<User> _userManager;
     private readonly RoleManager<Role> _roleManager;
