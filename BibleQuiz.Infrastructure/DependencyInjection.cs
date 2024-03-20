@@ -1,7 +1,10 @@
 ﻿using BibleQuiz.Domain.Entities.Identity;
 using BibleQuiz.Domain.Primitives;
+using BibleQuiz.Domain.Services;
 using BibleQuiz.Infrastructure.Data;
 using BibleQuiz.Infrastructure.Repository;
+using BibleQuiz.Infrastructure.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +18,8 @@ public static class DependencyInjection
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        services.AddScoped<ITokenService, TokenService>();
 
         services.AddDbContext<QuizDbContext>(opt =>
         {
@@ -34,7 +39,8 @@ public static class DependencyInjection
             opt.User.RequireUniqueEmail = true;
             opt.Password.RequireLowercase = false;
 
-        }).AddEntityFrameworkStores<QuizDbContext>();
+        }).AddEntityFrameworkStores<QuizDbContext>()
+        .AddDefaultTokenProviders();
 
         return services;
     }
