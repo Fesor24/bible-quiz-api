@@ -1,5 +1,4 @@
-﻿using BibleQuiz.Core;
-using BibleQuiz.Infrastructure.Data;
+﻿using BibleQuiz.Infrastructure.Data;
 
 namespace BibleQuiz.API
 {
@@ -85,18 +84,6 @@ namespace BibleQuiz.API
         //    // Return services for further chaining
         //    return services;
         //}
-
-        /// <summary>
-        /// Add token service to ServiceCollection
-        /// </summary>
-        /// <param name="services"></param>
-        /// <returns></returns>
-        public static IServiceCollection AddTokenService(this IServiceCollection services)
-        {
-            services.AddScoped<ITokenService, TokenService>();
-
-            return services;
-        }
 
     }
 }
