@@ -1,5 +1,6 @@
 using BibleQuiz.API.Middleware;
 using BibleQuiz.Application;
+using BibleQuiz.Application.Configurations;
 using BibleQuiz.Domain.Models;
 using BibleQuiz.Infrastructure;
 
@@ -20,10 +21,10 @@ namespace BibleQuiz.API
             builder.Services.Configure<BibleCredentials>(
                 builder.Configuration.GetSection(BibleCredentials.CONFIGURATION));
 
-            builder.Services
-                .AddTokenService();
-
-            builder.Services.AddResponseCaching();
+            builder.Services.AddOptions<SecurityConfiguration>()
+                .BindConfiguration(SecurityConfiguration.Name)
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -53,8 +54,6 @@ namespace BibleQuiz.API
             app.UseAuthentication();
 
             app.UseAuthorization();
-
-            app.UseResponseCaching();
 
             app.MapControllers();
 
