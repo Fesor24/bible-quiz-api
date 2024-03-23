@@ -8,5 +8,8 @@ internal sealed class UserEntityConfiguration : IEntityTypeConfiguration<User>
     public void Configure(EntityTypeBuilder<User> builder)
     {
         builder.ToTable(nameof(User), QuizDbContext.SECURITY);
+
+        builder.HasIndex(x => x.UserName)
+            .IsUnique();
     }
 }
