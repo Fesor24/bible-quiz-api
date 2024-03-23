@@ -19,7 +19,7 @@ public static class DependencyInjection
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-        services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<ISecurityService, SecurityService>();
 
         services.AddDbContext<QuizDbContext>(opt =>
         {
