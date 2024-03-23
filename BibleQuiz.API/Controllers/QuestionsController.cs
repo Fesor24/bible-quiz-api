@@ -12,23 +12,14 @@ using BibleQuiz.Application.Features.TestQuestion.Commands.UpdateQuestionPassage
 using BibleQuiz.Application.Features.TestQuestion.Queries.GetQuestionPassage;
 
 namespace BibleQuiz.API.Controllers;
-
-[ApiController]
-public class QuestionsController : ControllerBase
+public class QuestionsController : BaseController<QuestionsController>
 {
-    private readonly ISender _sender;
-
-    public QuestionsController(ISender sender)
-    {
-        _sender = sender;
-    }
-
     [HttpGet("/api/questions")]
     [ProducesResponseType(typeof(IReadOnlyList<GetQuestionResponse>),StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(Error))]
     public async Task<IActionResult> GetQuestionsBySource(QuestionSource source)
     {
-        var res = await _sender.Send(new GetQuestionsBySourceRequest { Source = source });
+        var res = await Sender.Send(new GetQuestionsBySourceRequest { Source = source });
 
         return res.Match(value => Ok(value), this.HandleErrorResult);
     }
@@ -38,7 +29,7 @@ public class QuestionsController : ControllerBase
     [ProducesErrorResponseType(typeof(Error))]
     public async Task<IActionResult> AddQuestions(List<CreateQuestionDto> questions)
     {
-        var res = await _sender.Send(new CreateQuestionsCommand { Questions = questions });
+        var res = await Sender.Send(new CreateQuestionsCommand { Questions = questions });
 
         return res.Match(value => Ok(value), this.HandleErrorResult);
     }
@@ -48,7 +39,7 @@ public class QuestionsController : ControllerBase
     [ProducesErrorResponseType(typeof(Error))]
     public async Task<IActionResult> DeleteQuestion(int id)
     {
-        var res = await _sender.Send(new DeleteQuestionCommand { Id = id });
+        var res = await Sender.Send(new DeleteQuestionCommand { Id = id });
 
         return res.Match(value => NoContent(), this.HandleErrorResult);
     }
@@ -58,7 +49,7 @@ public class QuestionsController : ControllerBase
     [ProducesErrorResponseType(typeof(Error))]
     public async Task<IActionResult> AddQuestion(CreateQuestionDto question)
     {
-        var res = await _sender.Send(new CreateQuestionCommand
+        var res = await Sender.Send(new CreateQuestionCommand
         {
             Answer = question.Answer,
             Question = question.Question,
@@ -74,7 +65,7 @@ public class QuestionsController : ControllerBase
     public async Task<IActionResult> AddPastQuestions([FromBody] List<CreatePastQuestionsDto> questions, 
         [FromQuery] QuestionSource source)
     {
-        var res = await _sender.Send(new CreatePastQuestionsCommand
+        var res = await Sender.Send(new CreatePastQuestionsCommand
         {
             Questions = questions,
             Source = source
@@ -88,7 +79,7 @@ public class QuestionsController : ControllerBase
     [ProducesErrorResponseType(typeof(Error))]
     public async Task<IActionResult> UpdateQuestionPassage(UpdateQuestionPassageDto passage)
     {
-        var res = await _sender.Send(new UpdateQuestionPassageCommand { Data = passage });
+        var res = await Sender.Send(new UpdateQuestionPassageCommand { Data = passage });
 
         return res.Match(value => NoContent(), this.HandleErrorResult);
     }
@@ -98,7 +89,7 @@ public class QuestionsController : ControllerBase
     [ProducesErrorResponseType(typeof(Error))]
     public async Task<IActionResult> GetQuestionPassage(int questionId)
     {
-        var res = await _sender.Send(new GetQuestionPassageRequest(questionId));
+        var res = await Sender.Send(new GetQuestionPassageRequest(questionId));
 
         return res.Match(value => Ok(value), this.HandleErrorResult);
     }
