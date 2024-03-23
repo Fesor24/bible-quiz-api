@@ -1,5 +1,4 @@
 ﻿using BibleQuiz.Application.Services;
-using BibleQuiz.Domain.Models;
 using BibleQuiz.Domain.Services;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
