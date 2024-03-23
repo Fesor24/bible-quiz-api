@@ -1,11 +1,4 @@
-﻿using System.Net;
-using BibleQuiz.Core;
-using BibleQuiz.Core.Specification;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-
-namespace BibleQuiz.API.Controllers
+﻿namespace BibleQuiz.API.Controllers
 {
     //[ApiController]
     //public class VerseController : ControllerBase
@@ -228,7 +221,7 @@ namespace BibleQuiz.API.Controllers
 
     //                    }
     //                }
-                    
+
     //            }
     //        }
 
@@ -329,7 +322,7 @@ namespace BibleQuiz.API.Controllers
     //        {
     //            Result = booksToReturn
     //        };
-            
+
     //    }
 
 
