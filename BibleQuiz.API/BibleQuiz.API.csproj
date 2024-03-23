@@ -26,7 +26,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BibleQuiz.Application\BibleQuiz.Application.csproj" />
-    <ProjectReference Include="..\BibleQuiz.Core\BibleQuiz.Core.csproj" />
     <ProjectReference Include="..\BibleQuiz.Infrastructure\BibleQuiz.Infrastructure.csproj" />
   </ItemGroup>
 
