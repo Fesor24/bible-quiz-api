@@ -8,4 +8,6 @@ public class SecurityConfiguration
     public string Secret { get; set; }
     [Required]
     public int ExpiryTimeInMinutes { get; set; }
+    [Required]
+    public string Issuer { get; set; }
 }
