@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using BibleQuiz.Application.Features.TestQuestion.Commands.CreateQuestion;
-using BibleQuiz.Application.Features.TestQuestion.Queries.GetQuestions;
+using BibleQuiz.Application.Features.Theory.Commands.CreateQuestions;
+using BibleQuiz.Application.Features.Theory.Queries.GetQuestions;
 using BibleQuiz.Domain.Entities;
 
 namespace BibleQuiz.Application.MappingProfiles;
@@ -8,8 +8,8 @@ public sealed class TestQuestionsMappings : Profile
 {
     public TestQuestionsMappings()
     {
-        CreateMap<TestQuestion, GetQuestionResponse>();
+        CreateMap<Theory, GetQuestionResponse>();
 
-        CreateMap<CreateQuestionDto, TestQuestion>();
+        CreateMap<CreateQuestionDto, Theory>();
     }
 }
