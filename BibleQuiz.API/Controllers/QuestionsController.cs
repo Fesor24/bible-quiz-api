@@ -1,20 +1,23 @@
-﻿using BibleQuiz.Application.Features.TestQuestion.Commands.CreateQuestion;
-using BibleQuiz.Application.Features.TestQuestion.Commands.DeleteQuestion;
-using BibleQuiz.Application.Features.TestQuestion.Queries.GetQuestions;
-using BibleQuiz.Application.Features.TestQuestion.Queries.GetQuestionsBySource;
+﻿using BibleQuiz.API.Dtos.Questions;
+using BibleQuiz.API.Extensions;
+using BibleQuiz.Application.Features.Objective.Command.CreateObjective;
+using BibleQuiz.Application.Features.Theory.Commands.CreatePastQuestions;
+using BibleQuiz.Application.Features.Theory.Commands.CreateQuestion;
+using BibleQuiz.Application.Features.Theory.Commands.CreateQuestions;
+using BibleQuiz.Application.Features.Theory.Commands.DeleteQuestion;
+using BibleQuiz.Application.Features.Theory.Commands.UpdateQuestionPassage;
+using BibleQuiz.Application.Features.Theory.Queries.GetQuestionPassage;
+using BibleQuiz.Application.Features.Theory.Queries.GetQuestions;
+using BibleQuiz.Application.Features.Theory.Queries.GetQuestionsBySource;
 using BibleQuiz.Domain.Enums;
 using BibleQuiz.Domain.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using BibleQuiz.API.Extensions;
-using BibleQuiz.Application.Features.TestQuestion.Commands.CreatePastQuestions;
-using BibleQuiz.Application.Features.TestQuestion.Commands.UpdateQuestionPassage;
-using BibleQuiz.Application.Features.TestQuestion.Queries.GetQuestionPassage;
 
 namespace BibleQuiz.API.Controllers;
 public class QuestionsController : BaseController<QuestionsController>
 {
-    [HttpGet("/api/questions")]
+    [HttpGet("/api/questions/theory")]
     [ProducesResponseType(typeof(IReadOnlyList<GetQuestionResponse>),StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(Error))]
     public async Task<IActionResult> GetQuestionsBySource(QuestionSource source)
@@ -24,7 +27,7 @@ public class QuestionsController : BaseController<QuestionsController>
         return res.Match(value => Ok(value), this.HandleErrorResult);
     }
 
-    [HttpPost("/api/questions")]
+    [HttpPost("/api/questions/theory")]
     [ProducesResponseType(typeof(Unit), StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(Error))]
     public async Task<IActionResult> AddQuestions(List<CreateQuestionDto> questions)
@@ -34,7 +37,7 @@ public class QuestionsController : BaseController<QuestionsController>
         return res.Match(value => Ok(value), this.HandleErrorResult);
     }
 
-    [HttpDelete("/api/question/{id}")]
+    [HttpDelete("/api/question/theory/{id}")]
     [ProducesResponseType(typeof(Unit), StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(Error))]
     public async Task<IActionResult> DeleteQuestion(int id)
@@ -44,7 +47,7 @@ public class QuestionsController : BaseController<QuestionsController>
         return res.Match(value => NoContent(), this.HandleErrorResult);
     }
 
-    [HttpPost("/api/question")]
+    [HttpPost("/api/question/theory")]
     [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(Error))]
     public async Task<IActionResult> AddQuestion(CreateQuestionDto question)
@@ -59,7 +62,7 @@ public class QuestionsController : BaseController<QuestionsController>
         return res.Match(value => CreatedAtRoute(value, question), this.HandleErrorResult);
     }
 
-    [HttpPost("/api/past-questions")]
+    [HttpPost("/api/past-questions/theory")]
     [ProducesResponseType(typeof(Unit), StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(Error))]
     public async Task<IActionResult> AddPastQuestions([FromBody] List<CreatePastQuestionsDto> questions, 
@@ -67,14 +70,14 @@ public class QuestionsController : BaseController<QuestionsController>
     {
         var res = await Sender.Send(new CreatePastQuestionsCommand
         {
-            Questions = questions,
+            Questions = Mapper.Map<List<PastQuestion>>(questions),
             Source = source
         });
 
         return res.Match(value => Ok(value), this.HandleErrorResult);
     }
 
-    [HttpPost("/api/question/passage")]
+    [HttpPost("/api/question/theory/passage")]
     [ProducesResponseType(typeof(Unit), StatusCodes.Status204NoContent)]
     [ProducesErrorResponseType(typeof(Error))]
     public async Task<IActionResult> UpdateQuestionPassage(UpdateQuestionPassageDto passage)
@@ -84,12 +87,22 @@ public class QuestionsController : BaseController<QuestionsController>
         return res.Match(value => NoContent(), this.HandleErrorResult);
     }
 
-    [HttpGet("/api/question/passage/{questionId}")]
+    [HttpGet("/api/question/theory/passage/{questionId}")]
     [ProducesResponseType(typeof(GetQuestionPassageResponse), StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(Error))]
     public async Task<IActionResult> GetQuestionPassage(int questionId)
     {
         var res = await Sender.Send(new GetQuestionPassageRequest(questionId));
+
+        return res.Match(value => Ok(value), this.HandleErrorResult);
+    }
+
+    [HttpPost("api/question/objective")]
+    [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+    public async Task<IActionResult> AddObjectiveQuestion([FromBody] CreateObjectiveQuestionDto model)
+    {
+        var res = await Sender.Send(new CreateObjectiveCommand(model.Question, model.OptionA,
+            model.OptionB, model.OptionC, model.OptionD, model.Answer));
 
         return res.Match(value => Ok(value), this.HandleErrorResult);
     }
