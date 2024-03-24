@@ -1,5 +1,5 @@
 ﻿namespace BibleQuiz.Domain.Primitives;
-public class Entity
+public abstract class Entity
 {
     public int Id { get; set; }
 }
