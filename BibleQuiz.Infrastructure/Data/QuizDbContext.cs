@@ -17,7 +17,7 @@ internal class QuizDbContext : IdentityDbContext<User, Role, string, IdentityUse
         
     }
 
-    public DbSet<TestQuestion> TestQuestions => Set<TestQuestion>();
+    public DbSet<Theory> TestQuestions => Set<Theory>();
     public DbSet<Verse> Verse => Set<Verse>();
 
     public DbSet<BibleBook> BibleBook => Set<BibleBook>();
