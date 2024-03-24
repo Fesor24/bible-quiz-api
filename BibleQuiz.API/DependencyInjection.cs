@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 namespace BibleQuiz.API;
 
@@ -9,6 +10,8 @@ internal static class DependencyInjection
 {
     internal static IServiceCollection AddApiServices(this IServiceCollection services)
     {
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
         services.AddMediatR(opt =>
         {
             opt.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
