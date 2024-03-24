@@ -2,7 +2,7 @@
 using BibleQuiz.Domain.Enums;
 
 namespace BibleQuiz.Domain.Specifications;
-public class GetTestQuestionsBySourceSpecification : BaseSpecification<TestQuestion>
+public class GetTestQuestionsBySourceSpecification : BaseSpecification<Theory>
 {
     public GetTestQuestionsBySourceSpecification(QuestionSource source) : base(x => x.Source == source)
     {
