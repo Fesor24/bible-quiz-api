@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using BibleQuiz.Domain.Specifications;
 
 namespace BibleQuiz.Infrastructure.Repository;
-internal class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : Entity, new()
+internal class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : Entity
 {
     private readonly DbSet<TEntity> _db;
     private readonly QuizDbContext _context;
