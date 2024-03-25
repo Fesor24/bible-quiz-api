@@ -1,10 +1,8 @@
-﻿using TestQuestionEntity = BibleQuiz.Domain.Entities.Theory;
-using BibleQuiz.Domain.Primitives;
+﻿using BibleQuiz.Domain.Primitives;
 using BibleQuiz.Domain.Services;
 using BibleQuiz.Domain.Shared;
 using BibleQuiz.Domain.Specifications;
 using MediatR;
-using BibleQuiz.Application.Errors;
 
 namespace BibleQuiz.Application.Features.Theory.Queries.GetQuestionPassage;
 internal sealed class GetQuestionPassageRequestHandler : IRequestHandler<GetQuestionPassageRequest,
@@ -24,10 +22,10 @@ internal sealed class GetQuestionPassageRequestHandler : IRequestHandler<GetQues
     {
         var spec = new GetTestQuestionByIdSpecification(request.QuestionId);
 
-        var question = await _unitOfWork.Repository<TestQuestionEntity>().GetAsync(spec);
+        var question = await _unitOfWork.Repository<TheoryEntity>().GetAsync(spec);
 
         if (question is null)
-            return ApplicationError.TestQuestion.NotFound(request.QuestionId);
+            return Error.NotFound("Question.NotFound", $"Question with Id:{request.QuestionId} not found");
 
         if (!string.IsNullOrWhiteSpace(question.Passage))
             return new GetQuestionPassageResponse(question.Passage, question.Id);
@@ -45,7 +43,7 @@ internal sealed class GetQuestionPassageRequestHandler : IRequestHandler<GetQues
 
             if (resQuestion.IsSuccess)
             {
-                _unitOfWork.Repository<TestQuestionEntity>().Update(resQuestion.Value);
+                _unitOfWork.Repository<TheoryEntity>().Update(resQuestion.Value);
 
                 await _unitOfWork.Complete();
             }
