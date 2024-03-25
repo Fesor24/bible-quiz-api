@@ -6,5 +6,8 @@ public class CreateQuestionCommand : IRequest<Result<int, Error>>
 {
     public string Question { get; set; }
     public string Answer { get; set; }
-    public string Verse { get; set; }
+    public string Book { get; set; }
+    public int Chapter { get; set; }
+    public int VerseFrom { get; set; }
+    public int VerseTo { get; set;}
 }

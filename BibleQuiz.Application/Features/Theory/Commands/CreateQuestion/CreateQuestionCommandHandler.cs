@@ -1,5 +1,4 @@
-﻿using TestQuestions = BibleQuiz.Domain.Entities.Theory;
-using BibleQuiz.Domain.Primitives;
+﻿using BibleQuiz.Domain.Primitives;
 using BibleQuiz.Domain.Shared;
 using MediatR;
 
@@ -16,13 +15,29 @@ internal sealed class CreateQuestionCommandHandler :
 
     public async Task<Result<int, Error>> Handle(CreateQuestionCommand request, CancellationToken cancellationToken)
     {
-        var res = TestQuestions.Create(request.Question, request.Answer, Domain.Enums.QuestionSource.Author,
-            request.Verse);
+        var bibleBooks = await _unitOfWork.Repository<BibleBookEntity>().GetAllAsync();
+
+        var book = bibleBooks.FirstOrDefault(x => x.ShortName.Equals(request.Book, StringComparison.OrdinalIgnoreCase));
+
+        if (book is null)
+            return Error.NotFound("Book.NotFound", $"Book with name:{request.Book} not found");
+
+        string completeVerse = string.Empty;
+
+        if (request.VerseTo != default)
+            completeVerse = book.ShortName + "." + request.Chapter + "." +
+                request.VerseFrom.ToString() + "-" + request.VerseTo.ToString();
+        else
+            completeVerse = book.ShortName + "." + request.Chapter + "." +
+                request.VerseFrom.ToString();
+
+        var res = TheoryEntity.Create(request.Question, request.Answer, Domain.Enums.QuestionSource.Author,
+            completeVerse);
 
         if (res.IsFailure)
             return res.Error;
 
-        await _unitOfWork.Repository<TestQuestions>().AddAsync(res.Value);
+        await _unitOfWork.Repository<TheoryEntity>().AddAsync(res.Value);
 
         await _unitOfWork.Complete();
 
