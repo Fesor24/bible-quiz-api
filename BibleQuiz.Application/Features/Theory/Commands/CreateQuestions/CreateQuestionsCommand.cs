@@ -5,7 +5,7 @@ using MediatR;
 namespace BibleQuiz.Application.Features.Theory.Commands.CreateQuestions;
 public class CreateQuestionsCommand : IRequest<Result<Unit, Error>>
 {
-    public List<CreateQuestionDto> Questions { get; set; }
+    public List<CreateQuestion> Questions { get; set; }
 }
 
 public class CreateQuestionsCommandValidator : AbstractValidator<CreateQuestionsCommand>
@@ -41,7 +41,7 @@ public class CreateQuestionsCommandValidator : AbstractValidator<CreateQuestions
     }
 }
 
-public sealed class CreateQuestionDto
+public class CreateQuestion
 {
     public string Question { get; set; }
     public string Answer { get; set; }
