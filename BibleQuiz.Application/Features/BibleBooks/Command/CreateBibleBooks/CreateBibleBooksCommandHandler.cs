@@ -1,5 +1,4 @@
-﻿using BibleBookEntity =  BibleQuiz.Domain.Entities.BibleBook;
-using BibleQuiz.Domain.Primitives;
+﻿using BibleQuiz.Domain.Primitives;
 using BibleQuiz.Domain.Services;
 using BibleQuiz.Domain.Shared;
 using MediatR;
