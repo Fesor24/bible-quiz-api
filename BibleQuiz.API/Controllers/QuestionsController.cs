@@ -1,6 +1,7 @@
 ﻿using BibleQuiz.API.Dtos.Questions;
 using BibleQuiz.API.Extensions;
 using BibleQuiz.Application.Features.Objective.Command.CreateObjective;
+using BibleQuiz.Application.Features.Objective.Query;
 using BibleQuiz.Application.Features.Theory.Commands.CreatePastQuestions;
 using BibleQuiz.Application.Features.Theory.Commands.CreateQuestion;
 using BibleQuiz.Application.Features.Theory.Commands.CreateQuestions;
@@ -22,6 +23,9 @@ public class QuestionsController : BaseController<QuestionsController>
     [ProducesErrorResponseType(typeof(Error))]
     public async Task<IActionResult> GetQuestionsBySource(QuestionSource source)
     {
+        if (!Enum.IsDefined(typeof(QuestionSource), source))
+            return BadRequest(new Error("Invalid.Source", $"{source} is not part of valid sources"));
+
         var res = await Sender.Send(new GetQuestionsBySourceRequest { Source = source });
 
         return res.Match(value => Ok(value), this.HandleErrorResult);
@@ -32,7 +36,10 @@ public class QuestionsController : BaseController<QuestionsController>
     [ProducesErrorResponseType(typeof(Error))]
     public async Task<IActionResult> AddQuestions(List<CreateQuestionDto> questions)
     {
-        var res = await Sender.Send(new CreateQuestionsCommand { Questions = questions });
+        var res = await Sender.Send(new CreateQuestionsCommand 
+        { 
+            Questions = Mapper.Map<List<CreateQuestion>>(questions) 
+        });
 
         return res.Match(value => Ok(value), this.HandleErrorResult);
     }
@@ -56,7 +63,10 @@ public class QuestionsController : BaseController<QuestionsController>
         {
             Answer = question.Answer,
             Question = question.Question,
-            Verse = question.Verse
+            Book = question.Book,
+            VerseTo = question.VerseTo,
+            VerseFrom = question.VerseFrom,
+            Chapter = question.Chapter
         });
 
         return res.Match(value => CreatedAtRoute(value, question), this.HandleErrorResult);
@@ -80,9 +90,9 @@ public class QuestionsController : BaseController<QuestionsController>
     [HttpPost("/api/question/theory/passage")]
     [ProducesResponseType(typeof(Unit), StatusCodes.Status204NoContent)]
     [ProducesErrorResponseType(typeof(Error))]
-    public async Task<IActionResult> UpdateQuestionPassage(UpdateQuestionPassageDto passage)
+    public async Task<IActionResult> UpdateQuestionPassage(UpdateQuestionPassageDto question)
     {
-        var res = await Sender.Send(new UpdateQuestionPassageCommand { Data = passage });
+        var res = await Sender.Send(new UpdateQuestionPassageCommand(question.QuestionId, question.Passage));
 
         return res.Match(value => NoContent(), this.HandleErrorResult);
     }
@@ -103,6 +113,15 @@ public class QuestionsController : BaseController<QuestionsController>
     {
         var res = await Sender.Send(new CreateObjectiveCommand(model.Question, model.OptionA,
             model.OptionB, model.OptionC, model.OptionD, model.Answer));
+
+        return res.Match(value => Ok(value), this.HandleErrorResult);
+    }
+
+    [HttpGet("api/question/objectives")]
+    [ProducesResponseType(typeof(ObjectiveQuestionResponse), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAllObjectiveQuestions()
+    {
+        var res = await Sender.Send(new GetAllObjectiveQuestionsQuery());
 
         return res.Match(value => Ok(value), this.HandleErrorResult);
     }
