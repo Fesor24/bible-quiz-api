@@ -18,14 +18,14 @@ internal sealed class UpdateQuestionPassageCommandHandler :
 
     public async Task<Result<Unit, Error>> Handle(UpdateQuestionPassageCommand request, CancellationToken cancellationToken)
     {
-        var spec = new GetTestQuestionByIdSpecification(request.Data.QuestionId);
+        var spec = new GetTestQuestionByIdSpecification(request.QuestionId);
 
         var question = await _unitOfWork.Repository<TestQuestionEntity>().GetAsync(spec);
 
         if (question is null)
-            return ApplicationError.TestQuestion.NotFound(request.Data.QuestionId);
+            return ApplicationError.TestQuestion.NotFound(request.QuestionId);
 
-        var res = question.UpdatePassage(request.Data.Passage);
+        var res = question.UpdatePassage(request.Passage);
 
         if (res.IsFailure)
             return res.Error;
