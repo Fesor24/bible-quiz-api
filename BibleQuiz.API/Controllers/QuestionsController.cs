@@ -69,7 +69,7 @@ public class QuestionsController : BaseController<QuestionsController>
             Chapter = question.Chapter
         });
 
-        return res.Match(value => CreatedAtRoute(value, question), this.HandleErrorResult);
+        return res.Match(value => CreatedAtRoute(value.Id, value), this.HandleErrorResult);
     }
 
     [HttpPost("/api/past-questions/theory")]
