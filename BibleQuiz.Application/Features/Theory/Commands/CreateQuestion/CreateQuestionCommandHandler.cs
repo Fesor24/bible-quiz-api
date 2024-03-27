@@ -4,7 +4,7 @@ using MediatR;
 
 namespace BibleQuiz.Application.Features.Theory.Commands.CreateQuestion;
 internal sealed class CreateQuestionCommandHandler :
-    IRequestHandler<CreateQuestionCommand, Result<int, Error>>
+    IRequestHandler<CreateQuestionCommand, Result<TheoryEntity, Error>>
 {
     private readonly IUnitOfWork _unitOfWork;
 
@@ -13,7 +13,7 @@ internal sealed class CreateQuestionCommandHandler :
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Result<int, Error>> Handle(CreateQuestionCommand request, CancellationToken cancellationToken)
+    public async Task<Result<TheoryEntity, Error>> Handle(CreateQuestionCommand request, CancellationToken cancellationToken)
     {
         var bibleBooks = await _unitOfWork.Repository<BibleBookEntity>().GetAllAsync();
 
@@ -41,6 +41,6 @@ internal sealed class CreateQuestionCommandHandler :
 
         await _unitOfWork.Complete();
 
-        return res.Value.Id;
+        return res.Value;
     }
 }
