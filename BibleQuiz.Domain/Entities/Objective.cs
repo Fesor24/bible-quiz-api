@@ -32,6 +32,16 @@ public class Objective : Entity
                 "One or more properties(question, answer or the various options) are empty or null");
         }
 
+        if (answer.Length > 1)
+            return Error.Validation("Invalid.Answer", "Answer can not be more than one character");
+
+        string[] acceptableAnswers = {"A", "B", "C", "D"};
+
+        if (!acceptableAnswers.Any(x => x.Equals(answer, StringComparison.InvariantCultureIgnoreCase)))
+            return Error.Validation("Invalid.AnswerOption", $"Acceptable options are {string.Join(",", acceptableAnswers)}");
+
+        answer = answer.ToUpper();
+
         Objective obj = new(question, new ObjectiveOptions(optionA, optionB, optionC, optionD), answer);
 
         return obj;
