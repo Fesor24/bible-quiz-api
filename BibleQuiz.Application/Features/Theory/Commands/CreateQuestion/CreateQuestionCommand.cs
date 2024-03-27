@@ -2,7 +2,7 @@
 using MediatR;
 
 namespace BibleQuiz.Application.Features.Theory.Commands.CreateQuestion;
-public class CreateQuestionCommand : IRequest<Result<int, Error>>
+public class CreateQuestionCommand : IRequest<Result<TheoryEntity, Error>>
 {
     public string Question { get; set; }
     public string Answer { get; set; }
